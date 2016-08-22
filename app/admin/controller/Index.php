@@ -1,11 +1,19 @@
 <?php
 namespace app\admin\controller;
 
+use think\Config;
+use think\Cookie;
 use think\Request;
 use think\Controller;
+use app\common\tools\Crypt;
+use think\Session;
+
 class Index extends Controller
 {
+
     public $app_type = 'public';
+
+    const COOKIE_EXPIRE = 604800;//7天
 
     /**
      * 登录
@@ -20,30 +28,24 @@ class Index extends Controller
                 $adminModel = model('Admin');
                 $admin = $adminModel::get(['account' => $account]);
                 if (!empty($admin)) {
-                    if ($this->psd_verify($password, $admin['password']) === TRUE) {
-                        session('_id', $admin['id']);
-                        $remember = I('post.remember');
-                        if (!empty($remember)) {
-                            $saveTime = 7 * 24 * 3600;
-                            cookie('_auth',
-                                authcode("{$admin['account']}\t{$admin['password']}\t{$admin['id']}", 'ENCODE'), $saveTime);
+                    if ($this::psd_verify($password, $admin['password']) === true) {
+                        Session::set('admin_id',$admin['id']);
+                        if (Request::instance()->has('remember','post')) {
+                            Cookie::set('_id',Crypt::authcode("{$admin['id']}", 'ENCODE'), self::COOKIE_EXPIRE);
                         }
-                        $result = array('code' => 1, 'msg' => '验证成功');
+                        return ['code'=>1,'msg'=>'验证成功'];
                     } else {
-                        $result = array('code' => 0, 'msg' => '密码不正确');
+                        return ['code'=>0,'msg'=>'密码不正确'];
                     }
                 } else {
-                    $result = array('code' => 0, 'msg' => '用户名不存在');
+                    return ['code'=>0,'msg'=>'用户名不存在'];
                 }
             } else {
-                $result = array('code' => 0, 'msg' => '验证码不正确');
+                return ['code'=>0,'msg'=>'验证码不正确'];
             }
-            return json($result);
         } else {
-
-            $admin_id = session('_id');
-            if (!empty($admin_id)) {
-                $this->redirect('/'); //跳转首页
+            if (Session::has('admin_id')) {
+                $this->redirect('home/index'); //跳转首页
             } else{
                 return $this->fetch();
             }
@@ -53,13 +55,13 @@ class Index extends Controller
     /**
      * 密码验证
      */
-    private function psd_verify($inputPsd, $password)
+    public static function psd_verify($inputPsd, $password)
     {
         $inputPsd = md5(md5($inputPsd) . C('DATA_AUTH_KEY'));
         if ($inputPsd == $password) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 
@@ -68,9 +70,9 @@ class Index extends Controller
      */
     public function logout()
     {
-        session(null);
-        cookie('_auth', null);
-        $this->redirect(U('/login')); //重新登录
+        Session::clear(Config::get('session.prefix'));
+        Cookie::clear(Config::get('cookie.prefix'));
+        $this->redirect('index/login'); //重新登录
     }
 
     /**

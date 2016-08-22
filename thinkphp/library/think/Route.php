@@ -233,7 +233,7 @@ class Route
     public static function rule($rule, $route = '', $type = '*', $option = [], $pattern = [])
     {
         $group = self::getGroup('name');
-        if (!empty($group)) {
+        if (!is_null($group)) {
             // 路由分组
             $option  = array_merge(self::getGroup('option'), $option);
             $pattern = array_merge(self::getGroup('pattern'), $pattern);
@@ -281,6 +281,8 @@ class Route
         if (is_array($rule)) {
             $name = $rule[0];
             $rule = $rule[1];
+        } elseif (is_string($route)) {
+            $name = $route;
         }
         if ('$' == substr($rule, -1, 1)) {
             // 是否完整匹配
@@ -401,8 +403,16 @@ class Route
                     } else {
                         $route = $val;
                     }
+
+                    $options  = isset($option1) ? $option1 : $option;
+                    $patterns = isset($pattern1) ? $pattern1 : $pattern;
+                    if ('$' == substr($key, -1, 1)) {
+                        // 是否完整匹配
+                        $options['complete_match'] = true;
+                        $key                       = substr($key, 0, -1);
+                    }
                     $vars   = self::parseVar($key);
-                    $item[] = ['rule' => $key, 'route' => $route, 'var' => $vars, 'option' => isset($option1) ? $option1 : $option, 'pattern' => isset($pattern1) ? $pattern1 : $pattern];
+                    $item[] = ['rule' => $key, 'route' => $route, 'var' => $vars, 'option' => $options, 'pattern' => $patterns];
                 }
                 self::$rules['*'][$name] = ['rule' => $item, 'route' => '', 'var' => [], 'option' => $option, 'pattern' => $pattern];
             }
@@ -1204,9 +1214,9 @@ class Route
                 foreach ($matches[1] as $name) {
                     if (strpos($name, '?')) {
                         $name      = substr($name, 0, -1);
-                        $replace[] = '(' . (isset($pattern[$name]) ? $pattern[$name] : '') . '?)';
+                        $replace[] = '(' . (isset($pattern[$name]) ? $pattern[$name] : '\w+') . '?)';
                     } else {
-                        $replace[] = '(' . (isset($pattern[$name]) ? $pattern[$name] : '') . ')';
+                        $replace[] = '(' . (isset($pattern[$name]) ? $pattern[$name] : '\w+') . ')';
                     }
                     $value[] = $name;
                 }

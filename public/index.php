@@ -9,6 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+define('CONF_PATH', '../config/');
 // [ 应用入口文件 ]
 $product_path = str_replace('\\','/',__DIR__);
 $product_path = preg_replace('/(.*)\/{1}([^\/]*)/i', '$1', $product_path);

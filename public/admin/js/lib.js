@@ -68,7 +68,7 @@ $.extend({
 
         var dialog = $('<div class="own_dialog"></div>');
         dialog.append('<div class="dialog_title"><h6></h6><a class="dialog_close"><i class="fa fa-times"></i></a></div>');
-        dialog.append('<div class="dialog_content"><img class="dialog_loading" src="/Public/Admin/img/loading.gif"/></div>');
+        dialog.append('<div class="dialog_content"><img class="dialog_loading" src="/admin/img/loading.gif"/></div>');
         dialog.append('<div class="dialog_footer"><a class="btn btn-success btn-sm shiny"></a></div>');
 
         if($.dialogBox.length > 1){

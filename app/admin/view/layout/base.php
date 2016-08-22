@@ -22,7 +22,7 @@ Purchase: http://wrapbootstrap.com
         <link rel="shortcut icon" href="__IMG__/favicon.png" type="image/x-icon">
     {/block}
 
-    <include file="Layout/basic_css"/>
+    {include file="Layout/basic_css" /}
 
     {block name="plugin_css"}
         <link href="__CSS__/dataTables.bootstrap.css" rel="stylesheet" />
@@ -47,11 +47,11 @@ Purchase: http://wrapbootstrap.com
 <body>
 
     {block name="loading"}
-        {:W('Page/loading')}
+        {:widget('Page/loading')}
     {/block}
 
     {block name="navbar"}
-        {:W('Page/navBar')}
+        {:widget('Page/navBar')}
     {/block}
 
     <div class="main-container container-fluid">
@@ -60,11 +60,11 @@ Purchase: http://wrapbootstrap.com
 
             <div class="page-sidebar" id="sidebar">
                 {block name="search"}
-                    {:W('Page/search')}
+                    {:widget('Page/search')}
                 {/block}
 
                 {block name="slideBar"}
-                    {:W('Page/sideBar',array($slideBar))}
+                    {:widget('Page/sideBar',[$slideBar])}
                 {/block}
             </div>
 
@@ -72,12 +72,12 @@ Purchase: http://wrapbootstrap.com
             <div class="page-content">
 
                 {block name="breadcrumbs"}
-                    {:W('Page/breadcrumbs',array($breadcrumbs))}
+                    {:widget('Page/breadcrumbs',[$breadcrumbs])}
                 {/block}
 
                 <!--<div class="page-header position-relative">
                     <block name="header-title">
-                        {:W('Page/title',array($breadcrumbs))}
+                        {:widget('Page/title',array($breadcrumbs))}
                     {/block}
                     <div class="header-buttons">
                         <a class="sidebar-toggler" href="#">
@@ -102,7 +102,7 @@ Purchase: http://wrapbootstrap.com
     </div>
 
     {block name="plugin_js"}
-        <include file="Layout/plugin_js"/>
+        {include file="Layout/plugin_js" /}
     {/block}
 
     {block name="js"}{/block}

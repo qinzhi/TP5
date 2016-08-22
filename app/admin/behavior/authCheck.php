@@ -1,33 +1,37 @@
 <?php
 
 namespace app\admin\behavior;
-use Common\Library\Org\Util\Crypt;
+use app\common\tools\Crypt;
+use think\response\Redirect;
 
 class AuthCheck{
     protected $config;
     public function run(&$params) {
         list($param,$method) = $params;
+
+        $param->app_type = isset($param->app_type)??'';
+
         switch ($param->app_type) {
             case 'public': {
                 return;
             }
+            default:
+                $this->ckeckLogin();
         }
 
-        /*$admin_id = session('_admin_id');
-        if(empty($admin_id)){
-            $_account = cookie('_account');
-            $_password = cookie('_password');
-            if(!empty($_account) && !empty($_password)){
-                $_account = Crypt::decode($_account);
-                $_password = Crypt::decode($_password);
-                $admin = M('Admin')->where(array('account'=>$_account))->find();
-                if(!empty($admin) && $_password == $admin['password']){
-                    session('_admin_id',$admin['id']);
-                }
-            }else{
-                header('Location: /login');
-            }
-        }*/
+    }
+
+    //检查是否登陆
+    private function ckeckLogin(){
+        $admin_id = session('admin_id');
+        $_id = cookie('_id');
+        if(empty($admin_id) && !empty($_auth)){
+            $_id = Crypt::authcode($_id, 'DECODE');
+            session('admin_id',$_id);
+        }else{
+            /*(new Redirect('index/login'))->send();
+            exit;*/
+        }
     }
 }
 ?>
