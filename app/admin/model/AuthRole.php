@@ -7,7 +7,6 @@
  */
 namespace app\admin\Model;
 
-use think\Config;
 use think\Request;
 
 class AuthRole extends Common{
@@ -18,7 +17,7 @@ class AuthRole extends Common{
 
     public function move($id,$action){
         $auth = self::get($id);
-        $authList = $this->get_auths_by_pid($auth['pid']);
+        $authList = $this->getAuthListByPid($auth['pid']);
         for($i=0,$len=count($authList);$i<$len;$i++){
             if($authList[$i]['id'] == $auth['id']){
                 if($i == 0 && $action == 'up' ){//上移失败
@@ -34,8 +33,8 @@ class AuthRole extends Common{
                         return false;
                     }
                     $tmp = $refer['sort'];
-                    $status1 = $this->where(array('id'=>$refer['id']))->setField(array('sort'=>$auth['sort']));
-                    $status2 = $this->where(array('id'=>$auth['id']))->setField(array('sort'=>$tmp));
+                    $status1 = $this->where(['id'=>$refer['id']])->setField(array('sort'=>$auth['sort']));
+                    $status2 = $this->where(['id'=>$auth['id']])->setField(array('sort'=>$tmp));
                     if($status1 && $status2){
                         return true;
                     }else{
@@ -46,37 +45,36 @@ class AuthRole extends Common{
         }
     }
 
-    public function format_tree($AuthLists,$is_json = true){
+    public function formatTree($lists){
         $tree[] = array('id'=>'','pid'=>0,'level'=>0,'name'=>'根节点');
-        foreach($AuthLists as $auth){
-            if($auth['level'] < 2){
+        foreach($lists as $list){
+            if($list['level'] < 2){
                 $tree[] = array(
-                    'id' => $auth['id'],
-                    'pId' => $auth['pid'],
-                    'name' => $auth['name'],
-                    'level' => $auth['level'],
+                    'id' => $list['id'],
+                    'pId' => $list['pid'],
+                    'name' => $list['name'],
+                    'level' => $list['level'],
                     'open' => true,
                 );
             }
         }
-        return $is_json?json_encode($tree):$tree;
+        return $tree;
     }
 
-    public function get_menu(){
+    public function getMenu(){
         return $this->where('type',2)->order($this::$order)->select();
     }
 
-    public function get_breadcrumbs($id = ''){
+    public function getBreadcrumbs($id = ''){
         if(empty($this->breadcrumbs)){
             $request = Request::instance();
-            $urlCase    =   Config::get('URL_CASE_INSENSITIVE');
+
             $controller_name = $request->controller();
+            $controller_name = str_replace('_',' ',$controller_name);
+            $controller_name = ucwords($controller_name);
+            $controller_name = str_replace(' ','',$controller_name);
             $action_name = $request->action();
-            if($urlCase){
-                $controller_name = str_replace('_',' ',$controller_name);
-                $controller_name = ucwords($controller_name);
-                $controller_name = str_replace(' ','',$controller_name);;
-            }
+
             $path = str_replace('\\','/',$controller_name . DS . $action_name);
             $breadcrumbs = $this->where(array('site'=>$path))->find();
         }else{
@@ -85,27 +83,26 @@ class AuthRole extends Common{
         if(!empty($breadcrumbs)){
             $this->breadcrumbs[] = $breadcrumbs;
             if($breadcrumbs['pid'] != 0){
-                $this->get_breadcrumbs($breadcrumbs['pid']);
+                $this->getBreadcrumbs($breadcrumbs['pid']);
             }
         }else{
-            return;
+            return false;
         }
     }
 
-    public function get_auth_by_pid($pid,$sort = ''){
-        $sort = $sort ?: $this::$order;
-        return $this->where(array('pid'=>$pid))->order($sort)->find();
+    public function getAuthByPid($pid){
+        return $this->where(['pid'=>$pid])->find();
     }
 
-    public function get_auths_by_pid($pid){
-        return $this->where(array('pid'=>$pid))->order($this::$order)->select();
+    public function getAuthListByPid($pid){
+        return $this->where(['pid'=>$pid])->order($this::$order)->select();
     }
 
-    public function get_auth_by_id($id){
-        return $this->where(array('id'=>$id))->find();
+    public function getAuthById($id){
+        return $this->where(['id'=>$id])->find();
     }
 
-    public function get_auths(){
+    public function getAuthList(){
         return $this->order($this::$order)->select();
     }
 }

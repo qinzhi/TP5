@@ -80,7 +80,7 @@
                                     </td>
                                     <td class="input-edit" data-field="sort" title="点击更新商品排序">{$vo.sort}</td>
                                     <td>
-                                        <a class="btn btn-default btn-sm purple btn-edit" href="{:U('Goods/edit',array('id'=>$vo['id']))}" title="编辑">
+                                        <a class="btn btn-default btn-sm purple btn-edit" href="{:url('Goods/edit',['id'=>$vo['id']])}" title="编辑">
                                             <i class="fa fa-edit"></i> 编辑</a>
                                         <a class="btn btn-default btn-sm danger btn-del" href="javascript:void(0);" title="删除">
                                             <i class="fa fa-times"></i> 删除</a>
@@ -97,11 +97,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="dataTables_paginate paging_bootstrap" id="searchable_paginate">
-                                <ul class="pagination">
-                                    <li class="prev disabled"><a href="#">上一页</a></li>
-                                    <li class="active"><a href="#">1</a></li>
-                                    <li class="next disabled"><a href="#">下一页</a></li>
-                                </ul>
+                                {$goods->render()}
                             </div>
                         </div>
                     </div>
@@ -307,7 +303,7 @@
 
             if($('#tree_category').find('li').length < 1){
                 $('#tree_panel').append('<p style="position: absolute;left:5px;top:5px;">数据获取中...</p>');
-                $.post('{:U("GoodsCategory/getCategoriesTree")}',function(tree){
+                $.post('{:url("goodsCategory/getCategoriesTree")}',function(tree){
                     $('#tree_panel').find('p').remove();
                     var zNodes = JSON.parse(tree);
                     zTree = $.fn.zTree.init($("#tree_category"), setting, zNodes);

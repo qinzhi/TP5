@@ -19,8 +19,8 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str' => array_merge(config('view_replace_str'),[
-        '__CKEDITOR__' => '/Ckeditor', // 富文本编辑器
-        '__CKFINDER__' => '/Ckfinder', // 图片资源管理器
+        '__CKEDITOR__' => '/ckeditor', // 富文本编辑器
+        '__CKFINDER__' => '/ckfinder', // 图片资源管理器
         '__ADMIN__' => '/admin',
         '__ADDONS__' => '/admin/Addons',
         '__IMG__'    => '/admin/img',

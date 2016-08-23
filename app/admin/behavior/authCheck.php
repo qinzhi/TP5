@@ -9,7 +9,7 @@ class AuthCheck{
     public function run(&$params) {
         list($param,$method) = $params;
 
-        $param->app_type = isset($param->app_type)??'';
+        $param->app_type = isset($param->app_type)?$param->app_type:'';
 
         switch ($param->app_type) {
             case 'public': {
@@ -28,9 +28,9 @@ class AuthCheck{
         if(empty($admin_id) && !empty($_auth)){
             $_id = Crypt::authcode($_id, 'DECODE');
             session('admin_id',$_id);
-        }else{
-            /*(new Redirect('index/login'))->send();
-            exit;*/
+        }elseif(empty($admin_id) && empty($_auth)){
+            (new Redirect('index/login'))->send();
+            exit;
         }
     }
 }

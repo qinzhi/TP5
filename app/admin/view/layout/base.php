@@ -37,6 +37,12 @@ Purchase: http://wrapbootstrap.com
     <link id="skin-link" href="__CSS__/skins/green.min.css" rel="stylesheet" type="text/css" />
     <script src="__STATIC__/js/jquery.min.js"></script>
     <script src="__STATIC__/js/template.js"></script>
+    <script type="application/javascript">
+        (function () {
+            template.config('openTag', '{%');
+            template.config('closeTag', '%}');
+        })();
+    </script>
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <script src="__JS__/skins.min.js"></script>
 

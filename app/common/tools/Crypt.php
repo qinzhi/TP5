@@ -6,6 +6,8 @@
  * Time: 17:19
  */
 namespace app\common\tools;
+use think\Config;
+
 /**
  * @class ICrypt
  * @brief ICrypt 加密解密类
@@ -132,7 +134,7 @@ class Crypt
          *取值为:md5($_DCACHE['settings']['authkey'].$_SERVER['HTTP_USER_AGENT'])
          *$_DCACHE['settings']['authkey']是论坛安装时生成的15位随机字符串
          */
-        $key = md5($key ? $key : C('DATA_AUTH_KEY'));
+        $key = md5($key ? $key : Config::get('auth_key'));
         $key_length = strlen($key);
         /**
          *如果解密，先对密文解码

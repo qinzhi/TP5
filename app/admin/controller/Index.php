@@ -57,7 +57,7 @@ class Index extends Controller
      */
     public static function psd_verify($inputPsd, $password)
     {
-        $inputPsd = md5(md5($inputPsd) . C('DATA_AUTH_KEY'));
+        $inputPsd = md5(md5($inputPsd) . Config::get('auth_key'));
         if ($inputPsd == $password) {
             return true;
         } else {

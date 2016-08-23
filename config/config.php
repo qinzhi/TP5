@@ -221,6 +221,8 @@ return [
     'paginate'               => [
         'type'      => 'bootstrap',
         'var_page'  => 'page',
-        'list_rows' => 15,
-    ]
+        'list_rows' => 20,
+    ],
+
+    'auth_key' => '1*NX+Jds|p!IFqltgD)"?4;ic<{,wuya239Ax^]-'
 ];

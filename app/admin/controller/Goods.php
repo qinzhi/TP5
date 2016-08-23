@@ -2,7 +2,10 @@
 
 namespace app\admin\Controller;
 
+use app\admin\Model\Product;
+use think\Loader;
 use think\Request;
+use app\admin\Model\Goods as GoodsModel;
 
 class Goods extends Admin
 {
@@ -11,12 +14,12 @@ class Goods extends Admin
 
     public function __construct(){
         parent::__construct();
-        $this->goodsModel = new \app\admin\Model\Goods();
+        $this->goodsModel = new GoodsModel();
     }
 
     //商品列表
     public function index(){
-        $goods = $this->goodsModel->getGoods();
+        $goods = $this->goodsModel->paginate();
         $this->assign('goods',$goods);
         $this->assign('categories_id',0);
         return $this->fetch();
@@ -74,61 +77,62 @@ class Goods extends Admin
 
     //更新商品
     public function update(){
-        if(IS_AJAX){
-            $action = I('get.action');
+        if(Request::instance()->isAjax()){
+            $productModel = new Product();
+            $action = Request::instance()->get('action');
             if($action == 'price'){ //更新价格
-                $result = $this->updatePrice();
+                $result = $this->updatePrice($productModel);
             }elseif($action == 'sku') {//更新库存
-                $result = $this->updateSku();
+                $result = $this->updateSku($productModel);
             }else{
                 $result = $this->goodsModel->save(I('post.'));
                 if($result){
-                    $result = array('code'=>1,'msg'=>'更新成功');
+                    return ['code'=>1,'msg'=>'更新成功'];
                 }else{
-                    $result = array('code'=>0,'msg'=>'更新失败');
+                    return ['code'=>0,'msg'=>'更新失败'];
                 }
             }
         }else{
-            $result = array('code'=>0,'msg'=>'异常提交');
+            return ['code'=>0,'msg'=>'异常提交'];
         }
-        $this->ajaxReturn($result);
+        return $result;
     }
 
     //更新库存
-    private function updateSku(){
-        $goods_id = I('get.goods_id/d');
-        $_product_id = I('get._product_id');
-        $_store_nums = I('get._store_nums');
-        $goods = array(
+    private function updateSku(Product $productModel){
+        $goods_id = Request::instance()->get('goods_id');
+        $_product_id = Request::instance()->get('_product_id');
+        $_store_nums = Request::instance()->get('_store_nums');
+        $goods = [
             'id' => $goods_id,
             'store_nums' => array_sum($_store_nums),
             'update_time' => time()
-        );
-        $result = $this->goodsModel->save($goods);
+        ];
+        $result = $this->goodsModel->update($goods);
         if($result){
+            $product = [];
             foreach($_product_id as $key=>$product_id){
-                $product = array(
+                $product[] = [
                     'id' => $product_id,
                     'store_nums' => $_store_nums[$key]
-                );
-
-                M('Products')->save($product);
+                ];
             }
-            $result = array('code'=>1,'msg'=>'更新成功');
+            $productModel->saveAll($product);
+            $result = ['code'=>1,'msg'=>'更新成功'];
         }else{
-            $result = array('code'=>0,'msg'=>'更新失败');
+            $result = ['code'=>0,'msg'=>'更新失败'];
         }
         return $result;
     }
 
     //更新价格
-    private function updatePrice(){
-        $goods_id = I('get.goods_id/d');
-        $_default = I('get._default/d');
-        $_product_id = I('get._product_id');
-        $_market_price = I('get._market_price');
-        $_sell_price = I('get._sell_price');
-        $_cost_price = I('get._cost_price');
+    private function updatePrice(Product $productModel){
+        $goods_id = Request::instance()->get('goods_id');
+        $_default = Request::instance()->get('_default');
+        $_product_id = Request::instance()->get('_product_id');
+        $_market_price = Request::instance()->get('_market_price');
+        $_sell_price = Request::instance()->get('_sell_price');
+        $_cost_price = Request::instance()->get('_cost_price');
         $goods = array(
             'id' => $goods_id,
             'market_price' => $_market_price[$_default],
@@ -136,68 +140,98 @@ class Goods extends Admin
             'cost_price' => $_cost_price[$_default],
             'update_time' => time()
         );
-        $result = $this->goodsModel->save($goods);
+        $result = $this->goodsModel->update($goods);
         if($result){
+            $product = [];
             foreach($_product_id as $key=>$product_id){
-                $product = array(
+                $product[] = [
                     'id' => $product_id,
                     'market_price' => $_market_price[$key],
                     'sell_price' => $_sell_price[$key],
                     'cost_price' => $_cost_price[$key],
-                );
-
-                M('Products')->save($product);
+                ];
             }
-            $result = array('code'=>1,'msg'=>'更新成功');
+            $productModel->saveAll($product);
+            $result = ['code'=>1,'msg'=>'更新成功'];
         }else{
-            $result = array('code'=>0,'msg'=>'更新失败');
+            $result = ['code'=>0,'msg'=>'更新失败'];
         }
         return $result;
     }
 
     public function del(){
-        $id = I('request.id/d');
-        $result = $this->goodsModel->delGoodsById($id);
+        $id = Request::instance()->get('id');
+        $result = GoodsModel::destroy($id);
         if($result){
-            $result = array('code'=>1,'msg'=>'删除成功');
+            $result = ['code'=>1,'msg'=>'删除成功'];
         }else{
-            $result = array('code'=>0,'msg'=>'删除失败');
+            $result = ['code'=>0,'msg'=>'删除失败'];
         }
-        $this->ajaxReturn($result);
+        return $result;
     }
 
-    public function __call($function,$args)
-    {
-        if ($function === 'spec') {
-            $tpl = I('request.tpl');
+    public function _empty(){
+        $action = Request::instance()->action();
+        $tpl = Request::instance()->request('tpl');
+        if ($action === 'spec') {
             if ($tpl == 'select') {
-                $has_id = I('request.has_id');
+                $has_id = Request::instance()->request('has_id');
                 $where = array();
                 if (!empty($has_id)) {
                     $where['id'] = array('not in', implode(',', $has_id));
                 }
-                $specs = D('Spec')->get_specs('id,name', $where);
+                $specs = Loader::model('spec')->where($where)->get();
                 $this->assign('specs', $specs);
             } elseif ($tpl == 'edit') {
-                $id = I('request.id/d');
-                $spec = D('Spec')->get_spec_by_id($id);
+                $id = Request::instance()->request('id');
+                $spec = Loader::model('spec')->get($id);
                 $this->assign('spec', $spec);
             }
-            $this->display(CONTROLLER_NAME . DS . ucfirst($function) . DS . $tpl);
-        }elseif($function === 'product'){
-            $tpl = I('request.tpl');
+            return $this->fetch("goods/$action/$tpl");
+        }elseif($action === 'product'){
             if($tpl == 'price' || $tpl == 'sku' ){
-                $id = I('request.id/d');
+                $id = Request::instance()->request('id');
                 $goods = $this->goodsModel->getGoodsById($id);
                 $this->assign('goods', $goods);
                 $products = $this->goodsModel->getProductsById($id);
                 $this->assign('products', $products);
             }
-            $this->display(CONTROLLER_NAME . DS . ucfirst($function) . DS . $tpl);
+            return $this->fetch("goods/$action/$tpl");
+        }
+    }
+
+    public function __call($function,$args)
+    {
+        if ($function === 'spec') {
+            $tpl = Request::instance()->request('tpl');
+            if ($tpl == 'select') {
+                $has_id = Request::instance()->request('has_id');
+                $where = array();
+                if (!empty($has_id)) {
+                    $where['id'] = array('not in', implode(',', $has_id));
+                }
+                $specs = Loader::model('spec')->where($where)->get();
+                $this->assign('specs', $specs);
+            } elseif ($tpl == 'edit') {
+                $id = Request::instance()->request('id');
+                $spec = Loader::model('spec')->get($id);
+                $this->assign('spec', $spec);
+            }
+            return $this->fetch(Request::instance()->controller() . DS . ucfirst($function) . DS . $tpl);
+        }elseif($function === 'product'){
+            $tpl = Request::instance()->request('tpl');
+            if($tpl == 'price' || $tpl == 'sku' ){
+                $id = Request::instance()->request('id');
+                $goods = $this->goodsModel->getGoodsById($id);
+                $this->assign('goods', $goods);
+                $products = $this->goodsModel->getProductsById($id);
+                $this->assign('products', $products);
+            }
+            return $this->fetch(Request::instance()->controller() . DS . ucfirst($function) . DS . $tpl);
         }else{
-            echo"你所调用的函数: ".$function."(参数: ";
-            dump(array_merge(I('post.'),I('get.')));
-            echo")<br>不存在！<br>";
+            echo "你所调用的函数: ".$function."(参数: ";
+            dump(Request::instance()->request());
+            echo ")<br>不存在！<br>";
         }
     }
 }
