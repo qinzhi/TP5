@@ -88,9 +88,10 @@ class GoodsCategory extends Common{
      * @return mixed
      */
     public function getCategoryById($id){
-        return $this->alias('t')
-                        ->join(self::TABLE_SEO . ' t1','t1.category_id=t.id')
-                            ->where(['t.id'=>$id])->find();
+        return $this->field('t.*,t1.title,t1.keywords,t1.descript')
+                        ->alias('t')
+                            ->join(self::TABLE_SEO . ' t1','t1.category_id=t.id')
+                                ->where(['t.id'=>$id])->find();
     }
 
     /**
@@ -117,12 +118,12 @@ class GoodsCategory extends Common{
      * @return bool|mixed
      */
     public function addCategory($category,$seo){
-        $insert_id = $this->save($category);
-        if($insert_id === false){
-            return $insert_id;
+        $status = $this->save($category);
+        if($status == false){
+            return false;
         }else{
-            $seo['category_id'] = $insert_id;
-            Db::table(self::TABLE_SEO)->save($seo);
+            $seo['category_id'] = $this->getData('id');
+            Db::name(self::TABLE_SEO)->insert($seo);
             return true;
         }
     }
@@ -135,11 +136,11 @@ class GoodsCategory extends Common{
      * @return bool
      */
     public function updateCategoryById($category,$seo,$id){
-        $result = $this->where(['id'=>$id])->save($category);
+        $result = $this->save($category,['id'=>$id]);
         if($result === false){
             return $result;
         }else{
-            Db::table(self::TABLE_SEO)->where(['category_id'=>$id])->save($seo);
+            Db::name(self::TABLE_SEO)->where(['category_id'=>$id])->update($seo);
             return true;
         }
     }

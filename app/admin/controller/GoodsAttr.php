@@ -2,6 +2,7 @@
 
 namespace app\admin\Controller;
 
+use app\admin\Model\Attr;
 use think\Db;
 use app\admin\Model\Model;
 use think\Request;
@@ -12,17 +13,16 @@ class GoodsAttr extends Admin {
 
     public function __construct(){
         parent::__construct();
-        $this->attr = Db::name('attr');
+        $this->attr = new Attr();;
     }
 
     public function getModels(){
-        $model = Model::select();
+        $model = Model::all();
         return $model;
     }
 
-    public function gets(){
-        $model_id = Request::instance()->get('id');
-        $attrs = $this->attr->where(array('model_id'=>$model_id))->select();
+    public function gets($id){
+        $attrs = $this->attr->where(['model_id'=>$id])->select();
         return $attrs;
     }
 
@@ -35,12 +35,12 @@ class GoodsAttr extends Admin {
     public function add(){
         if(Request::instance()->isPost()){
             $name = Request::instance()->request('name','','trim');
-            $model_id = M('Model')->add(array('name'=>$name));
+            $model_id = Db::name(Model::TABLE_NAME)->insertGetId(['name'=>$name]);
 
-            $attr_name = Request::instance()->request('attr_name');
-            if(!empty($attr_name)){
-                $type = Request::instance()->request('type');
-                $value = Request::instance()->request('value');
+            if(!empty($_POST['type'])){
+                $attr_name = $_POST['attr_name'];
+                $type = $_POST['type'];
+                $value = $_POST['value'];
                 for($i=0,$len=count($attr_name);$i<$len;$i++){
                     $attr = array(
                         'model_id' => $model_id,
@@ -49,14 +49,13 @@ class GoodsAttr extends Admin {
                         'value' =>  $value[$i],
                         'sort' => $i
                     );
-                    $this->attr->add($attr);
+                    $this->attr->save($attr);
                 }
             }
-            $this->success('添加成功',url('goodsAttr/index'));
-            return;
+            return $this->success('添加成功',url('goodsAttr/index'));
         }
 
-        $this->display('goods/attr/add');
+        return $this->fetch('goods/attr/add');
 
     }
 
@@ -67,14 +66,13 @@ class GoodsAttr extends Admin {
 
             $del_id = Request::instance()->request('del_id');
             if(!empty($del_id)){
-                $this->attr->delete($del_id);
+                Attr::destroy($del_id);
             }
-
-            $attr_id = Request::instance()->request('attr_id');
-            if(!empty($attr_id)){
-                $attr_name = Request::instance()->request('attr_name');
-                $type = Request::instance()->request('type');
-                $value = Request::instance()->request('value');
+            if(!empty($_POST['type'])){
+                $attr_id = $_POST['attr_id'];
+                $attr_name = $_POST['attr_name'];
+                $type = $_POST['type'];
+                $value = $_POST['value'];
                 $attr = [];
                 for($i=0,$len=count($attr_id);$i<$len;$i++){
                     $attr[$i] = [

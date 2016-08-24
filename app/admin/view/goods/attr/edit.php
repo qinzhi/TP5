@@ -109,12 +109,22 @@
                     $(form).submit();
                 }
             });
-
+            $(document).on('click','select[name="type[]"]',function(){
+                var value = $(this).closest('tr').find('input[name="value[]"]');
+                if(this.value == 1){
+                    value.val('').attr('readonly',true);
+                }else{
+                    value.removeAttr('readonly');
+                }
+            });
             (function init(){
                 var attrs = JSON.parse('{$model.attr|json_encode}');
                 $('.tbody-attr_list').html(template('model_list',{attrs:attrs}));
                 $('.tbody-attr_list').find('.attr_type').each(function(index){
                     $(this).find('option[value=' + attrs[index].type + ']').attr('selected',true);
+                    if(attrs[index].type == 1){
+                        $(this).closest('tr').find('input[name="value[]"]').attr('readonly',true);
+                    }
                 });
                 $('#addAttr').click(function(){
                     var attrs = [];attrs[0] = {};

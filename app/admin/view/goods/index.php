@@ -175,7 +175,7 @@
                         });
                         if($return){
                             var params = target.find('form').serialize();
-                            $.get("{:url('goods/update')}",params,function(result){
+                            $.post("{:url('goods/update')}",params,function(result){
                                 if(result.code == 1){
                                     var _default = target.find('input[name=_default]');
                                     var sell_price = _default.closest('tr').find('input[name="_sell_price[]"]').val();
@@ -215,7 +215,7 @@
                         });
                         if($return){
                             var params = target.find('form').serialize();
-                            $.get("{:url('goods/update')}",params,function(result){
+                            $.post("{:url('goods/update')}",params,function(result){
                                 if(result.code == 1){
                                     var store_nums = target.find('input[name="_store_nums[]"]');
                                     var total = 0;
@@ -305,8 +305,7 @@
                 $('#tree_panel').append('<p style="position: absolute;left:5px;top:5px;">数据获取中...</p>');
                 $.post('{:url("goodsCategory/getCategoriesTree")}',function(tree){
                     $('#tree_panel').find('p').remove();
-                    var zNodes = JSON.parse(tree);
-                    zTree = $.fn.zTree.init($("#tree_category"), setting, zNodes);
+                    zTree = $.fn.zTree.init($("#tree_category"), setting, tree);
                 });
             }
             $("body").bind("mousedown", onBodyDown);

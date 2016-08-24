@@ -13,6 +13,17 @@
             </td>
         </tr>
         <tr>
+            <th>商品简述：</th>
+            <td>
+                <div class="form-group has-feedback no-margin">
+                    <span class="input-icon icon-right Lwidth400">
+                        <textarea id="intro" name="intro" class="form-control" maxlength="128"></textarea>
+                        <i class="fa fa-rocket darkorange"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <th>关键字：</th>
             <td>
                 <div class="form-group has-feedback no-margin">

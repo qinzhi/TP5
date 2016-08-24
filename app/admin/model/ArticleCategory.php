@@ -13,9 +13,11 @@ class ArticleCategory extends Common{
      * 删除时间
      * @var string
      */
-    protected static $deleteTime = 'delete_time';
+    protected static $deleteTime = 'del_time';
 
     public static $order = 'sort asc'; //排序
+
+    const TABLE_NAME = 'article_category';
 
     const TABLE_SEO = 'article_category_to_seo';
 
@@ -49,7 +51,7 @@ class ArticleCategory extends Common{
         }
     }
 
-    public function format_tree($AuthLists,$is_init = true){
+    public function formatTree($AuthLists,$is_init = true){
         if($is_init) $tree[] = array('id'=>'','pid'=>0,'level'=>0,'name'=>'根节点');
         foreach($AuthLists as $auth){
             if($auth['level'] < 2){
@@ -101,12 +103,12 @@ class ArticleCategory extends Common{
      * @return bool|mixed
      */
     public function addCategory($category,$seo){
-        $insert_id = $this->save($category);
-        if($insert_id === false){
-            return $insert_id;
+        $status = $this->save($category);
+        if($status == false){
+            return false;
         }else{
-            $seo['category_id'] = $insert_id;
-            Db::table(self::TABLE_SEO)->save($seo);
+            $seo['category_id'] = $this->getData('id');
+            Db::name(self::TABLE_SEO)->insert($seo);
             return true;
         }
     }
@@ -119,11 +121,11 @@ class ArticleCategory extends Common{
      * @return bool
      */
     public function updateCategoryById($category,$seo,$id){
-        $result = $this->where('id',$id)->save($category);
+        $result = $this->where('id',$id)->update($category);
         if($result === false){
             return $result;
         }else{
-            Db::table(self::TABLE_SEO)->where('category_id',$id)->save($seo);
+            Db::name(self::TABLE_SEO)->where('category_id',$id)->update($seo);
             return true;
         }
     }
@@ -134,9 +136,10 @@ class ArticleCategory extends Common{
      * @return mixed
      */
     public function getCategoryById($id){
-        return $this->alias('t')
-                        ->join(self::TABLE_SEO . ' t1','t1.category_id=t.id')
-                            ->where('t.id',$id)->find();
+        return $this->field('t.*,t1.title,t1.keywords,t1.descript')
+                        ->alias('t')
+                            ->join(self::TABLE_SEO . ' t1','t1.category_id=t.id')
+                                ->where('t.id',$id)->find();
     }
 
 }

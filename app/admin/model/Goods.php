@@ -2,7 +2,11 @@
 
 namespace app\admin\Model;
 
-use think\Db;
+use app\common\Model\GoodsToAttr;
+use app\common\Model\GoodsToCategory;
+use app\common\Model\GoodsToCommend;
+use app\common\Model\GoodsToDetail;
+use app\common\Model\GoodsToSeo;
 use think\Request;
 use traits\model\SoftDelete;
 
@@ -22,34 +26,9 @@ class Goods extends Common{
     protected $update = ['update_time'];
 
     /**
-     * 商品分类表
-     */
-    const TABLE_CATEGORY = 'goods_to_category';
-
-    /**
-     * 商品类型表
-     */
-    const TABLE_COMMEND = 'goods_to_commend';
-
-    /**
-     * 商品属性表
-     */
-    const TABLE_ATTR = 'goods_to_attr';
-
-    /**
-     * 商品详情表
-     */
-    const TABLE_DETAIL = 'goods_to_detail';
-
-    /**
-     * 商品SEO表
-     */
-    const TABLE_SEO = 'goods_to_seo';
-
-    /**
      * 产品表
      */
-    const TABLE_PRODUCT = 'product';
+    const TABLE_PRODUCT = 'products';
 
     public function setCreateTimeAttr(){
         return time();
@@ -75,9 +54,9 @@ class Goods extends Common{
         $_weight = $params['_weight'];
 
         //计算总库存
-        $store_total_nums = 0;
+        $store_total_num = 0;
         foreach($_store_nums as $val){
-            $store_total_nums += $val;
+            $store_total_num += $val;
         }
 
         $goods = [
@@ -86,23 +65,23 @@ class Goods extends Common{
             'search_words' => $params['search_words'],
             'status' => intval($params['status']),
             'goods_no' => $_goods_no[$_default],
-            'store_nums' => $store_total_nums,
+            'store_nums' => $store_total_num,
             'market_price' => $_market_price[$_default],
             'sell_price' => $_sell_price[$_default],
             'cost_price' => $_cost_price[$_default],
             'weight' => $_weight[$_default],
         ];
 
-        $goods_id = $this->data($goods)->save($goods);//添加商品
+        $status = $this->data($goods)->save();//添加商品
 
-        if($goods_id > 0){
-
+        if($status){
+            $goods_id = $this->getData('id');
             /** --------   添加商品详情   --------- **/
             $detail = array(
                 'goods_id' => $goods_id,
-                'detail' => I('post.detail','','')
+                'detail' => Request::instance()->post('detail','','trim')
             );
-            Db::table(self::TABLE_DETAIL)->insert($detail);
+            (new GoodsToDetail())->save($detail);
 
             /** --------   添加商品SEO   --------- **/
             $seo = [
@@ -110,11 +89,11 @@ class Goods extends Common{
                 'keywords' => $params['keywords'],
                 'description' => $params['description']
             ];
-            Db::table(self::TABLE_SEO)->save($seo);
+            (new GoodsToSeo())->save($seo);
 
             /** --------   添加商品类型   --------- **/
-            $commend_type = $params['commend_type'];
-            if(!empty($commend_type)){
+            if(!empty($params['commend_type'])){
+                $commend_type = $params['commend_type'];
                 $commend = [];
                 foreach($commend_type as $val){
                     $commend[] = [
@@ -122,13 +101,12 @@ class Goods extends Common{
                         'goods_id' => $goods_id
                     ];
                 }
-                Db::table(self::TABLE_COMMEND)->saveAll($commend);
+                (new GoodsToCommend())->saveAll($commend);
             }
 
             /** --------   添加商品分类   --------- **/
-            $category_id = $params['category_id'];
-            if(!empty($category_id)){
-                $category_id = explode(',',$category_id);
+            if(!empty($params['category_id'])){
+                $category_id = explode(',',$params['category_id']);
                 $category = [];
                 foreach($category_id as $val){
                     $category[] = [
@@ -136,13 +114,13 @@ class Goods extends Common{
                         'goods_id' => $goods_id
                     ];
                 }
-                Db::table(self::TABLE_CATEGORY)->saveAll($category);
+                (new GoodsToCategory())->saveAll($category);
             }
 
             /** --------   添加商品扩展属性   --------- **/
-            $model_id = $params['model_id'];
-            $_attr = $params['_attr'];
-            if($model_id > 0 && !empty($_attr)){
+            if(!empty($params['model_id']) && !empty($params['_attr'])){
+                $model_id = $params['model_id'];
+                $_attr = $params['_attr'];
                 $attr = [];
                 foreach($_attr as $key => $val){
                     $attr[] = [
@@ -152,8 +130,9 @@ class Goods extends Common{
                         'attr_value' => is_array($val) ? implode(',',$val) : $val
                     ];
                 }
-                Db::table(self::TABLE_ATTR)->saveAll($attr);
+                (new GoodsToAttr())->saveAll($attr);
             }
+
 
             /** --------   添加規格商品   --------- **/
             $_spec_list = Request::instance()->post('_spec_list');
@@ -171,18 +150,11 @@ class Goods extends Common{
                     'is_default' => ($_default == $key)?:0
                 ];
             }
-            Db::table(self::TABLE_PRODUCT)->saveAll($product);
+            (new Products())->saveAll($product);
         }
     }
 
     public function editGoodsById($params,$goods_id){
-        $goods = array(
-            'id' => $goods_id,
-            'name' => $params['name'],
-            'intro' => $params['intro'],
-            'search_words' => $params['search_words'],
-            'status' => (int)$params['status'],
-        );
 
         $_default = isset($params['_default']) ? (int)$params['_default'] : 0;
 
@@ -194,38 +166,45 @@ class Goods extends Common{
         $_weight = $params['_weight'];
 
         //计算总库存
-        $store_total_nums = 0;
+        $store_total_num = 0;
         foreach($_store_nums as $val){
-            $store_total_nums += $val;
+            $store_total_num += $val;
         }
 
-        $goods['goods_no'] = $_goods_no[$_default];
-        $goods['store_nums'] = $store_total_nums;
-        $goods['market_price'] = $_market_price[$_default];
-        $goods['sell_price'] = $_sell_price[$_default];
-        $goods['cost_price'] = $_cost_price[$_default];
-        $goods['weight'] = $_weight[$_default];
+        $goods = [
+            'name' => $params['name'],
+            'intro' => $params['intro'],
+            'search_words' => $params['search_words'],
+            'status' => intval($params['status']),
+            'goods_no' => $_goods_no[$_default],
+            'store_nums' => $store_total_num,
+            'market_price' => $_market_price[$_default],
+            'sell_price' => $_sell_price[$_default],
+            'cost_price' => $_cost_price[$_default],
+            'weight' => $_weight[$_default],
+        ];
 
-        if($this->save($goods)){//更新商品
+        if($this->save($goods,['id' => $goods_id])){//更新商品
 
             $map['goods_id'] = $goods_id;
 
             /** --------   更新商品详情   --------- **/
             $detail = array(
-                'detail' => Request::instance()->post('trim','','')
+                'detail' => Request::instance()->post('detail','','trim')
             );
-            Db::table(self::TABLE_DETAIL)->where($map)->save($detail);
+            GoodsToDetail::where($map)->update($detail);
 
             /** --------   更新商品SEO   --------- **/
             $seo = array(
                 'keywords' => $params['keywords'],
                 'description' => $params['description']
             );
-            Db::table(self::TABLE_SEO)->where($map)->save($seo);
+            GoodsToSeo::where($map)->update($seo);
 
             /** --------   添加商品类型   --------- **/
             $commend_type = $params['commend_type'];
-            Db::table(self::TABLE_COMMEND)->where($map)->delete();//删除商品类型
+            $goodsToCommendModel = new GoodsToCommend();
+            $goodsToCommendModel->where($map)->delete();//删除商品类型
             if(!empty($commend_type)){
                 $commend = [];
                 foreach($commend_type as $val){
@@ -234,12 +213,13 @@ class Goods extends Common{
                         'goods_id' => $goods_id
                     ];
                 }
-                Db::table(self::TABLE_COMMEND)->saveAll($commend);
+                $goodsToCommendModel->saveAll($commend);
             }
 
             /** --------   添加商品分类   --------- **/
             $category_id = $params['category_id'];
-            Db::table(self::TABLE_CATEGORY)->where($map)->delete();//删除商品分类
+            $goodsToCategoryModel = new GoodsToCategory();
+            $goodsToCategoryModel->where($map)->delete();//删除商品分类
             if(!empty($category_id)){
                 $category_id = explode(',',$category_id);
                 $category = [];
@@ -249,13 +229,14 @@ class Goods extends Common{
                         'goods_id' => $goods_id
                     ];
                 }
-                Db::table(self::TABLE_CATEGORY)->saveAll($category);
+                $goodsToCategoryModel->saveAll($category);
             }
 
             /** --------   添加商品扩展属性   --------- **/
             $model_id = $params['model_id'];
             $_attr = $params['_attr'];
-            Db::table(self::TABLE_ATTR)->where($map)->delete();//删除商品分类
+            $goodsToAttrModel = new GoodsToAttr();
+            $goodsToAttrModel->where($map)->delete();//删除商品分类
             if($model_id > 0 && !empty($_attr)){
                 $attr = [];
                 foreach($_attr as $key => $val){
@@ -266,18 +247,21 @@ class Goods extends Common{
                         'attr_value' => is_array($val) ? implode(',',$val) : $val
                     ];
                 }
-                Db::table(self::TABLE_ATTR)->saveAll($attr);
+                $goodsToAttrModel->saveAll($attr);
             }
 
             /** --------   更新規格商品   --------- **/
-            $_spec_list = Request::instance()->post('_spec_list','','');
+            $productModel = new Products();
+            $_spec_list = $params['_spec_list'];
             $_product_id = $params['_product_id'];
-            $delProduct = $params['delProduct'];
-            if(!empty($delProduct)){
-                Db::table(self::TABLE_PRODUCT)->where(array('id'=>array('in',$delProduct)))->save(array('is_del'=>1));
+
+            if(!empty($params['delProduct'])){
+                $productModel->delete($params['delProduct']);//删除商品
             }
+
+            $product = [];
             foreach($_goods_no as $key => $value){
-                $product = array(
+                $product[$key] = [
                     'goods_id' => $goods_id,
                     'products_no' => $_goods_no[$key],
                     'spec_array' => !empty($_spec_list[$key]) ? "[".join(',',$_spec_list[$key])."]" : '',
@@ -287,12 +271,12 @@ class Goods extends Common{
                     'cost_price' => $_cost_price[$key],
                     'weight' => $_weight[$key],
                     'is_default' => ($_default == $key)?:0
-                );
+                ];
                 if(!empty($_product_id[$key])){
-                    $product['id'] = $_product_id[$key];
+                    $product[$key]['id'] = $_product_id[$key];
                 }
-                Db::table(self::TABLE_PRODUCT)->save($product);
             }
+            $productModel->saveAll($product);
         }
     }
 
@@ -303,9 +287,9 @@ class Goods extends Common{
      */
     public function getGoodsById($id){
         return $this->alias('t')
-                        ->join(self::TABLE_DETAIL . ' t1','t1.goods_id=t.id','LEFT')
-                            ->join(self::TABLE_SEO . ' t2','t2.goods_id=t.id','LEFT')
-                                ->where('t.id='.$id)->find();
+                        ->join(GoodsToDetail::TABLE_NAME . ' t1','t1.goods_id=t.id','LEFT')
+                            ->join(GoodsToSeo::TABLE_NAME . ' t2','t2.goods_id=t.id','LEFT')
+                                ->where('t.id',$id)->find();
     }
 
     /**
@@ -314,7 +298,7 @@ class Goods extends Common{
      * @return mixed
      */
     public function getGoodsCategoriesById($goods_id){
-        return Db::table(self::TABLE_CATEGORY)->where('goods_id',$goods_id)->select();
+        return GoodsToCategory::where('goods_id',$goods_id)->select();
     }
 
     /**
@@ -323,7 +307,7 @@ class Goods extends Common{
      * @return mixed
      */
     public function getGoodsCommendById($goods_id){
-        return Db::table(self::TABLE_COMMEND)->where('goods_id',$goods_id)->select();
+        return GoodsToCommend::where('goods_id',$goods_id)->select();
     }
 
     /**
@@ -332,7 +316,7 @@ class Goods extends Common{
      * @return mixed
      */
     public function getGoodsAttrById($goods_id){
-        $attr = Db::table(self::TABLE_ATTR)->where('goods_id',$goods_id)->select();
+        $attr = GoodsToAttr::where('goods_id',$goods_id)->select();
         $arr = array();
         foreach($attr as $value){
             $arr[$value['model_id']][$value['attr_id']] = array(
@@ -351,10 +335,6 @@ class Goods extends Common{
      * @return mixed
      */
     public function getProductsById($goods_id){
-        $map = array(
-            'goods_id' => $goods_id,
-            'is_del' => 0
-        );
-        return M('Products')->where($map)->select();
+        return Products::where('goods_id',$goods_id)->select();
     }
 }

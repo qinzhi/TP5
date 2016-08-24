@@ -8,7 +8,7 @@
             <div class="widget flat no-margin">
                 <div class="widget-header widget-fruiter">
                     <div class="pull-right">
-                        <a class="btn btn-success" id="article_save" href="javascript:void(0);">添加文章</a>
+                        <a class="btn btn-success" id="article_save" href="javascript:void(0);">保存</a>
                     </div>
                 </div><!--Widget Header-->
                 <div class="widget-body plugins_goods-">
@@ -188,9 +188,8 @@
 
             create_category_panel();
 
-            $.post('{:U("ArticleCategory/getCategoriesTree")}',function(tree){
-                var zNodes = JSON.parse(tree);
-                zTree = $.fn.zTree.init($("#tree_category"), setting, zNodes);
+            $.post('{:url("articleCategory/getCategoriesTree")}',function(tree){
+                zTree = $.fn.zTree.init($("#tree_category"), setting, tree);
             });
 
             $('#article_save').click(function(){

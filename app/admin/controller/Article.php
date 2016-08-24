@@ -1,8 +1,10 @@
 <?php
 
 namespace app\admin\Controller;
+
 use think\Loader;
 use think\Request;
+use app\admin\model\Article as ArticleModel;
 
 /**
  * 文章管理控制器
@@ -15,7 +17,7 @@ class Article extends Admin {
 
     public function __construct(){
         parent::__construct();
-        $this->articleModel = Loader::model('article');
+        $this->articleModel = new ArticleModel();
     }
 
     public function index(){
@@ -41,8 +43,18 @@ class Article extends Admin {
         }else{
             $article = $this->articleModel->getArticleById($id);
             $this->assign('article',$article);
-            $this->display();
+            return $this->fetch();
         }
+    }
+
+    public function del($id){
+        $result = ArticleModel::destroy($id);
+        if($result){
+            $result = ['code'=>1,'msg'=>'删除成功'];
+        }else{
+            $result = ['code'=>0,'msg'=>'删除失败'];
+        }
+        return $result;
     }
 
 }

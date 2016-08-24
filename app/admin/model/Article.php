@@ -2,6 +2,8 @@
 
 namespace app\admin\Model;
 
+use app\common\Model\ArticleToDetail;
+use app\common\Model\ArticleToSeo;
 use think\Db;
 use traits\model\SoftDelete;
 
@@ -9,17 +11,11 @@ class Article extends Common{
 
     use SoftDelete;
 
-    const TABLE_CATEGORY = 'article_category';
-
-    const TABLE_DETAIL = 'article_to_detail';
-
-    const TABLE_SEO = 'article_to_seo';
-
     /**
      * 删除时间
      * @var string
      */
-    protected static $deleteTime = 'del_time';
+    protected static $deleteTime = 'delete_time';
 
     protected $insert = ['create_time','update_time'];
 
@@ -36,7 +32,7 @@ class Article extends Common{
     public function getArticles(){
         return $this->field('t.id,t.title,t.category_id,t.category_id,t.create_time,t.sort,t1.name as category')
                         ->alias('t')
-                            ->join(self::TABLE_CATEGORY . ' t1','t.category_id=t1.id')
+                            ->join(ArticleCategory::TABLE_NAME . ' t1','t.category_id=t1.id','left')
                                 ->select();
     }
 
@@ -52,15 +48,15 @@ class Article extends Common{
             'sort' => (int)$params['sort']
         );
 
-        $article_id = $this->save($article);//添加文章
-        if($article_id > 0){
-
+        $status = $this->save($article);//添加文章
+        if($status){
+            $article_id = $this->getData('id');
             /** --------   添加文章详情   --------- **/
             $detail = array(
                 'article_id' => $article_id,
                 'detail' => $params['detail']
             );
-            Db::table('ArticleToDetail')->save($detail);
+            (new ArticleToDetail())->save($detail);
 
             /** --------   添加商品SEO   --------- **/
             $seo = array(
@@ -68,7 +64,7 @@ class Article extends Common{
                 'keywords' => $params['keywords'],
                 'description' => $params['description']
             );
-            Db::table('ArticleToSeo')->save($seo);
+            (new ArticleToSeo())->save($seo);
         }
     }
 
@@ -87,7 +83,7 @@ class Article extends Common{
             'update_time' => time()
         );
 
-        if($this->save($article)){//更新商品
+        if($this->update($article)){//更新商品
 
             $map['article_id'] = $article_id;
 
@@ -95,14 +91,14 @@ class Article extends Common{
             $detail = array(
                 'detail' => $params['detail']
             );
-            Db::table('ArticleToDetail')->where($map)->save($detail);
+            ArticleToDetail::where($map)->update($detail);
 
             /** --------   更新商品SEO   --------- **/
             $seo = array(
                 'keywords' => $params['keywords'],
                 'description' => $params['description']
             );
-            Db::table('ArticleToSeo')->where($map)->save($seo);
+            ArticleToSeo::where($map)->update($seo);
         }
     }
 
@@ -114,9 +110,9 @@ class Article extends Common{
     public function getArticleById($id){
         return $this->field('t.*,t1.detail,t2.keywords,t2.description,t3.name as category')
                         ->alias('t')
-                            ->join('left join ' . $this->tablePrefix . 'article_to_detail as t1 on t1.article_id = t.id')
-                                ->join('left join ' . $this->tablePrefix . 'article_to_seo as t2 on t2.article_id = t.id')
-                                    ->join('left join ' . $this->tablePrefix . 'article_category as t3 on t3.id = t.category_id')
-                                        ->where('t.id='.$id)->find();
+                            ->join(ArticleToDetail::TABLE_NAME . ' t1','t1.article_id = t.id','left')
+                                ->join(ArticleToSeo::TABLE_NAME . ' t2','t2.article_id = t.id','left')
+                                    ->join(ArticleCategory::TABLE_NAME . ' t3','t3.id = t.category_id','left')
+                                        ->where('t.id',$id)->find();
     }
 }

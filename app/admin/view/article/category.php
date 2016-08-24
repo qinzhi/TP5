@@ -153,7 +153,7 @@
                 if(category_id > 0){
                     var query = $('.plugins_category- form').serialize();
                     query += '&id=' + category_id;
-                    $.fruiter.post('{:U("ArticleCategory/edit")}',{params:encodeURIComponent(query)},function(data){
+                    $.fruiter.post('{:url("articleCategory/edit")}',{params:encodeURIComponent(query)},function(data){
                         if(data.code == 1){
                             $('.plugins_category- .dataTable').find('tr[data-id='+category_id+']')
                                 .find('.category_name').text($('.plugins_category- form').find('input[name=name]').val());
@@ -171,7 +171,7 @@
                     var category_name = $('.plugins_category- .dataTable').find('tr[data-id='+category_id+']').find('.category_name').text();
                     bootbox.confirm("确定要删除<span class='red'>"+category_name+"</span>分类?", function (result) {
                         if (result) {
-                            $.fruiter.post('{:U("ArticleCategory/del")}',{id:category_id},function(data){
+                            $.fruiter.post('{:url("articleCategory/del")}',{id:category_id},function(data){
                                 if(data.code == 1){
                                     $('.plugins_category- table').find('tr[data-id='+category_id+']').remove();
                                     category_id = null;
@@ -320,7 +320,7 @@
                 }else if(tr.data('id') == $(trs[trs.length-1]).data('id') && action == 'down' ){
                     Notify('无法下移', 'bottom-right', '5000', 'warning', 'fa-warning', true);
                 }else{
-                    $.fruiter.post("{:U('GoodsCategory/move')}",{id:$(tr).data('id'),action:action},function(data){
+                    $.fruiter.post("{:url('articleCategory/move')}",{id:$(tr).data('id'),action:action},function(data){
                         if(data.code == 1){
                             for(var i in trs){
                                 if($(trs[i]).data('id') == tr.data('id')){
@@ -357,4 +357,4 @@
             });
         });
     </script>
-</block>
+{/block}

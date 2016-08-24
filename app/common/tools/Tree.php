@@ -27,10 +27,12 @@ class Tree {
      * @param integer $root 顶级分类的父id
      */
     public function __construct($result, $fields = array('id', 'pid'), $root = 0) {
-        $this->result = $result;
-        $this->fields = $fields;
-        $this->root = $root;
-        $this->handler();
+        if(!empty($result)){
+            $this->result = $result;
+            $this->fields = $fields;
+            $this->root = $root;
+            $this->handler();
+        }
     }
     /**
      * 树型数据表结果集处理
@@ -88,8 +90,12 @@ class Tree {
      * @return array 返回分支，默认返回整个树
      */
     public function leaf($id = null) {
-        $id = ($id == null) ? $this->root : $id;
-        return $this->tmp[$id];
+        $id = ($id == null) ? (isset($this->root)?$this->root:'') : $id;
+        if(!empty($this->tmp[$id])){
+            return $this->tmp[$id];
+        }else{
+            return;
+        }
     }
     /**
      * 导航 一维数组

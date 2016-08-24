@@ -189,8 +189,7 @@
             create_category_panel();
 
             $.post('{:url("articleCategory/getCategoriesTree")}',function(tree){
-                var zNodes = JSON.parse(tree);
-                zTree = $.fn.zTree.init($("#tree_category"), setting, zNodes);
+                zTree = $.fn.zTree.init($("#tree_category"), setting, tree);
             });
 
             $('#article_save').click(function(){
@@ -222,8 +221,6 @@
                 if(val > 0){
                     input.value = val - 1;
                 }
-
-
             });
         });
     </script>

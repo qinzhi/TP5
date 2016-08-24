@@ -18,6 +18,11 @@ class Spec extends Common{
 
     protected $update = ['update_time'];
 
+    /**
+     * 表名
+     */
+    const TABLE_NAME = 'spec';
+
     public function setCreateTimeAttr(){
         return time();
     }

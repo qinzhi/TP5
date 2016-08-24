@@ -39,16 +39,16 @@
                                 </ul>
                                 <div class="tab-content tabs-flat">
                                     <div class="tab-pane active" id="tab-basic">
-                                        {include file="goods/add/base"}
+                                        {include file="goods/edit/base"}
                                     </div>
                                     <div class="tab-pane" id="tab-detail">
-                                        {include file="goods/add/detail"}
+                                        {include file="goods/edit/detail"}
                                     </div>
                                     <div class="tab-pane" id="tab-attr">
-                                        {include file="goods/add/attr"}
+                                        {include file="goods/edit/attr"}
                                     </div>
                                     <div class="tab-pane" id="tab-seo">
-                                        {include file="goods/add/seo"}
+                                        {include file="goods/edit/seo"}
                                     </div>
                                 </div>
                             </form>
@@ -131,6 +131,15 @@
             create_category_panel();
 
             $.post('{:url("goodsCategory/getCategoriesTree")}',function(tree){
+                var categories_id = $('#category_id').data('value'),categories = [];
+                $('#category_id').val(categories_id.join(','));
+                for(var i in tree){
+                    if(categories_id.indexOf(tree[i].id) != -1){
+                        tree[i].checked = true;
+                        categories.push(tree[i].name);
+                    }
+                }
+                $('#category').val(categories.join(','));
                 zTree = $.fn.zTree.init($("#tree_category"), setting, tree);
             });
 

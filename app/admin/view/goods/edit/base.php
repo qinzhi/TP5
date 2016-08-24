@@ -13,6 +13,17 @@
             </td>
         </tr>
         <tr>
+            <th>商品简述：</th>
+            <td>
+                <div class="form-group has-feedback no-margin">
+                    <span class="input-icon icon-right Lwidth400">
+                        <textarea id="intro" name="intro" class="form-control" maxlength="128">{$goods.intro}</textarea>
+                        <i class="fa fa-rocket darkorange"></i>
+                    </span>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <th>关键字：</th>
             <td>
                 <div class="form-group has-feedback no-margin">
@@ -195,7 +206,7 @@
                     tbody.append(tr);
                 });
             }
-        })(JSON.parse('{$products}'));
+        })(<?php echo $products;?>);
         $('#addSpec').click(function(){
             if($(this).data('status') == false){
                 Notify('重新设置规格需删除当前规格列表', 'bottom-right', '5000', 'warning', 'fa-warning', true);

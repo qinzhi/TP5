@@ -31,7 +31,7 @@ class Index extends Controller
                     if ($this::psd_verify($password, $admin['password']) === true) {
                         Session::set('admin_id',$admin['id']);
                         if (Request::instance()->has('remember','post')) {
-                            Cookie::set('_id',Crypt::authcode("{$admin['id']}", 'ENCODE'), self::COOKIE_EXPIRE);
+                            Cookie::set('id',Crypt::authcode("{$admin['id']}", 'ENCODE'), self::COOKIE_EXPIRE);
                         }
                         return ['code'=>1,'msg'=>'验证成功'];
                     } else {

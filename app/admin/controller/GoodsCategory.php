@@ -2,9 +2,10 @@
 
 namespace app\admin\Controller;
 
-use \app\common\tools\Tree;
+use app\common\tools\Tree;
 use think\Loader;
 use think\Request;
+use app\admin\Model\GoodsCategory as GoodsCategoryModel;
 
 class GoodsCategory extends Admin {
 
@@ -12,7 +13,7 @@ class GoodsCategory extends Admin {
 
     public function __construct(){
         parent::__construct();
-        $this->category = Loader::model('GoodsCategory');
+        $this->category = new GoodsCategoryModel();
     }
 
     public function index(){
@@ -41,14 +42,14 @@ class GoodsCategory extends Admin {
 
     public function add(){
         if(Request::instance()->isPost()){
-            $pid = Request::instance()->request('p_id');
-            $pcategory = $this->category->getCategoryByPid($pid);
+            $pid = Request::instance()->request('p_id','','intval');
+            $pCategory = $this->category->getCategoryByPid($pid);
             if($pid == 0) $level = 0;
             else{
                 $category = $this->category->getCategoryById($pid);
                 $level = $category['level'] + 1;
             }
-            $sort = !empty($pcategory) ? ($pcategory['sort'] + 1) : 0;
+            $sort = !empty($pCategory) ? ($pCategory['sort'] + 1) : 0;
             $data = [
                 'pid' => $pid,
                 'level' => $level,
@@ -71,7 +72,7 @@ class GoodsCategory extends Admin {
 
     public function edit(){
         if(Request::instance()->isAjax()){
-            parse_str(urldecode(I('request.params')),$params);
+            parse_str(urldecode(Request::instance()->request('params')),$params);
             $pid = $params['p_id'];
             $category = $this->category->getCategoryById($pid);
             if($pid == 0) $level = 0;

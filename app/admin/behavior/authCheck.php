@@ -24,7 +24,7 @@ class AuthCheck{
     //检查是否登陆
     private function ckeckLogin(){
         $admin_id = session('admin_id');
-        $_id = cookie('_id');
+        $_id = cookie('id');
         if(empty($admin_id) && !empty($_auth)){
             $_id = Crypt::authcode($_id, 'DECODE');
             session('admin_id',$_id);

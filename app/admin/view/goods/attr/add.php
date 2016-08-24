@@ -86,7 +86,7 @@
                 </select>
             </td>
             <td class="padding-left-20 padding-right-20">
-                <input type="text" name="value[]" class="input-xs form-control">
+                <input type="text" name="value[]" class="input-xs form-control" readonly>
             </td>
             <td>
                 <a class="btn btn-default btn-xs shiny icon-only success btn-move" href="javascript:void(0);" data-action="up"><i class="fa fa-arrow-up"></i></a>
@@ -105,6 +105,14 @@
             });
             $('#addAttr').click(function(){
                 $('.tbody-attr_list').append(template('model_list'));
+            });
+            $(document).on('click','select[name="type[]"]',function(){
+                var value = $(this).closest('tr').find('input[name="value[]"]');
+                if(this.value == 1){
+                    value.val('').attr('readonly',true);
+                }else{
+                    value.removeAttr('readonly');
+                }
             });
             $(document).on('click','.btn-move',function(){
                 var action = $(this).data('action');
