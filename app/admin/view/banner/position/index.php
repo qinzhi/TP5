@@ -1,5 +1,5 @@
-<extend name="Layout/base" />
-<block name="content">
+{extend name="layout/base" /}
+{block name="content"}
     <div class="row no-margin">
         <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
             <div class="widget flat no-margin plugins_position-">
@@ -9,7 +9,7 @@
                         <button class="btn btn-success" id="search" type="submit">搜索</button>
                     </form>
                     <div class="pull-right">
-                        <a class="btn btn-success" href="{:U('Banner/position_add')}">添加广告位</a>
+                        <a class="btn btn-success" href="{:url('banner/position_add')}">添加广告位</a>
                     </div>
                 </div><!--Widget Header-->
                 <div class="widget-body no-padding">
@@ -33,33 +33,33 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <volist name="position" id="vo">
-                            <tr>
-                                <td class="padding-left-16">
-                                    <div class="checkbox checkbox-inline no-margin no-padding">
-                                        <label class="no-padding">
-                                            <input type="checkbox" class="position_id" name="id[]" value="{$vo.id}" autocomplete="off">
-                                            <span class="text"></span>
+                            {volist name="position" id="vo"}
+                                <tr>
+                                    <td class="padding-left-16">
+                                        <div class="checkbox checkbox-inline no-margin no-padding">
+                                            <label class="no-padding">
+                                                <input type="checkbox" class="position_id" name="id[]" value="{$vo.id}" autocomplete="off">
+                                                <span class="text"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="input-edit" data-field="name" title="点击更新名称">{$vo.name}</td>
+                                    <td>{$vo.width}x{$vo.height}</td>
+                                    <td class="input-edit" data-field="sort" title="点击更新排序">{$vo.sort}</td>
+                                    <td>
+                                        <label class="list-status position-status">
+                                            <input class="checkbox-slider toggle colored-success yesno" type="checkbox" autocomplete="off" {$vo['status']?'checked':''}>
+                                            <span class="text" title="开启状态"></span>
                                         </label>
-                                    </div>
-                                </td>
-                                <td class="input-edit" data-field="name" title="点击更新名称">{$vo.name}</td>
-                                <td>{$vo.width}x{$vo.height}</td>
-                                <td class="input-edit" data-field="sort" title="点击更新排序">{$vo.sort}</td>
-                                <td>
-                                    <label class="list-status position-status">
-                                        <input class="checkbox-slider toggle colored-success yesno" type="checkbox" autocomplete="off" {$vo['status']?'checked':''}>
-                                        <span class="text" title="开启状态"></span>
-                                    </label>
-                                </td>
-                                <td>
-                                    <a class="btn btn-default btn-sm purple btn-edit" href="{:U('Banner/position_edit',array('id'=>$vo['id']))}" title="编辑">
-                                        <i class="fa fa-edit"></i> 编辑</a>
-                                    <a class="btn btn-default btn-sm danger btn-del" href="javascript:void(0);" title="删除">
-                                        <i class="fa fa-times"></i> 删除</a>
-                                </td>
-                            </tr>
-                        </volist>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-default btn-sm purple btn-edit" href="{:url('banner/position_edit',array('id'=>$vo['id']))}" title="编辑">
+                                            <i class="fa fa-edit"></i> 编辑</a>
+                                        <a class="btn btn-default btn-sm danger btn-del" href="javascript:void(0);" title="删除">
+                                            <i class="fa fa-times"></i> 删除</a>
+                                    </td>
+                                </tr>
+                            {/volist}
                         </tbody>
                     </table>
                     <div class="row DTTTFooter padding-left-16">
@@ -82,13 +82,13 @@
             </div><!--Widget-->
         </div>
     </div>
-</block>
-<block name="js">
+{/block}
+{block name="js"}
     <script type="application/javascript">
         $(function () {
             var _position = {
                 update: function (params) {
-                    $.fruiter.post('{:U("Banner/position_update")}', params, function (data) {
+                    $.fruiter.post('{:url("banner/position_update")}', params, function (data) {
                         if (data.code == 1) {
                             Notify(data.msg, 'bottom-right', '5000', 'success', 'fa-check', true);
                         } else {
@@ -125,7 +125,7 @@
                 var position_id = $(this).closest('tr').find('.position_id').val();
                 bootbox.confirm("确定要删除么?", function (result) {
                     if(result){
-                        $.post('{:U("Banner/position_del")}',{id:position_id},function(result){
+                        $.post('{:url("banner/position_del")}',{id:position_id},function(result){
                             if(result.code == 1){
                                 window.location.reload();
                             }else{
@@ -143,4 +143,4 @@
             });
         });
     </script>
-</block>
+{/block}

@@ -32,7 +32,6 @@ class ArticleCategory extends Admin {
     public function getCategory($id){
         $category = $this->category->getCategoryById($id);
         return $category;
-
     }
 
     public function getCategoriesTree(){

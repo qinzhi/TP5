@@ -1,7 +1,6 @@
 function BrowseServer(input_image,fun )
 {
     var finder = new CKFinder();
-    finder.basePath = '../';
     finder.selectActionFunction = SetFileField;
 
     finder.selectActionData = input_image;
@@ -15,8 +14,8 @@ function getCKeditorValue(id){
 }
 function SetFileField( fileUrl , data )
 {
-    split = '\/Attachments\/';
-    pic = fileUrl.split(split);
+    var split = '\/resource\/';
+    var pic = fileUrl.split(split);
     var selectActionData = document.getElementById( (data["selectActionData"] ));
     if(!!pic[1] && selectActionData){
         selectActionData.value = pic[1];

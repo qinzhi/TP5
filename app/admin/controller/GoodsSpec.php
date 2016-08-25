@@ -29,9 +29,7 @@ class GoodsSpec extends Admin {
         $spec = [
             'name' => $name,
             'value' => $value,
-            'remark' => Request::instance()->request('remark','','trim'),
-            'create_time' => time(),
-            'update_time' => time()
+            'remark' => Request::instance()->request('remark','','trim')
         ];
 
         if($insert_id = Db::name(Spec::TABLE_NAME)->insertGetId($spec)){
@@ -54,8 +52,7 @@ class GoodsSpec extends Admin {
             'id' => $id,
             'name' => $name,
             'value' => $value,
-            'remark' => Request::instance()->request('remark','','trim'),
-            'update_time' => time()
+            'remark' => Request::instance()->request('remark','','trim')
         ];
 
         if(Spec::update($spec)){

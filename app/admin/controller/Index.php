@@ -1,4 +1,5 @@
 <?php
+
 namespace app\admin\controller;
 
 use think\Config;
@@ -7,6 +8,7 @@ use think\Request;
 use think\Controller;
 use app\common\tools\Crypt;
 use think\Session;
+use think\Url;
 
 class Index extends Controller
 {
@@ -33,7 +35,7 @@ class Index extends Controller
                         if (Request::instance()->has('remember','post')) {
                             Cookie::set('id',Crypt::authcode("{$admin['id']}", 'ENCODE'), self::COOKIE_EXPIRE);
                         }
-                        return ['code'=>1,'msg'=>'验证成功'];
+                        return ['code'=>1,'msg'=>'验证成功','url'=>Url::build('home/index')];
                     } else {
                         return ['code'=>0,'msg'=>'密码不正确'];
                     }

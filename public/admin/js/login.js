@@ -28,7 +28,7 @@
                     var params = $(this).closest('form').serialize();
                     $.post(location.href,params,function(result){
                         if(result.code == 1){
-                            show_msg('登录成功咯！  正在为您跳转...','/');
+                            show_msg('登录成功咯！  正在为您跳转...',result.url);
                         }else{
 							var src = $('#verify').data('src');
 							$('#verify').attr('src',src + '?rand=' + Math.random());

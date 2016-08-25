@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2016-08-23 18:17:41
+Date: 2016-08-25 18:06:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,7 +48,7 @@ CREATE TABLE `fruiter_article` (
   `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='文章表';
 
 -- ----------------------------
 -- Records of fruiter_article
@@ -68,12 +68,12 @@ CREATE TABLE `fruiter_article_category` (
   `del_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `parent_id` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
 
 -- ----------------------------
 -- Records of fruiter_article_category
 -- ----------------------------
-INSERT INTO `fruiter_article_category` VALUES ('1', '0', '购物指南', '0', '0', null);
+INSERT INTO `fruiter_article_category` VALUES ('5', '0', '购物指南', '0', '0', null);
 
 -- ----------------------------
 -- Table structure for fruiter_article_category_to_seo
@@ -86,12 +86,14 @@ CREATE TABLE `fruiter_article_category_to_seo` (
   `keywords` varchar(255) DEFAULT NULL COMMENT 'SEO关键词和检索关键词',
   `descript` varchar(255) DEFAULT NULL COMMENT 'SEO描述',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `category_id` (`category_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章分类SEO表';
+  UNIQUE KEY `category_id` (`category_id`) USING BTREE,
+  CONSTRAINT `fruiter_article_category_to_seo_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `fruiter_article_category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='文章分类SEO表';
 
 -- ----------------------------
 -- Records of fruiter_article_category_to_seo
 -- ----------------------------
+INSERT INTO `fruiter_article_category_to_seo` VALUES ('2', '5', '水果', '', '');
 
 -- ----------------------------
 -- Table structure for fruiter_article_to_detail
@@ -102,8 +104,9 @@ CREATE TABLE `fruiter_article_to_detail` (
   `article_id` int(10) NOT NULL,
   `detail` text,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `article_id` (`article_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `article_id` (`article_id`) USING BTREE,
+  CONSTRAINT `fruiter_article_to_detail_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `fruiter_article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_article_to_detail
@@ -120,8 +123,9 @@ CREATE TABLE `fruiter_article_to_seo` (
   `keywords` varchar(255) DEFAULT NULL COMMENT '关键词',
   `description` varchar(255) DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `article_id` (`article_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章SEO表';
+  UNIQUE KEY `article_id` (`article_id`) USING BTREE,
+  CONSTRAINT `fruiter_article_to_seo_ibfk_1` FOREIGN KEY (`article_id`) REFERENCES `fruiter_article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='文章SEO表';
 
 -- ----------------------------
 -- Records of fruiter_article_to_seo
@@ -140,8 +144,9 @@ CREATE TABLE `fruiter_attr` (
   `value` varchar(255) DEFAULT NULL,
   `sort` smallint(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `model_id` (`model_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='属性表';
+  KEY `model_id` (`model_id`) USING BTREE,
+  CONSTRAINT `fruiter_attr_ibfk_1` FOREIGN KEY (`model_id`) REFERENCES `fruiter_model` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='属性表';
 
 -- ----------------------------
 -- Records of fruiter_attr
@@ -200,12 +205,13 @@ CREATE TABLE `fruiter_banner` (
   `intro` varchar(120) DEFAULT NULL COMMENT '广告简述',
   `image` varchar(255) NOT NULL COMMENT '广告图片',
   `link` varchar(255) DEFAULT NULL COMMENT '链接地址',
-  `start_time` date DEFAULT NULL COMMENT '开始时间',
-  `end_time` date DEFAULT NULL COMMENT '结束时间',
+  `start_time` int(10) DEFAULT NULL COMMENT '开始时间',
+  `end_time` int(10) DEFAULT NULL COMMENT '结束时间',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '开启状态 1.开启 0.关闭',
   `sort` mediumint(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `create_time` int(10) NOT NULL COMMENT '添加时间',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除 0正常 1已删除',
+  `update_time` int(10) NOT NULL,
+  `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `position_id` (`position_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告';
@@ -227,16 +233,16 @@ CREATE TABLE `fruiter_banner_position` (
   `create_time` int(10) NOT NULL COMMENT '添加时间',
   `sort` smallint(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '开启状态 1.开启 0.关闭',
-  `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
+  `del_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
-  KEY `is_del` (`delete_time`) USING BTREE,
+  KEY `is_del` (`del_time`) USING BTREE,
   KEY `status` (`status`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='广告位';
 
 -- ----------------------------
 -- Records of fruiter_banner_position
 -- ----------------------------
-INSERT INTO `fruiter_banner_position` VALUES ('1', '首页Banner', '', '0', '0', '1455781850', '0', '1', null);
+INSERT INTO `fruiter_banner_position` VALUES ('1', '首页Banner', '', '0', '0', '1455781850', '1', '1', '1472108919');
 
 -- ----------------------------
 -- Table structure for fruiter_goods
@@ -245,7 +251,8 @@ DROP TABLE IF EXISTS `fruiter_goods`;
 CREATE TABLE `fruiter_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品ID',
   `name` varchar(50) NOT NULL COMMENT '商品名称',
-  `goods_no` varchar(20) NOT NULL COMMENT '商品货号',
+  `intro` varchar(128) DEFAULT NULL COMMENT '商品简述',
+  `goods_no` varchar(20) DEFAULT NULL COMMENT '商品货号',
   `model_id` int(10) NOT NULL DEFAULT '0' COMMENT '模型ID',
   `sell_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价格',
   `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场价格',
@@ -268,12 +275,12 @@ CREATE TABLE `fruiter_goods` (
   PRIMARY KEY (`id`),
   KEY `is_del` (`delete_time`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_goods
 -- ----------------------------
-INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', 's0001', '0', '1800.00', '2000.00', '500.00', '1', null, null, '1456747529', '0', '500', '手机', '200.00', null, '0', '0', '0', null, '0', null);
+INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '', 's0002', '0', '1800.00', '2000.00', '500.00', '1', '1472010633', '1472010628', '1472010875', '0', '16000', '手机', '200.00', null, '0', '0', '0', null, '1', null);
 
 -- ----------------------------
 -- Table structure for fruiter_goods_category
@@ -288,7 +295,7 @@ CREATE TABLE `fruiter_goods_category` (
   `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `parent_id` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='产品分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='产品分类表';
 
 -- ----------------------------
 -- Records of fruiter_goods_category
@@ -306,8 +313,9 @@ CREATE TABLE `fruiter_goods_category_to_seo` (
   `keywords` varchar(255) DEFAULT NULL COMMENT 'SEO关键词和检索关键词',
   `descript` varchar(255) DEFAULT NULL COMMENT 'SEO描述',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `category_id` (`category_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='产品分类SEO表';
+  UNIQUE KEY `category_id` (`category_id`) USING BTREE,
+  CONSTRAINT `fruiter_goods_category_to_seo_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `fruiter_goods_category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='产品分类SEO表';
 
 -- ----------------------------
 -- Records of fruiter_goods_category_to_seo
@@ -328,16 +336,17 @@ CREATE TABLE `fruiter_goods_to_attr` (
   PRIMARY KEY (`id`),
   KEY `attr_id` (`attr_id`),
   KEY `goods_id` (`goods_id`),
-  KEY `model_id` (`model_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  KEY `model_id` (`model_id`),
+  CONSTRAINT `fruiter_goods_to_attr_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_goods_to_attr
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_attr` VALUES ('9', '1', '2', '1', '134mm*67.2mm*9.4mm', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('10', '1', '2', '2', '1280 x 720', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('11', '1', '2', '3', '8核', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('12', '1', '2', '5', '4G', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('77', '1', '2', '1', '134mm*67.2mm*9.4mm', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('78', '1', '2', '2', '1280 x 720', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('79', '1', '2', '3', '8核', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('80', '1', '2', '5', '4G', '0');
 
 -- ----------------------------
 -- Table structure for fruiter_goods_to_category
@@ -349,13 +358,14 @@ CREATE TABLE `fruiter_goods_to_category` (
   `goods_id` int(11) NOT NULL COMMENT '商品ID',
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`) USING BTREE,
-  KEY `goods_id` (`goods_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
+  KEY `goods_id` (`goods_id`) USING BTREE,
+  CONSTRAINT `fruiter_goods_to_category_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_category
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_category` VALUES ('3', '1', '1');
+INSERT INTO `fruiter_goods_to_category` VALUES ('21', '1', '1');
 
 -- ----------------------------
 -- Table structure for fruiter_goods_to_commend
@@ -367,14 +377,15 @@ CREATE TABLE `fruiter_goods_to_commend` (
   `commend_id` tinyint(1) NOT NULL COMMENT '推荐类型ID 1:最新商品 2:特价商品 3:热卖商品 4:推荐商品',
   PRIMARY KEY (`id`),
   KEY `goods_id` (`goods_id`) USING BTREE,
-  KEY `commend_id` (`commend_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='推荐商品类型关联表';
+  KEY `commend_id` (`commend_id`) USING BTREE,
+  CONSTRAINT `fruiter_goods_to_commend_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='推荐商品类型关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_commend
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_commend` VALUES ('4', '1', '1');
-INSERT INTO `fruiter_goods_to_commend` VALUES ('5', '1', '2');
+INSERT INTO `fruiter_goods_to_commend` VALUES ('42', '1', '1');
+INSERT INTO `fruiter_goods_to_commend` VALUES ('43', '1', '2');
 
 -- ----------------------------
 -- Table structure for fruiter_goods_to_detail
@@ -385,31 +396,33 @@ CREATE TABLE `fruiter_goods_to_detail` (
   `goods_id` int(11) NOT NULL COMMENT '商品ID',
   `detail` longtext COMMENT '商品详情',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `goods_id` (`goods_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
+  UNIQUE KEY `goods_id` (`goods_id`) USING BTREE,
+  CONSTRAINT `fruiter_goods_to_detail_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_detail
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	反应快啊</p>\r\n');
+INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	反应快啊</p>');
 
 -- ----------------------------
 -- Table structure for fruiter_goods_to_seo
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_to_seo`;
 CREATE TABLE `fruiter_goods_to_seo` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `goods_id` int(11) NOT NULL,
   `keywords` varchar(255) DEFAULT NULL COMMENT 'SEO关键词和检索关键词',
   `description` varchar(255) DEFAULT NULL COMMENT 'SEO描述',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `goods_id` (`goods_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品SEO表';
+  UNIQUE KEY `goods_id` (`goods_id`) USING BTREE,
+  CONSTRAINT `fruiter_goods_to_seo_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品SEO表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_seo
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_seo` VALUES ('0', '1', '手机', '小米手机');
+INSERT INTO `fruiter_goods_to_seo` VALUES ('1', '1', '手机', '小米手机');
 
 -- ----------------------------
 -- Table structure for fruiter_model
@@ -420,7 +433,7 @@ CREATE TABLE `fruiter_model` (
   `name` varchar(20) NOT NULL COMMENT '模型名称',
   `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品模型表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='商品模型表';
 
 -- ----------------------------
 -- Records of fruiter_model
@@ -442,17 +455,18 @@ CREATE TABLE `fruiter_products` (
   `cost_price` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
   `weight` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
   `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除 0正常 1已删除',
+  `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `goods_id` (`goods_id`),
-  KEY `products_no` (`products_no`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='规格商品表';
+  KEY `products_no` (`products_no`),
+  CONSTRAINT `fruiter_products_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='规格商品表';
 
 -- ----------------------------
 -- Records of fruiter_products
 -- ----------------------------
-INSERT INTO `fruiter_products` VALUES ('1', '1', 's0001', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"16G\"}]', '300', '2000.00', '1800.00', '500.00', '200.00', '0', '0');
-INSERT INTO `fruiter_products` VALUES ('2', '1', 's0001', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"}]', '200', '2000.00', '1800.00', '500.00', '200.00', '1', '0');
+INSERT INTO `fruiter_products` VALUES ('1', '1', 's0001', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"16G\"}]', '8000', '2000.00', '1800.00', '500.00', '200.00', '0', null);
+INSERT INTO `fruiter_products` VALUES ('2', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"}]', '8000', '2000.00', '1800.00', '500.00', '200.00', '1', null);
 
 -- ----------------------------
 -- Table structure for fruiter_session
@@ -487,10 +501,10 @@ CREATE TABLE `fruiter_spec` (
   `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `is_del` (`delete_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品规格表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品规格表';
 
 -- ----------------------------
 -- Records of fruiter_spec
 -- ----------------------------
-INSERT INTO `fruiter_spec` VALUES ('1', '内存', '[\"16G\",\"32G\",\"64G\"]', '1', '内存大小', '0', '1471938080', null);
+INSERT INTO `fruiter_spec` VALUES ('1', '内存', '[\"16G\",\"32G\",\"64G\"]', '1', '内存大小', '0', '1472022541', null);
 INSERT INTO `fruiter_spec` VALUES ('2', '颜色', '[\"红色\",\"白色\"]', '1', '', '0', '0', null);

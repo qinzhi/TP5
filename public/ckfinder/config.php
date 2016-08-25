@@ -62,11 +62,11 @@ Examples:
 
 ATTENTION: The trailing slash is required.
 */
-$base_url = 'http://' . $_SERVER['HTTP_HOST'];
+$baseUrl = 'http://' . $_SERVER['HTTP_HOST'];
 
-$ckfinder_url = '/Public/Admin/Attachments/';
+$ckfinder_url = '/resource/';
 
-$baseUrl = $base_url  . $ckfinder_url;
+$baseUrl .= $ckfinder_url;
 
 
 /*
@@ -91,7 +91,7 @@ $ckfinder_dir = dirname(__FILE__);
 
 $project_dir = str_replace('\\','/',realpath($ckfinder_dir . '/..'));
 
-$baseDir =  $project_dir . '/Attachments/';
+$baseDir =  $project_dir . '/resource/';
 
 $config['Resource_Root_Dir'] = $baseDir;
 

@@ -28,7 +28,7 @@ return [
     // 扩展配置文件
     'extra_config_list'      => ['database','validate','route'],
     // 扩展函数文件
-    'extra_file_list'        => [THINK_PATH . 'helper' . EXT],
+    'extra_file_list'        => [THINK_PATH . 'helper' . EXT,EXTEND_PATH . 'fb' . EXT],
     // 默认输出类型
     'default_return_type'    => 'html',
     // 默认AJAX 数据返回格式,可选json xml ...
@@ -217,12 +217,23 @@ return [
         'setcookie' => true,
     ],
 
-    //分页配置
+    // +----------------------------------------------------------------------
+    // | 分页配置
+    // +----------------------------------------------------------------------
     'paginate'               => [
         'type'      => 'bootstrap',
         'var_page'  => 'page',
         'list_rows' => 20,
     ],
+
+    // +----------------------------------------------------------------------
+    // | 微信配置
+    // +----------------------------------------------------------------------
+    'weixin' => array(
+        'token' => 'guoduqianxun',
+        'app_id' => 'wx20375ac755d2f51a',
+        'app_secret' => 'e53f87ed1d174c5ba02b5d40a18e2887',
+    ),
 
     'auth_key' => '1*NX+Jds|p!IFqltgD)"?4;ic<{,wuya239Ax^]-'
 ];

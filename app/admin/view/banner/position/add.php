@@ -1,5 +1,5 @@
-<extend name="Layout/base" />
-<block name="content">
+{extend name="layout/base" /}
+{block name="content"}
     <div class="row no-margin">
         <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
             <div class="widget flat no-margin">
@@ -119,8 +119,8 @@
             </div><!--Widget-->
         </div>
     </div>
-</block>
-<block name="js">
+{/block}
+{block name="js"}
     <script>
         $(document).ready(function(){
 
@@ -156,4 +156,4 @@
             });
         });
     </script>
-</block>
+{/block}

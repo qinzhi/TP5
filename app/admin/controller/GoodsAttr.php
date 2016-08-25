@@ -38,9 +38,9 @@ class GoodsAttr extends Admin {
             $model_id = Db::name(Model::TABLE_NAME)->insertGetId(['name'=>$name]);
 
             if(!empty($_POST['type'])){
-                $attr_name = $_POST['attr_name'];
-                $type = $_POST['type'];
-                $value = $_POST['value'];
+                $attr_name = Request::instance()->post('attr_name/a');
+                $type = Request::instance()->post('type/a');
+                $value = Request::instance()->post('value/a');
                 for($i=0,$len=count($attr_name);$i<$len;$i++){
                     $attr = array(
                         'model_id' => $model_id,
@@ -69,10 +69,10 @@ class GoodsAttr extends Admin {
                 Attr::destroy($del_id);
             }
             if(!empty($_POST['type'])){
-                $attr_id = $_POST['attr_id'];
-                $attr_name = $_POST['attr_name'];
-                $type = $_POST['type'];
-                $value = $_POST['value'];
+                $attr_id = Request::instance()->post('attr_id/a');
+                $attr_name = Request::instance()->post('attr_name/a');
+                $type = Request::instance()->post('type/a');
+                $value = Request::instance()->post('value/a');
                 $attr = [];
                 for($i=0,$len=count($attr_id);$i<$len;$i++){
                     $attr[$i] = [
