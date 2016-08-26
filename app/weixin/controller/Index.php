@@ -1,21 +1,25 @@
 <?php
 namespace app\weixin\controller;
 
+use app\admin\Model\Banner;
+use app\weixin\Model\Goods;
 use think\Controller;
 
 class Index extends Controller
 {
     public function index(){
-        /*D('Common/Wechat','Service');
+        /*D('Common/Wechat','Service');*/
 
-        $banners = D('Admin/Banner')->getBannersByPositionId(1);
+        $bannerModel = new Banner();
+        $banners = $bannerModel->getBannersByPositionId(1);
         $this->assign('banners',$banners);
 
-        $goods = D('Goods')->getGoods();
+        $goodsModel = new Goods();
+        $goods = $goodsModel->getGoods();
 
         $this->assign('goods',$goods);
 
-        $this->assign('nav_type',1);*/
+        $this->assign('nav_type',1);
         return $this->fetch();
     }
 }

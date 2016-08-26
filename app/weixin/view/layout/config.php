@@ -12,6 +12,6 @@
             }
             return true;
         },
-        getWeixinSign: '{:U("Home/getWeixinSign")}'
+        getWeixinSign: '{:url("home/getWeixinSign")}'
     }
 </script>

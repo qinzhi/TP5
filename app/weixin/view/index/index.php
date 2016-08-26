@@ -45,7 +45,7 @@
                 </div>
                 <div class="product-content">
                     <ul class="product-list clearfix">
-                        {volist name="goods" id="vo"}
+                        <!--{volist name="goods" id="vo"}
                             <li class="product-list-item" data-sku="{$vo.store_nums}" data-id="{$vo.id}"
                                 data-unit="{$vo.unit}" data-cart_num="{$vo.cart_num|default=0}"  data-rule='{$vo.rule|json_encode}'>
                                 <div class="product-img">
@@ -56,7 +56,7 @@
                                     <p class="product_intro">{$vo.intro}</p>
                                     <div class="product-cost widthScale80">
                                         <span class="product_price">
-                                            <?php list($int,$decimal) = explode('.',$vo['sell_price']);?>
+                                            <?php /*list($int,$decimal) = explode('.',$vo['sell_price']);*/?>
                                             <sup>￥</sup>
                                             <em>{$int}.</em>
                                             <i>{$decimal}</i>
@@ -67,14 +67,14 @@
                                     <div class="product-cart_add">
                                         <i class="icon icon-add cart_add"></i>
 
-                                        <input class="cart_num" style="<?php if($vo['cart_num'] <= 0)echo 'display:none'?>"
+                                        <input class="cart_num" style="<?php /*if($vo['cart_num'] <= 0)echo 'display:none'*/?>"
                                                type="tel" value="{$vo.cart_num}" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="3"/>
-                                        <i class="icon icon-minus cart_minus" style="<?php if($vo['cart_num'] <= 0)echo 'display:none'?>"></i>
+                                        <i class="icon icon-minus cart_minus" style="<?php /*if($vo['cart_num'] <= 0)echo 'display:none'*/?>"></i>
 
                                     </div>
                                 </div>
                             </li>
-                        {/volist}
+                        {/volist}-->
                     </ul>
                     <!--<p class="text-center" style="line-height: 1.6rem;background-color: #f0f4f0">~没有更多商品了~</p>-->
                 </div>

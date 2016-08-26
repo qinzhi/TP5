@@ -22,7 +22,7 @@
     <link href="__CSS__/style.css" rel="stylesheet" type="text/css">
     {block name="quote-css"}{/block}
     {block name="css"}{/block}
-    <script type='text/javascript' src='__STATIC_JS__/jquery-2.1.4.min.js' charset='utf-8'></script>
+    <script type='text/javascript' src='__STATIC__/js/jquery-2.1.4.min.js' charset='utf-8'></script>
     <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     {include file="Layout:config"/}
 </head>
@@ -31,7 +31,7 @@
     <script type='text/javascript' src='__LIGHT7__/js/light7.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='__LIGHT7__/js/i18n/cn.min.js' charset='utf-8'></script>
     <script type='text/javascript' src='__LIGHT7__/js/light7-swiper.min.js' charset='utf-8'></script>
-    <script src="__STATIC_JS__/template.js"></script>
+    <script src="__STATIC__/js/template.js"></script>
     {block name="quote-js"}{/block}
     {block name="js"}{/block}
 </body>

@@ -38,4 +38,7 @@ class Banner extends Common{
                                 ->select();
     }
 
+    public function getBannersByPositionId($position_id){
+        return $this->where('position_id',$position_id)->where('status',1)->limit(5)->select();
+    }
 }

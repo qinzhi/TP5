@@ -25,11 +25,6 @@ class Goods extends Common{
 
     protected $update = ['update_time'];
 
-    /**
-     * 产品表
-     */
-    const TABLE_PRODUCT = 'products';
-
     public function setCreateTimeAttr(){
         return time();
     }

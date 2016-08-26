@@ -1,0 +1,158 @@
+*{margin: 0;padding: 0;}
+@font-face {
+    font-family: "iconfont";
+    src: url('../iconfont/iconfont.eot'); /* IE9*/
+    src: url('../iconfont/iconfont.eot#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../iconfont/iconfont.woff') format('woff'), /* chrome, firefox */
+    url('../iconfont/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('../iconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+p{margin: 0}
+.icon {
+    font-family:"iconfont" !important;
+    font-size:0.8rem;
+    font-style:normal;
+    display: inline;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: .01rem;
+    -moz-osx-font-smoothing: grayscale;
+}
+.icon-daojishi:before { content: "\e600"; }
+.icon-diqiu:before { content: "\e601"; }
+.icon-dizhi:before { content: "\e602"; }
+.icon-erweima:before { content: "\e603"; }
+.icon-fangdajing:before { content: "\e604"; }
+.icon-feiji:before { content: "\e605"; }
+.icon-fenxiang:before { content: "\e606"; }
+.icon-gou:before { content: "\e607"; }
+.icon-gouwuche:before { content: "\e608"; }
+.icon-cart:before{ content: "\e639";}
+.icon-jiahao:before { content: "\e609"; }
+.icon-jianhao:before { content: "\e60a"; }
+.icon-jinru:before { content: "\e60b"; }
+.icon-qq:before { content: "\e60c"; }
+.icon-jinru1:before { content: "\e60d"; }
+.icon-kongaixin:before { content: "\e60e"; }
+.icon-laji:before { content: "\e60f"; }
+.icon-laba:before { content: "\e610"; }
+.icon-liwu:before { content: "\e611"; }
+.icon-lianjie:before { content: "\e612"; }
+.icon-lingdang:before { content: "\e613"; }
+.icon-naochuan:before { content: "\e614"; }
+.icon-quanyonghu:before { content: "\e615"; }
+.icon-renminbi:before { content: "\e616"; }
+.icon-saomiao:before { content: "\e617"; }
+.icon-shangpin:before { content: "\e618"; }
+.icon-shangpin1:before { content: "\e619"; }
+.icon-shangpu:before { content: "\e61a"; }
+.icon-shangchuan:before { content: "\e61b"; }
+.icon-shezhi:before { content: "\e61c"; }
+.icon-shizhong:before { content: "\e61d"; }
+.icon-shoucang:before { content: "\e61e"; }
+.icon-shu:before { content: "\e61f"; }
+.icon-suoyou:before { content: "\e620"; }
+.icon-touxiang:before { content: "\e621"; }
+.icon-tupian:before { content: "\e622"; }
+.icon-weibo:before { content: "\e623"; }
+.icon-xia:before { content: "\e624"; }
+.icon-xiangji:before { content: "\e625"; }
+.icon-xiaoxi:before { content: "\e628"; }
+.icon-xinxi:before { content: "\e629"; }
+.icon-xinxijinggao:before { content: "\e62a"; }
+.icon-xunhuan:before { content: "\e62b"; }
+.icon-yun:before { content: "\e62c"; }
+.icon-yunshu1:before { content: "\e62d"; }
+.icon-zan:before { content: "\e62e"; }
+.icon-zhifubao:before { content: "\e62f"; }
+.icon-zhiding:before { content: "\e630"; }
+.icon-zhuye:before { content: "\e631"; }
+.icon-zhuce:before { content: "\e632"; }
+.icon-zhucechenggong:before { content: "\e633"; }
+.icon-aixin:before { content: "\e634"; }
+.icon-cha:before { content: "\e635"; }
+.icon-add:before { content: "\e636"; }
+.icon-minus:before { content: "\e637"; }
+.icon-fenlei:before { content: "\e638"; }
+.icon-daipingjia:before { content: "\e63a"; }
+.icon-daifahuo:before { content: "\e63b"; }
+.icon-daifukuan:before { content: "\e63c"; }
+.icon-left:before { content: "\e63d"; }
+.icon-down:before { content: "\e63e"; }
+.icon-right:before { content: "\e63f"; }
+.icon-up:before { content: "\e640"; }
+
+.page{background-color: #f0f4f0;}
+.bar-nav a{color: #ffffff;}
+.bar-nav .title{background-color: #41c172;color: #ffffff;}
+.bar-tab .tab-item.active, .bar-tab .tab-item:active{color: #41c172;}
+
+.swiper-home{padding-bottom: 0;background-color: #fff;}
+.swiper-home .swiper-img{width: 100%;float: left}
+.swiper-home .swiper-pagination{bottom: 0rem;}
+
+.flex{display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;}
+.flex-1 {-webkit-box-flex: 1;-webkit-flex: 1;-ms-flex: 1;flex: 1;width: 0}
+
+.no-radius{border-radius: 0 !important;-moz-border-radius: 0 !important;-webkit-border-radius: 0 !important;}
+
+.btn{-webkit-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none;background-image: none;
+border: .1rem solid transparent;-moz-border-radius: .2rem; /* Firefox */-webkit-border-radius: .2rem; /* Safari 和 Chrome */border-radius: .2rem;
+cursor: pointer;display: inline-block;font-size: .7rem;font-weight: 400;margin-bottom: 0;padding: .3rem .6rem;text-align: center;
+vertical-align: middle;white-space: nowrap;}
+.btn.focus, .btn:focus, .btn:hover{background-color: #e6e6e6;border-color: #adadad;color: #333;}
+.btn-block{display: block;width: 100%;}
+.btn-primary{color: #ffffff;background-color: #41c172;border-color: #41c172;}
+.btn-primary:hover,.btn-primary:focus{color: #ffffff;background-color: #3bae67;border-color: #3bae67;}
+.btn-danger{color: #ffffff;background-color: #d73d32;border-color:  #d73d32;}
+.btn-danger:hover,.btn-danger:focus{color: #ffffff;background-color: #e74b37;border-color:  #e74b37;}
+.badge{
+    color: #ffffff;
+    border-radius: .6rem;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    text-shadow: none;
+    font-size: .55rem;
+    height: .9rem;
+    line-height: .9rem;
+    padding: 0 .3rem;
+    font-style: normal;
+}
+.badge-danger{
+    background-color: #ff655b;
+}
+.text-center{text-align: center}
+.text-left{text-align: left}
+.text-right{text-align: right}
+.widthScale10{width: 10%;}
+.widthScale20{width: 20%;}
+.widthScale30{width: 30%;}
+.widthScale40{width: 40%;}
+.widthScale50{width: 50%;}
+.widthScale60{width: 60%;}
+.widthScale70{width: 70%;}
+.widthScale80{width: 80%;}
+.widthScale90{width: 90%;}
+.widthScale00{width: 100%;}
+.padding-right-5{padding-right: .5rem}
+.padding-right-10{padding-right: 1rem}
+.padding-right-15{padding-right: 1.5rem}
+.padding-right-20{padding-right: 2rem}
+.clearfix {
+    zoom: 1
+}
+.clearfix:before {
+    content: '';
+    display: block
+}
+.clearfix:after {
+    content: '';
+    display: table;
+    clear: both
+}
+.top-80{top: 80%;}
+
+.bar.bar-footer-secondary{
+    bottom: 2.5rem;
+}
+.swiper-pagination-bullet.swiper-pagination-bullet-active{background-color: #41c172}
