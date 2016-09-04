@@ -2,21 +2,21 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50711
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : fruiter
 
 Target Server Type    : MYSQL
-Target Server Version : 50711
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-08-25 18:06:11
+Date: 2016-09-04 21:29:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for fruiter_admin
+-- Table structure for `fruiter_admin`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_admin`;
 CREATE TABLE `fruiter_admin` (
@@ -34,7 +34,7 @@ CREATE TABLE `fruiter_admin` (
 INSERT INTO `fruiter_admin` VALUES ('1', 'admin', 'a3ab9193e5b81674b87d6b2431f3c75d', '0');
 
 -- ----------------------------
--- Table structure for fruiter_article
+-- Table structure for `fruiter_article`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_article`;
 CREATE TABLE `fruiter_article` (
@@ -56,7 +56,7 @@ CREATE TABLE `fruiter_article` (
 INSERT INTO `fruiter_article` VALUES ('1', '安徽男子网上', '', '1', '1455615111', '1455616450', '1', null);
 
 -- ----------------------------
--- Table structure for fruiter_article_category
+-- Table structure for `fruiter_article_category`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_article_category`;
 CREATE TABLE `fruiter_article_category` (
@@ -76,7 +76,7 @@ CREATE TABLE `fruiter_article_category` (
 INSERT INTO `fruiter_article_category` VALUES ('5', '0', '购物指南', '0', '0', null);
 
 -- ----------------------------
--- Table structure for fruiter_article_category_to_seo
+-- Table structure for `fruiter_article_category_to_seo`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_article_category_to_seo`;
 CREATE TABLE `fruiter_article_category_to_seo` (
@@ -96,7 +96,7 @@ CREATE TABLE `fruiter_article_category_to_seo` (
 INSERT INTO `fruiter_article_category_to_seo` VALUES ('2', '5', '水果', '', '');
 
 -- ----------------------------
--- Table structure for fruiter_article_to_detail
+-- Table structure for `fruiter_article_to_detail`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_article_to_detail`;
 CREATE TABLE `fruiter_article_to_detail` (
@@ -114,7 +114,7 @@ CREATE TABLE `fruiter_article_to_detail` (
 INSERT INTO `fruiter_article_to_detail` VALUES ('1', '1', '<p>\r\n	aa</p>\r\n');
 
 -- ----------------------------
--- Table structure for fruiter_article_to_seo
+-- Table structure for `fruiter_article_to_seo`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_article_to_seo`;
 CREATE TABLE `fruiter_article_to_seo` (
@@ -133,7 +133,7 @@ CREATE TABLE `fruiter_article_to_seo` (
 INSERT INTO `fruiter_article_to_seo` VALUES ('1', '1', '', '');
 
 -- ----------------------------
--- Table structure for fruiter_attr
+-- Table structure for `fruiter_attr`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_attr`;
 CREATE TABLE `fruiter_attr` (
@@ -157,7 +157,7 @@ INSERT INTO `fruiter_attr` VALUES ('3', '2', '1', 'CPU', '', '2');
 INSERT INTO `fruiter_attr` VALUES ('5', '2', '1', '无线网络与制式 ', '', '3');
 
 -- ----------------------------
--- Table structure for fruiter_auth_role
+-- Table structure for `fruiter_auth_role`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_auth_role`;
 CREATE TABLE `fruiter_auth_role` (
@@ -195,7 +195,7 @@ INSERT INTO `fruiter_auth_role` VALUES ('17', '16', 'Admin', '2', '广告位列�
 INSERT INTO `fruiter_auth_role` VALUES ('18', '16', 'Admin', '2', '广告列表', 'Banner/index', '1', '1');
 
 -- ----------------------------
--- Table structure for fruiter_banner
+-- Table structure for `fruiter_banner`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_banner`;
 CREATE TABLE `fruiter_banner` (
@@ -221,7 +221,7 @@ CREATE TABLE `fruiter_banner` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for fruiter_banner_position
+-- Table structure for `fruiter_banner_position`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_banner_position`;
 CREATE TABLE `fruiter_banner_position` (
@@ -245,7 +245,25 @@ CREATE TABLE `fruiter_banner_position` (
 INSERT INTO `fruiter_banner_position` VALUES ('1', '首页Banner', '', '0', '0', '1455781850', '1', '1', '1472108919');
 
 -- ----------------------------
--- Table structure for fruiter_goods
+-- Table structure for `fruiter_cart`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_cart`;
+CREATE TABLE `fruiter_cart` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL COMMENT '商品ID',
+  `user_id` int(11) NOT NULL COMMENT '会员ID',
+  `cart_num` mediumint(8) NOT NULL DEFAULT '1' COMMENT '数量',
+  `update_time` int(10) NOT NULL COMMENT '添加时间',
+  PRIMARY KEY (`id`),
+  KEY `goods_id` (`goods_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车表';
+
+-- ----------------------------
+-- Records of fruiter_cart
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `fruiter_goods`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods`;
 CREATE TABLE `fruiter_goods` (
@@ -271,9 +289,9 @@ CREATE TABLE `fruiter_goods` (
   `comments` int(10) NOT NULL DEFAULT '0' COMMENT '评论次数',
   `sale` int(10) DEFAULT NULL COMMENT '销量',
   `sort` smallint(5) NOT NULL DEFAULT '0' COMMENT '排序',
-  `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
+  `goods_delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
-  KEY `is_del` (`delete_time`),
+  KEY `is_del` (`goods_delete_time`),
   KEY `status` (`status`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
@@ -283,7 +301,7 @@ CREATE TABLE `fruiter_goods` (
 INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '', 's0002', '0', '1800.00', '2000.00', '500.00', '1', '1472010633', '1472010628', '1472010875', '0', '16000', '手机', '200.00', null, '0', '0', '0', null, '1', null);
 
 -- ----------------------------
--- Table structure for fruiter_goods_category
+-- Table structure for `fruiter_goods_category`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_category`;
 CREATE TABLE `fruiter_goods_category` (
@@ -303,7 +321,7 @@ CREATE TABLE `fruiter_goods_category` (
 INSERT INTO `fruiter_goods_category` VALUES ('1', '0', '水果', '0', '0', null);
 
 -- ----------------------------
--- Table structure for fruiter_goods_category_to_seo
+-- Table structure for `fruiter_goods_category_to_seo`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_category_to_seo`;
 CREATE TABLE `fruiter_goods_category_to_seo` (
@@ -323,7 +341,7 @@ CREATE TABLE `fruiter_goods_category_to_seo` (
 INSERT INTO `fruiter_goods_category_to_seo` VALUES ('1', '1', '水果', '水果', '水果');
 
 -- ----------------------------
--- Table structure for fruiter_goods_to_attr
+-- Table structure for `fruiter_goods_to_attr`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_to_attr`;
 CREATE TABLE `fruiter_goods_to_attr` (
@@ -349,7 +367,7 @@ INSERT INTO `fruiter_goods_to_attr` VALUES ('79', '1', '2', '3', '8核', '0');
 INSERT INTO `fruiter_goods_to_attr` VALUES ('80', '1', '2', '5', '4G', '0');
 
 -- ----------------------------
--- Table structure for fruiter_goods_to_category
+-- Table structure for `fruiter_goods_to_category`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_to_category`;
 CREATE TABLE `fruiter_goods_to_category` (
@@ -368,7 +386,7 @@ CREATE TABLE `fruiter_goods_to_category` (
 INSERT INTO `fruiter_goods_to_category` VALUES ('21', '1', '1');
 
 -- ----------------------------
--- Table structure for fruiter_goods_to_commend
+-- Table structure for `fruiter_goods_to_commend`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_to_commend`;
 CREATE TABLE `fruiter_goods_to_commend` (
@@ -388,7 +406,7 @@ INSERT INTO `fruiter_goods_to_commend` VALUES ('42', '1', '1');
 INSERT INTO `fruiter_goods_to_commend` VALUES ('43', '1', '2');
 
 -- ----------------------------
--- Table structure for fruiter_goods_to_detail
+-- Table structure for `fruiter_goods_to_detail`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_to_detail`;
 CREATE TABLE `fruiter_goods_to_detail` (
@@ -406,7 +424,7 @@ CREATE TABLE `fruiter_goods_to_detail` (
 INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	反应快啊</p>');
 
 -- ----------------------------
--- Table structure for fruiter_goods_to_seo
+-- Table structure for `fruiter_goods_to_seo`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods_to_seo`;
 CREATE TABLE `fruiter_goods_to_seo` (
@@ -425,7 +443,7 @@ CREATE TABLE `fruiter_goods_to_seo` (
 INSERT INTO `fruiter_goods_to_seo` VALUES ('1', '1', '手机', '小米手机');
 
 -- ----------------------------
--- Table structure for fruiter_model
+-- Table structure for `fruiter_model`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_model`;
 CREATE TABLE `fruiter_model` (
@@ -441,7 +459,7 @@ CREATE TABLE `fruiter_model` (
 INSERT INTO `fruiter_model` VALUES ('2', '小米手机', null);
 
 -- ----------------------------
--- Table structure for fruiter_products
+-- Table structure for `fruiter_products`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_products`;
 CREATE TABLE `fruiter_products` (
@@ -455,7 +473,7 @@ CREATE TABLE `fruiter_products` (
   `cost_price` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
   `weight` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
   `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
+  `products_delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `goods_id` (`goods_id`),
   KEY `products_no` (`products_no`),
@@ -469,7 +487,7 @@ INSERT INTO `fruiter_products` VALUES ('1', '1', 's0001', '[{\"id\":1,\"name\":\
 INSERT INTO `fruiter_products` VALUES ('2', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"}]', '8000', '2000.00', '1800.00', '500.00', '200.00', '1', null);
 
 -- ----------------------------
--- Table structure for fruiter_session
+-- Table structure for `fruiter_session`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_session`;
 CREATE TABLE `fruiter_session` (
@@ -487,7 +505,7 @@ CREATE TABLE `fruiter_session` (
 INSERT INTO `fruiter_session` VALUES ('1006', '2a0lqoeno8mff0ao4odt4s6hf7', '1470323308', '');
 
 -- ----------------------------
--- Table structure for fruiter_spec
+-- Table structure for `fruiter_spec`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_spec`;
 CREATE TABLE `fruiter_spec` (

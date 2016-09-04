@@ -7,7 +7,7 @@ use traits\model\SoftDelete;
 class Products extends Common{
 
     use SoftDelete;
-    protected static $deleteTime = 'del_time';
+    protected static $deleteTime = 'products_delete_time';
 
     /**
      * 表名

@@ -19,7 +19,7 @@ class Goods extends Common{
      * 删除时间
      * @var string
      */
-    protected static $deleteTime = 'delete_time';
+    protected static $deleteTime = 'goods_delete_time';
 
     protected $insert = ['create_time','update_time'];
 

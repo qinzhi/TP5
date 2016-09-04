@@ -19,17 +19,17 @@ class Goods extends Common{
      * 删除时间
      * @var string
      */
-    protected static $deleteTime = 'delete_time';
+    protected static $deleteTime = 'goods_delete_time';
 
     public function getGoods(){
 
         $cartSql = Db::name('cart')->where('user_id',$this->user_id)->buildSql();
 
-        $sql = $this->field('g.*,p.*,c.num as cart_num')
+        $sql = $this->field('g.*,p.*,c.cart_num')
                         ->alias('g')
                         ->join("$cartSql as c",'g.id=c.goods_id','left')
                         ->join(Products::TABLE_PRODUCT . ' as p','g.id=p.goods_id','left')
-                        ->where('status',1)->where('p.del_time IS NULL')->buildSql();
+                        ->where('status',1)->where('p.products_delete_time IS NULL')->buildSql();
         $goods = Db::query($sql);
         $arr = [];
         foreach($goods as $val){
