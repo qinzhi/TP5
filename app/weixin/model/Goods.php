@@ -9,7 +9,6 @@ use app\common\Model\GoodsToCommend;
 use app\common\Model\GoodsToDetail;
 use app\common\Model\GoodsToSeo;
 use think\Db;
-use think\Request;
 use traits\model\SoftDelete;
 
 class Goods extends Common{
