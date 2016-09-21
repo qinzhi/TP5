@@ -60,6 +60,7 @@
     </div>
 {/block}
 {block name="js"}
+    <script src="__JS__/goods.js"></script>
     <script src="__JS__/jquery.ztree.all-3.5.min.js"></script>
     <script>
         //商品分类操作事件

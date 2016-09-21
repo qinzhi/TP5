@@ -3,6 +3,7 @@
 namespace app\admin\Controller;
 
 use app\admin\Model\Products;
+use think\Db;
 use think\Loader;
 use think\Request;
 use app\admin\Model\Goods as GoodsModel;
@@ -31,6 +32,8 @@ class Goods extends Admin
             $this->goodsModel->addGoods(Request::instance()->post());
             $this->redirect('goods/index');
         }else{
+            $unit = Db::name('unit')->where('is_close',0)->select();//单位名称
+            $this->assign('unit',$unit);
             return $this->fetch();
         }
     }
@@ -41,9 +44,19 @@ class Goods extends Admin
             $this->goodsModel->editGoodsById(Request::instance()->post(),$id);
             $this->redirect('goods/index');
         }else{
+            $unit = Db::name('unit')->where('is_close',0)->select();//单位名称
+            $this->assign('unit',$unit);
+            
             $goods = $this->goodsModel->getGoodsById($id);
             $this->assign('goods',$goods);
 
+            //商品图片
+            $images = $this->goodsModel->getGoodsImageById($id);
+            foreach ($images as &$val){
+                $val['imageUrl'] = get_img($val['image']);
+            }
+            $this->assign('images',$images);
+            
             //商品分类
             $categories = $this->goodsModel->getGoodsCategoriesById($id);
             $categories_id = array();

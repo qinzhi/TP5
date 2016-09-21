@@ -6,6 +6,7 @@ use app\common\Model\GoodsToAttr;
 use app\common\Model\GoodsToCategory;
 use app\common\Model\GoodsToCommend;
 use app\common\Model\GoodsToDetail;
+use app\common\Model\GoodsToImages;
 use app\common\Model\GoodsToSeo;
 use think\Request;
 use traits\model\SoftDelete;
@@ -39,6 +40,11 @@ class Goods extends Common{
      */
     public function addGoods($params){
 
+        $image = $params['image'];//商品图片
+        $cover_index = intval($params['cover_index']);
+        $cover_index = ($cover_index > 0 && $cover_index < count($image)) ? $cover_index : 0;
+        $cover_image = !empty($image[$cover_index]) ? $image[$cover_index] : '';//封面图片
+
         $_default = isset($params['_default']) ? (int)$params['_default'] : 0;
 
         $_goods_no = $params['_goods_no'];
@@ -58,9 +64,11 @@ class Goods extends Common{
             'name' => $params['name'],
             'intro' => $params['intro'],
             'search_words' => $params['search_words'],
+            'cover_image' => $cover_image,
             'status' => intval($params['status']),
             'goods_no' => $_goods_no[$_default],
             'store_nums' => $store_total_num,
+            'unit' => $params['unit'],
             'market_price' => $_market_price[$_default],
             'sell_price' => $_sell_price[$_default],
             'cost_price' => $_cost_price[$_default],
@@ -71,6 +79,17 @@ class Goods extends Common{
 
         if($status){
             $goods_id = $this->getData('id');
+            /** --------   添加商品图片   --------- **/
+            $images = [];
+            for ($i=0;$i<count($image);$i++){
+                $images[] = array(
+                    'goods_id' => $goods_id,
+                    'image' => $image[$i],
+                    'is_default' => ($cover_index == $i) ?: 0,
+                );
+            }
+            if(!empty($images)) (new GoodsToImages())->saveAll($images);
+
             /** --------   添加商品详情   --------- **/
             $detail = array(
                 'goods_id' => $goods_id,
@@ -151,6 +170,11 @@ class Goods extends Common{
 
     public function editGoodsById($params,$goods_id){
 
+        $image = $params['image'];//商品图片
+        $cover_index = intval($params['cover_index']);
+        $cover_index = ($cover_index > 0 && $cover_index < count($image)) ? $cover_index : 0;
+        $cover_image = !empty($image[$cover_index]) ? $image[$cover_index] : '';//封面图片
+
         $_default = isset($params['_default']) ? (int)$params['_default'] : 0;
 
         $_goods_no = $params['_goods_no'];
@@ -170,9 +194,11 @@ class Goods extends Common{
             'name' => $params['name'],
             'intro' => $params['intro'],
             'search_words' => $params['search_words'],
+            'cover_image' => $cover_image,
             'status' => intval($params['status']),
             'goods_no' => $_goods_no[$_default],
             'store_nums' => $store_total_num,
+            'unit' => $params['unit'],
             'market_price' => $_market_price[$_default],
             'sell_price' => $_sell_price[$_default],
             'cost_price' => $_cost_price[$_default],
@@ -182,6 +208,19 @@ class Goods extends Common{
         if($this->save($goods,['id' => $goods_id])){//更新商品
 
             $map['goods_id'] = $goods_id;
+
+            /** --------   添加商品图片   --------- **/
+            $images = [];
+            $goodsToImagesModel = new GoodsToImages();
+            $goodsToImagesModel->where($map)->delete();//删除商品图片
+            for ($i=0;$i<count($image);$i++){
+                $images[] = array(
+                    'goods_id' => $goods_id,
+                    'image' => $image[$i],
+                    'is_default' => ($cover_index == $i) ?: 0,
+                );
+            }
+            if(!empty($images)) $goodsToImagesModel->saveAll($images);
 
             /** --------   更新商品详情   --------- **/
             $detail = array(
@@ -322,6 +361,15 @@ class Goods extends Common{
             );
         }
         return $arr;
+    }
+
+    /**
+     * 获取单个商品图片
+     * @param $goods_id
+     * @return mixed
+     */
+    public function getGoodsImageById($goods_id){
+        return GoodsToImages::where('goods_id',$goods_id)->select();
     }
 
     /**

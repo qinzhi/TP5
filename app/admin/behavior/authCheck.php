@@ -14,9 +14,6 @@ class AuthCheck{
 
         switch ($param->app_type) {
             case 'public': {
-                if(Request::instance()->action() == 'login'){
-                    $this->ckeckLogin();
-                }
                 return;
             }
             default:

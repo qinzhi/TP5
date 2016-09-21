@@ -61,14 +61,16 @@ var GoodsImage = function(config){
     this.getLen = function(){
         return this.ul.find('.goods-img').length;
     };
-    if(this.data.length > 0){
-        for(var i in this.data){
-            var fileUrl = this.data[i].imageUrl;
-            var saveUrl = this.data[i].image;
-            this.addImage(fileUrl,saveUrl,this);
-            if(this.data[i].is_default == 1){
-                this.ul.find('li:eq('+i+')').find('.set-cover').trigger('click',{noTip: true});
+    this.init = function () {
+        if(this.data.length > 0){
+            for(var i in this.data){
+                var fileUrl = this.data[i].imageUrl;
+                var saveUrl = this.data[i].image;
+                this.addImage(fileUrl,saveUrl,this);
+                if(this.data[i].is_default == 1){
+                    this.ul.find('li:eq('+i+')').find('.set-cover').trigger('click',{noTip: true});
+                }
             }
         }
-    }
+    }    
 };

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2016-09-04 21:29:53
+Date: 2016-09-21 23:02:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -272,6 +272,8 @@ CREATE TABLE `fruiter_goods` (
   `intro` varchar(128) DEFAULT NULL COMMENT '商品简述',
   `goods_no` varchar(20) DEFAULT NULL COMMENT '商品货号',
   `model_id` int(10) NOT NULL DEFAULT '0' COMMENT '模型ID',
+  `search_words` varchar(50) DEFAULT NULL COMMENT '商品搜索词库,逗号分隔',
+  `cover_image` varchar(255) NOT NULL COMMENT '封面图片',
   `sell_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价格',
   `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场价格',
   `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
@@ -281,13 +283,12 @@ CREATE TABLE `fruiter_goods` (
   `update_time` int(10) NOT NULL COMMENT '最后一次修改时间',
   `create_time` int(10) NOT NULL COMMENT '创建时间',
   `store_nums` int(10) NOT NULL DEFAULT '0' COMMENT '库存',
-  `search_words` varchar(50) DEFAULT NULL COMMENT '商品搜索词库,逗号分隔',
   `weight` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '重量',
   `unit` varchar(6) DEFAULT NULL COMMENT '计量单位',
   `visit` int(10) NOT NULL DEFAULT '0' COMMENT '浏览次数',
   `favorite` int(10) NOT NULL DEFAULT '0' COMMENT '收藏次数',
   `comments` int(10) NOT NULL DEFAULT '0' COMMENT '评论次数',
-  `sale` int(10) DEFAULT NULL COMMENT '销量',
+  `sale` int(10) DEFAULT '0' COMMENT '销量',
   `sort` smallint(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `goods_delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
@@ -298,7 +299,7 @@ CREATE TABLE `fruiter_goods` (
 -- ----------------------------
 -- Records of fruiter_goods
 -- ----------------------------
-INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '', 's0002', '0', '1800.00', '2000.00', '500.00', '1', '1472010633', '1472010628', '1472010875', '0', '16000', '手机', '200.00', null, '0', '0', '0', null, '1', null);
+INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '为发烧而生', 's0002', '0', '手机', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1800.00', '2000.00', '500.00', '1', '1474467934', '1474467932', '1474467934', '0', '1024000', '200.00', '件', '0', '0', '0', '0', '1', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_category`
@@ -356,15 +357,15 @@ CREATE TABLE `fruiter_goods_to_attr` (
   KEY `goods_id` (`goods_id`),
   KEY `model_id` (`model_id`),
   CONSTRAINT `fruiter_goods_to_attr_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_goods_to_attr
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_attr` VALUES ('77', '1', '2', '1', '134mm*67.2mm*9.4mm', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('78', '1', '2', '2', '1280 x 720', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('79', '1', '2', '3', '8核', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('80', '1', '2', '5', '4G', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('101', '1', '2', '1', '134mm*67.2mm*9.4mm', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('102', '1', '2', '2', '1280 x 720', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('103', '1', '2', '3', '8核', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('104', '1', '2', '5', '4G', '0');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_category`
@@ -378,12 +379,12 @@ CREATE TABLE `fruiter_goods_to_category` (
   KEY `category_id` (`category_id`) USING BTREE,
   KEY `goods_id` (`goods_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_category_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_category
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_category` VALUES ('21', '1', '1');
+INSERT INTO `fruiter_goods_to_category` VALUES ('27', '1', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_commend`
@@ -397,13 +398,13 @@ CREATE TABLE `fruiter_goods_to_commend` (
   KEY `goods_id` (`goods_id`) USING BTREE,
   KEY `commend_id` (`commend_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_commend_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='推荐商品类型关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='推荐商品类型关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_commend
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_commend` VALUES ('42', '1', '1');
-INSERT INTO `fruiter_goods_to_commend` VALUES ('43', '1', '2');
+INSERT INTO `fruiter_goods_to_commend` VALUES ('54', '1', '1');
+INSERT INTO `fruiter_goods_to_commend` VALUES ('55', '1', '2');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_detail`
@@ -422,6 +423,24 @@ CREATE TABLE `fruiter_goods_to_detail` (
 -- Records of fruiter_goods_to_detail
 -- ----------------------------
 INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	反应快啊</p>');
+
+-- ----------------------------
+-- Table structure for `fruiter_goods_to_images`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_goods_to_images`;
+CREATE TABLE `fruiter_goods_to_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否封面图(1.封面图)',
+  PRIMARY KEY (`id`),
+  KEY `goods_id` (`goods_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+
+-- ----------------------------
+-- Records of fruiter_goods_to_images
+-- ----------------------------
+INSERT INTO `fruiter_goods_to_images` VALUES ('17', '1', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_seo`
@@ -483,8 +502,8 @@ CREATE TABLE `fruiter_products` (
 -- ----------------------------
 -- Records of fruiter_products
 -- ----------------------------
-INSERT INTO `fruiter_products` VALUES ('1', '1', 's0001', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"16G\"}]', '8000', '2000.00', '1800.00', '500.00', '200.00', '0', null);
-INSERT INTO `fruiter_products` VALUES ('2', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"}]', '8000', '2000.00', '1800.00', '500.00', '200.00', '1', null);
+INSERT INTO `fruiter_products` VALUES ('1', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"16G\"}]', '512000', '2000.00', '1800.00', '500.00', '200.00', '0', null);
+INSERT INTO `fruiter_products` VALUES ('2', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"}]', '512000', '2000.00', '1800.00', '500.00', '200.00', '1', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_session`
@@ -526,3 +545,19 @@ CREATE TABLE `fruiter_spec` (
 -- ----------------------------
 INSERT INTO `fruiter_spec` VALUES ('1', '内存', '[\"16G\",\"32G\",\"64G\"]', '1', '内存大小', '0', '1472022541', null);
 INSERT INTO `fruiter_spec` VALUES ('2', '颜色', '[\"红色\",\"白色\"]', '1', '', '0', '0', null);
+
+-- ----------------------------
+-- Table structure for `fruiter_unit`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_unit`;
+CREATE TABLE `fruiter_unit` (
+  `id` smallint(3) NOT NULL AUTO_INCREMENT,
+  `name` varchar(8) CHARACTER SET utf8 NOT NULL COMMENT '单位名称',
+  `is_close` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否关闭 0.未关闭 1.关闭',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of fruiter_unit
+-- ----------------------------
+INSERT INTO `fruiter_unit` VALUES ('1', '件', '0');

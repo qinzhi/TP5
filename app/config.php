@@ -236,5 +236,10 @@ return [
         'app_secret' => 'e53f87ed1d174c5ba02b5d40a18e2887',
     ),
 
-    'auth_key' => '1*NX+Jds|p!IFqltgD)"?4;ic<{,wuya239Ax^]-'
+    // +----------------------------------------------------------------------
+    // | 项目配置配置
+    // +----------------------------------------------------------------------
+    'auth_key' => '1*NX+Jds|p!IFqltgD)"?4;ic<{,wuya239Ax^]-',   //加密key
+    'resource_path' => '/resource/',
+    'resource_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/resource/',
 ];

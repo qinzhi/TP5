@@ -9,7 +9,7 @@
     </a>
     <a class="tab-item {$nav_type == 3?'active':''}" href="{:url('cart')}" data-no-cache="true">
         <span class="icon icon-gouwuche"></span>
-        <span class="tab-label">货单</span>
+        <span class="tab-label">购物车</span>
         <span class="badge" id="cart_num">{$cartNum|default=0}</span>
     </a>
     <a class="tab-item {$nav_type == 4?'active':''}" href="{:url('me')}">

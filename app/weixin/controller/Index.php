@@ -16,7 +16,7 @@ class Index extends Controller
 
         $goodsModel = new Goods();
         $goods = $goodsModel->getGoods();
-
+fb($goods);
         $this->assign('goods',$goods);
 
         $this->assign('nav_type',1);

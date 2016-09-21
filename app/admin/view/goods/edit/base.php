@@ -122,6 +122,18 @@
             </td>
         </tr>
         <tr>
+            <th>计量单位显示：</th>
+            <td>
+                <div class="form-group has-feedback no-margin">
+                    <select name="unit" id="unit">
+                        {volist name="unit" id="vo"}
+                            <option value="{$vo.name}">{$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
             <th>商品类型：</th>
             <td>
                 <div class="checkbox checkbox-inline no-margin no-padding">
@@ -150,10 +162,34 @@
                 </div>
             </td>
         </tr>
+        <tr>
+            <th>商品图片：</th>
+            <td>
+                <ul class="cover-box">
+                    <li class="last" id="add-image"></li>
+                </ul>
+            </td>
+        </tr>
     </tbody>
 </table>
+<script type="text/html" id="coverTpl">
+    <li class="goods-img">
+        <img src="{%img%}"/>
+        <i class="delete glyphicon glyphicon-remove"></i>
+        <input type="hidden" name="image[]" value="{%image%}"/>
+        {%if (index > 0)%}
+            <p class="set-cover">设为封面图</p>
+        {%else%}
+            <input type="hidden" id="cover-index" name="cover_index" value="{%index%}"/>
+            <p class="set-cover active">封面图片</p>
+        {%/if%}
+    </li>
+</script>
 <script>
     $(function(){
+        (new GoodsImage({
+            data: {$images|json_encode}
+        })).init();
         var goods_base = $('.table-border').find('tbody tr.base');
         (function init(products){
             var head = products[0];
