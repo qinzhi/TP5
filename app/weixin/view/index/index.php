@@ -7,7 +7,7 @@
         <header class="bar bar-nav">
             <h1 class="title">果度商城</h1>
         </header>
-        {include file="Layout:footer"/}
+        {include file="layout:footer"/}
         <div class="content">
             <!-- 首页轮播图 开始 -->
             <section class="swiper-container swiper-home" id="swiper">
@@ -48,14 +48,14 @@
                         {volist name="goods" id="vo"}
                             <li class="product-list-item" data-sku="{$vo.store_nums}" data-id="{$vo.id}"
                                 data-unit="{$vo.unit}" data-cart_num="{$vo.cart_num|default=0}" >
-                                <a class="flex">
+                                <a class="flex" href="javascript:;">
                                     <div class="product-img">
                                         <img src="{$vo.cover_image|get_img}">
                                     </div>
                                     <div class="product-info flex-1">
                                         <h3 class="product_name">{$vo.name}</h3>
                                         <p class="product_intro">{$vo.intro}</p>
-                                        <div class="product-cost widthScale80">
+                                        <div class="product-cost">
                                             <span class="product_price">
                                                 <?php list($int,$decimal) = explode('.',10.28/*$vo['sell_price']*/);?>
                                                 <sup>￥</sup>
@@ -81,6 +81,8 @@
                     <!--<p class="text-center" style="line-height: 1.6rem;background-color: #f0f4f0">~没有更多商品了~</p>-->
                 </div>
             </section>
+
+            {include file="public:purchases"}
         </div>
     </div>
 {/block}

@@ -1,17 +1,16 @@
 function purchases(goods){
     var entity = this;
     this.goods = goods;
-    this.addBtn = goods.find('.cart_add');
-    this.minusBtn = goods.find('.cart_minus');
     this.input = goods.find('.cart_num');
     this.win_height = $(window).height();
     this.action = 'up';
-    this.sku = this.goods.data('sku');
+    this.sku = parseInt(this.goods.data('sku'));
     this.unit = this.goods.data('unit');
-    this.num = this.goods.data('cart_num');
+    this.num = parseInt(this.goods.data('cart_num')) || 1;
     this.goods_id = this.goods.data('id');
     this.goods_cover = this.goods.find('.product-img img').attr('src');
     this.goods_name = this.goods.find('.product_name').text();
+    this.properties = null;
     this.section = null;
     this.panel = null;
     this.shade = null;
@@ -21,7 +20,7 @@ function purchases(goods){
         return this;
     }
     this.setNum = function(num){
-        if(num < 0){
+        if(num <= 0){
             $.toast('数量必须大于0',2000, 'top-80');
         }else if(num > this.sku){
             $.toast('添加数量已上限',2000, 'top-80');
@@ -36,7 +35,7 @@ function purchases(goods){
     };
     this.updateCart = function(){
         $.showPreloader(this.tips);
-        $.post('/cart/add',{goods_id:this.goods_id,num:this.num},function(result){
+        $.post('/weixin/cart/add',{goods_id:this.goods_id,num:this.num},function(result){
             if(result.code != 1){
                 $.toast(result.msg,2000, 'top-80');
             }
@@ -47,81 +46,23 @@ function purchases(goods){
         });
         return this;
     };
-    this.hideMinus = function(){
-        this.minusBtn.hide();
-        this.input.hide();
-    };
-    this.showMinus = function(){
-        this.minusBtn.show();
-        this.input.show();
-    }
+
     this.setHeight = function(height){
         this.panel.css('height',height);
         return this;
     };
-    this.source = '<section class="product-purchasing">' +
-                        '<div class="all-shade "></div>' +
-                        '<div class="product-panel">' +
-                            '<div class="product-view">' +
-                                '<div class="product-img">' +
-                                    '<img src="' + this.goods_cover + '">' +
-                                '</div>' +
-                                '<div class="product-info">' +
-                                    '<h3 class="product_name">' + this.goods_name + '</h3>' +
-                                    '<div class="flex widthScale00 rule">' +
-                                        '{{each rules as rule index}}' +
-                                            '<div class="flex-1">' +
-                                                '<p class="product_price">' +
-                                                    '<sup>￥</sup><em>{{rule.price[0]}}.</em><i>{{rule.price[1]}}</i>' +
-                                                '</p>' +
-                                                '<p class="product-purchase_num">{{rule.numLabel}}<unit>' + this.unit + '</unit></p>' +
-                                            '</div>' +
-                                        '{{/each}}' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="product-order">' +
-                                '<div class="order-header">' +
-                                    '<span class="order-title">购买数量：</span>' +
-                                    '<span class="order-stock">库存' +
-                                        '<span class="value">' + this.sku + '</span>' +
-                                        '<span class="unit">' + this.unit + '</span>' +
-                                    '</span>' +
-                                '</div>' +
-                                '<div class="order-action">' +
-                                    '<div class="amount-control">' +
-                                        '<a href="javascript:;" class="amount-down pull-left">' +
-                                            '<i class="icon icon-jianhao"></i>' +
-                                        '</a>' +
-                                        '<input type="number" value="' + this.num + '" maxlength="8" pattern="d*" class="amount-input pull-left">' +
-                                        '<a href="javascript:;" class="amount-up pull-left">' +
-                                            '<i class="icon icon-jiahao"></i>' +
-                                        '</a>' +
-                                    '</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="product-action">' +
-                                '<div class="flex">' +
-                                    '<div class="flex-1"><a class="btn btn-primary no-radius btn-block product-ok">确定</a></div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="panel-close">' +
-                                '<i class="icon icon-cha action-close"></i>' +
-                            '</div>' +
-                        '</div>' +
-                    '</section>';
+    this.source = document.getElementById('purchasesTpl').innerHTML;
+
     this.create = function(){
 
         var entity = this;
 
-        var rules = JSON.parse(entity.goods.data('rule'));
-        for(var i in rules){
-            rules[i].price = rules[i].price.split('.');
-            rules[i].numLabel = '≥' + rules[i].num;
-        }
-
         var render = template.compile(entity.source);
-        var html = render({rules:rules});
+        var html = render({
+            goods_cover:this.goods_cover,
+            goods_name:this.goods_name,
+            properties:this.properties
+        });
 
         var page = entity.goods.closest('.page');
         page.append(html);
@@ -134,12 +75,10 @@ function purchases(goods){
         var input = entity.section.find('.amount-input');
 
         entity.section.find('.amount-down').click(function(){
-            input.val(entity.num - 1);
-            entity.setNum(entity.num - 1);
+            input.val(entity.setNum(entity.num - 1).getNum());
         });
         entity.section.find('.amount-up').click(function(){
-            input.val(entity.num + 1);
-            entity.setNum(entity.num + 1);
+            input.val(entity.setNum(entity.num + 1).getNum());
         });
         input.on({
             blur: function(){
@@ -159,7 +98,7 @@ function purchases(goods){
         entity.section.find('.product-ok').click(function(){
             entity.close()
             if(entity.num > 0){
-                entity.updateCart().showMinus();
+                entity.updateCart();
             }
         });
 
