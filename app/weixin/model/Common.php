@@ -8,9 +8,10 @@ class Common extends Model{
 
     public $user_id;//用户id
 
-    public function __construct()
+    public function initialize()
     {
-        parent::__construct();
+        parent::initialize();
+        //parent::__construct();
 
         $this->user_id = 1;
     }

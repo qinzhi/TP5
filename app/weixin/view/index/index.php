@@ -67,11 +67,6 @@
                                         </div>
                                         <div class="product-cart_add">
                                             <i class="icon icon-add cart_add"></i>
-
-                                            <input class="cart_num" style="<?php if($vo['cart_num'] <= 0)echo 'display:none'?>"
-                                                   type="tel" value="{$vo.cart_num}" onkeyup="this.value=this.value.replace(/\D/g,'')" maxlength="3"/>
-                                            <i class="icon icon-minus cart_minus" style="<?php if($vo['cart_num'] <= 0)echo 'display:none'?>"></i>
-
                                         </div>
                                     </div>
                                 </a>
@@ -85,9 +80,4 @@
             {include file="public:purchases"}
         </div>
     </div>
-{/block}
-
-{block name="quote-js"}
-    <script src="__JS__/cart.js"></script>
-    <script src="__JS__/guodu.js"></script>
 {/block}

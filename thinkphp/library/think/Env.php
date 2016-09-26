@@ -9,17 +9,23 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-return [
-    // 生成应用公共文件
-    '__file__' => ['common.php', 'config.php', 'database.php'],
+namespace think;
 
-    // 定义demo模块的自动生成 （按照实际定义的文件名生成）
-    'demo'     => [
-        '__file__'   => ['common.php'],
-        '__dir__'    => ['behavior', 'controller', 'model', 'view'],
-        'controller' => ['Index', 'Test', 'UserType'],
-        'model'      => ['User', 'UserType'],
-        'view'       => ['index/index'],
-    ],
-    // 其他更多的模块定义
-];
+class Env
+{
+    /**
+     * 获取环境变量值
+     * @param string    $name 环境变量名（支持二级 .号分割）
+     * @param string    $default  默认值
+     * @return mixed
+     */
+    public static function get($name, $default = null)
+    {
+        $result = getenv(ENV_PREFIX . strtoupper(str_replace('.', '_', $name)));
+        if (false !== $result) {
+            return $result;
+        } else {
+            return $default;
+        }
+    }
+}

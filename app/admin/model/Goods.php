@@ -8,6 +8,7 @@ use app\common\Model\GoodsToCommend;
 use app\common\Model\GoodsToDetail;
 use app\common\Model\GoodsToImages;
 use app\common\Model\GoodsToSeo;
+use app\common\Model\Products;
 use think\Request;
 use traits\model\SoftDelete;
 

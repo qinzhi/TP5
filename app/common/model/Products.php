@@ -1,10 +1,11 @@
 <?php
 
-namespace app\admin\Model;
+namespace app\common\Model;
 
+use think\Model;
 use traits\model\SoftDelete;
 
-class Products extends Common{
+class Products extends Model{
 
     use SoftDelete;
     protected static $deleteTime = 'products_delete_time';
