@@ -193,19 +193,19 @@ class Goods extends Admin
         $tpl = Request::instance()->request('tpl');
         if ($action === 'spec') {
             if ($tpl == 'select') {
-                $has_id = Request::instance()->request('has_id');
+                $has_id = Request::instance()->request('has_id/a');
                 $where = array();
                 if (!empty($has_id)) {
                     $where['id'] = array('not in', implode(',', $has_id));
                 }
-                $specs = Loader::model('spec')->where($where)->get();
+                $specs = Db::name('spec')->where($where)->select();
                 $this->assign('specs', $specs);
             } elseif ($tpl == 'edit') {
                 $id = Request::instance()->request('id');
-                $spec = Loader::model('spec')->get($id);
+                $spec = Db::name('spec')->where('id',$id)->find();
                 $this->assign('spec', $spec);
             }
-            return $this->fetch("goods/$action/$tpl");
+            die($this->fetch("goods/$action/$tpl"));
         }elseif($action === 'product'){
             if($tpl == 'price' || $tpl == 'sku' ){
                 $id = Request::instance()->request('id');
@@ -214,7 +214,7 @@ class Goods extends Admin
                 $products = $this->goodsModel->getProductsById($id);
                 $this->assign('products', $products);
             }
-            return $this->fetch("goods/$action/$tpl");
+            die($this->fetch("goods/$action/$tpl"));
         }else{
             echo "你所调用的函数: ".$action."(参数: ";
             dump(Request::instance()->request());

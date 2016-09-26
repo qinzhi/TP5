@@ -192,6 +192,7 @@
         })).init();
         var goods_base = $('.table-border').find('tbody tr.base');
         (function init(products){
+            if(!products.length) return;
             var head = products[0];
             if(head.spec_array != ''){
                 for(var i in products)
@@ -218,7 +219,7 @@
                     var td = $('<td></td>');
                     td.append('<div class="checkbox no-margin"></div>');
                     td.find('div').append('<label class="no-padding-left"></label>');
-                    var _checkbox = $('<input type="checkbox" name="_default[]" value="' + index + '" class="inverted" />');
+                    var _checkbox = $('<input type="checkbox" name="_default" value="' + index + '" class="inverted"/>');
                     td.find('div > label').append(_checkbox);
                     td.find('div > label').append('<span class="text margin-left-4"></span>');
 
@@ -228,6 +229,12 @@
                     tr.append('<input type="hidden" name="_product_id[]" value="' + this.id + '"/>');
                     tr.append(base_tr);
 
+                    tr.find('input[name="_goods_no[]"]').val(this.products_no);
+                    tr.find('input[name="_store_nums[]"]').val(this.store_nums);
+                    tr.find('input[name="_market_price[]"]').val(this.market_price);
+                    tr.find('input[name="_sell_price[]"]').val(this.sell_price);
+                    tr.find('input[name="_cost_price[]"]').val(this.cost_price);
+                    tr.find('input[name="_weight[]"]').val(this.weight);
                     for(var i=0;i<spec.length;i++){
                         tr.prepend('<td></td>');
                     }
@@ -291,8 +298,8 @@
 
                             if(goods_base == ''){
                                 goods_base = tbody.find('tr.base');
-                                tbody.find('tr.base').remove();
                             }
+                            tbody.find('tr.base').remove();
 
                             var th = table.find('thead > tr');
                             var _spec = [];
@@ -337,7 +344,7 @@
                                 td.append('<div class="checkbox no-margin"></div>');
                                 td.find('div').append('<label class="no-padding-left"></label>');
 
-                                var _checkbox = $('<input type="checkbox" name="_default[]" value="' + i + '" class="inverted" />');
+                                var _checkbox = $('<input type="checkbox" name="_default" value="' + i + '" class="inverted" />');
                                 if(i == 0) _checkbox.attr('checked',true);
                                 td.find('div > label').append(_checkbox);
 
@@ -355,14 +362,14 @@
                 }
             });
         });
-        $(document).on('click','.table-border input[name="_default[]"]',function(){
+        $(document).on('click','.table-border input[name="_default"]',function(){
             var tbody = $('.table-border').find('tbody');
             if(this.checked === false){
-                if(tbody.find('input[name="_default[]"]:checked').length <= 0){
+                if(tbody.find('input[name="_default"]:checked').length <= 0){
                     this.checked = true;
                 }
             }else{
-                var checkbox = tbody.find('input[name="_default[]"]:checked');
+                var checkbox = tbody.find('input[name="_default"]:checked');
                 if(checkbox.length > 0){
                     checkbox.attr('checked',false);
                 }

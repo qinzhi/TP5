@@ -4,12 +4,12 @@
             <h7>请选择规格</h7>
             <div class="well well-sm bg-white well-select-spec">
                 <ul class="ul-spec-list">
-                    <volist name="specs" id="vo">
+                    {volist name="specs" id="vo"}
                         <li data-id="{$vo.id}">
                             <label>{$vo.name}</label>
                             <i class="fa fa-check spec-status"></i>
                         </li>
-                    </volist>
+                    {/volist}
                 </ul>
             </div>
         </div>

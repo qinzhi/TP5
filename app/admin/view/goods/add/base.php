@@ -237,8 +237,8 @@
 
                             if(goods_base == ''){
                                 goods_base = tbody.find('tr.base');
-                                tbody.find('tr.base').remove();
                             }
+                            tbody.find('tr.base').remove();
 
                             var th = table.find('thead > tr');
                             var _spec = [];
@@ -283,7 +283,7 @@
                                 td.append('<div class="checkbox no-margin"></div>');
                                 td.find('div').append('<label class="no-padding-left"></label>');
 
-                                var _checkbox = $('<input type="checkbox" name="_default[]" value="' + i + '" class="inverted" />');
+                                var _checkbox = $('<input type="checkbox" name="_default" value="' + i + '" class="inverted" />');
                                 if(i == 0) _checkbox.attr('checked',true);
                                 td.find('div > label').append(_checkbox);
 
@@ -297,13 +297,13 @@
 
                             $('#addSpec').data('status',false);
 
-                            tbody.find('input[name="default[]"]').click(function(){
+                            tbody.find('input[name="_default"]').click(function(){
                                 if(this.checked === false){
-                                    if(tbody.find('input[name="default[]"]:checked').length <= 0){
+                                    if(tbody.find('input[name="_default"]:checked').length <= 0){
                                         this.checked = true;
                                     }
                                 }else{
-                                    var checkbox = tbody.find('input[name="default[]"]:checked');
+                                    var checkbox = tbody.find('input[name="_default"]:checked');
                                     if(checkbox.length > 0){
                                         checkbox.attr('checked',false);
                                     }

@@ -288,7 +288,7 @@ class Goods extends Common{
             /** --------   更新規格商品   --------- **/
             $productModel = new Products();
             $_spec_list = $params['_spec_list'];
-            $_product_id = $params['_product_id'];
+            $_product_id = isset($params['_product_id'])?$params['_product_id']:[];
 
             if(!empty($params['delProduct'])){
                 $productModel->delete($params['delProduct']);//删除商品
