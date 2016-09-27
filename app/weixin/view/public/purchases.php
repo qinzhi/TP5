@@ -5,20 +5,25 @@
         <div class="product-panel">
             <div class="product-view">
                 <div class="product-img">
-                    <img src="{{goods_cover}}">
+                    <img src="{%goods_cover%}">
                 </div>
                 <div class="product-info">
-                    <h3 class="product_name">{{goods_name}}</h3>
+                    <h3 class="product_name">{%goods_name%}</h3>
                 </div>
             </div>
             <div class="product-select-box">
-                <div class="product-property-type">
-                    <h3 class="property-type">颜色</h3>
-                    <ul class="property-box">
-                        <li class="property-item selected">红色</li>
-                        <li class="property-item">红色</li>
-                    </ul>
-                </div>
+                {%if (!is_single)%}
+                    {%each properties as property key%}
+                        <div class="product-property-type">
+                            <h3 class="property-type">{%key%}</h3>
+                            <ul class="property-box">
+                                {%each property as value%}
+                                    <li class="property-item">{%value%}</li>
+                                {%/each%}
+                            </ul>
+                        </div>
+                    {%/each%}
+                {%/if%}
                 <div class="product-order flex">
                     <h3 class="order-header flex-1">购买数量：</h3>
                     <div class="order-action text-align-right">

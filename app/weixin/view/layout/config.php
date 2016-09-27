@@ -13,5 +13,9 @@
             return true;
         },
         getWeixinSign: '{:url("home/getWeixinSign")}'
-    }
+    };
+    $(function () {
+        template.config('openTag', '{%');
+        template.config('closeTag', '%}');
+    })
 </script>

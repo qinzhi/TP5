@@ -54,8 +54,20 @@ $.extend({
             });
         }
     },
+    isRepeat: function (arr) {/*判断一个数组中是否有重复值*/
+        var hash = {};
+        for(var i in arr) {
+            if(hash[arr[i]])
+                return true;
+            hash[arr[i]] = true;
+        }
+        return false;
+    },
     dialog : function(config){
         var id = config.id ? this.prefix + config.id : config.id;
+        var auto_close = true;
+        if(config.auto_close === false )
+            auto_close = false;
         if($('#' + id).length > 0){
             return;
         }
@@ -175,7 +187,11 @@ $.extend({
                 $('body').removeAttr('style').removeAttr('unselectable').removeAttr('onselectstart');
             }
         }).find('.dialog_close').click(function(){
-            var dialog_id = $(this).parents('.own_dialog').attr('id'),id='';
+            dialog.close();
+        });
+        dialog.close = function () {
+            //var dialog_id = $(this).parents('.own_dialog').attr('id'),id='';
+            var dialog_id = $(this).attr('id'),id='';
             for(var i= ($.dialogBox.length-1);i>=0;i--){
                 id = $.dialogBox[i].attr('id');
                 $.dialogBox[i].remove();
@@ -184,7 +200,7 @@ $.extend({
                     break;
                 }
             }
-        });
+        }
         $(dialog).find('.dialog_footer a').click(function(){
             if($.isFunction(config.ok)){
                 if(async === false){
@@ -202,7 +218,7 @@ $.extend({
                     return;
                 }
             }
-            $(this).parents('.own_dialog').find('.dialog_close').trigger('click');
+            if(auto_close) $(this).parents('.own_dialog').find('.dialog_close').trigger('click');
         });
     },
     regex: function(pattern){

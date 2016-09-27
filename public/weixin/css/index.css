@@ -223,7 +223,7 @@
 .product-panel .product-property-type .property-item{
     display: inline-block;
     font-size: .75rem;
-    border: 1px solid #ccc;
+    border: 1px solid #bbb;
     border-radius: 5px;
     padding: .4rem .8rem;
     margin-right: .5rem;
@@ -232,6 +232,11 @@
 .product-panel .product-property-type .property-item.selected{
     border-color: #41c172;
     color: #41c172;
+}
+.product-panel .product-property-type .property-item.disabled{
+    border: 1px dashed #ccc;
+    color: #999;
+    cursor: not-allowed;
 }
 .product-panel .product-order{
     padding-top: .5rem;

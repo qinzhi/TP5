@@ -11,6 +11,8 @@ function purchases(goods){
     this.goods_cover = this.goods.find('.product-img img').attr('src');
     this.goods_name = this.goods.find('.product_name').text();
     this.properties = null;
+    this.products = null;
+    this.is_single = 0;
     this.section = null;
     this.panel = null;
     this.shade = null;
@@ -59,12 +61,18 @@ function purchases(goods){
             type: 'post',
             data: {goods_id:this.goods_id},
             context: this,
-            success: function(products){
+            success: function(result){
+                this.is_single = result['is_single'];
+                this.properties = result['properties'];
+                this.products = result['products'];
+                console.log(this.properties);
+
                 var entity = this;
                 var render = template.compile(entity.source);
                 var html = render({
                     goods_cover:this.goods_cover,
                     goods_name:this.goods_name,
+                    is_single:this.is_single,
                     properties:this.properties
                 });
 

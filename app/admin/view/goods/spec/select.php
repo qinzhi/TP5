@@ -59,6 +59,7 @@
                 async : false,
                 min_width: 600,
                 min_height: 350,
+                auto_close: false,
                 content : function(){
                     var content;
                     $.post("{:url('goods/spec')}",{tpl:'add'},function(data){
@@ -71,8 +72,10 @@
                     var params = {};
                     params.name = $.trim($('#spec_name').val());
                     if(params.name == ''){
-                        Notify('规格名称不能为空', 'bottom-right', '5000', 'warning', 'fa-warning', true);
-                        return false;
+                        return Notify('规格名称不能为空', 'bottom-right', '5000', 'warning', 'fa-warning', true);
+                    }
+                    if($.isRepeat(params.value) === true){
+                        return Notify('规格值不能重复', 'bottom-right', '5000', 'warning', 'fa-warning', true);
                     }
                     params.remark = $.trim($('#spec_show').val());
                     params.value = [];
@@ -81,6 +84,7 @@
                     });
                     $.fruiter.post("{:url('goodsSpec/add')}",params,function(result){
                         if(result.code == 1){
+                            target.close();//关闭弹窗
                             var data = result.data;
                             $('.ul-spec-list').append('<li data-id="'+data.id+'"><label>'+data.name+'</label></li>');
                             Notify(result.msg, 'bottom-right', '5000', 'success', 'fa-check', true);
