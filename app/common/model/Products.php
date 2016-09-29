@@ -13,5 +13,5 @@ class Products extends Model{
     /**
      * 表名
      */
-    const TABLE_PRODUCT = 'products';
+    const TABLE_NAME = 'products';
 }

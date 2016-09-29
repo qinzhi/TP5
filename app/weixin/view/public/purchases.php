@@ -1,7 +1,7 @@
 <script src="__JS__/purchases.js"></script>
 <script type="text/html" id="purchasesTpl">
     <section class="product-purchasing">
-        <div class="all-shade "></div>
+        <div class="all-shade"></div>
         <div class="product-panel">
             <div class="product-view">
                 <div class="product-img">

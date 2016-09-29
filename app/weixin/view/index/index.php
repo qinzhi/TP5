@@ -81,3 +81,29 @@
         </div>
     </div>
 {/block}
+{block name="js"}
+    <script>
+        $(function(){
+            var purchase = null;
+            $(window).resize(function(e){
+                if(!!purchase){
+                    var cur_win_height = $(this).height();
+                    if(purchase.panel.length >= 1 && purchase.win_height > cur_win_height){
+                        purchase.setHeight('100%');
+                    }else{
+                        purchase.setHeight('80%');
+                    }
+                }
+            });
+            $(document).on('click','.cart_add',function(){
+                purchase = new purchases($(this).closest('li'));
+                /*if(purchase.num > 0){
+                 purchase.setTips('正在加入购物车...').setNum(purchase.num + 1).updateCart();
+                 }else{
+                 purchase.create();
+                 }*/
+                purchase.create();
+            });
+        });
+    </script>
+{/block}
