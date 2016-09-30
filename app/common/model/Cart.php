@@ -21,8 +21,7 @@ class Cart extends Model{
                         ->alias('c')
                             ->join(Products::TABLE_NAME . ' p','c.product_id = p.id')
                                 ->join(Goods::TABLE_NAME . ' g','p.goods_id = g.id')
-                                    ->where('g.status',1)->where('c.user_id',$user_id)->select();
-        fb($list);
+                                    ->where('c.user_id',$user_id)->select();
         return $list;
     }
 }

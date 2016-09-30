@@ -18,6 +18,30 @@
 .empty-cart .btn-empty-cart{
     width: 7.5rem;
 }
+#page-cart label.label-checkbox input[type="checkbox"]:checked + .item-media i.icon-form-checkbox,
+#page-cart label.label-checkbox input[type="radio"]:checked + .item-media i.icon-form-checkbox{
+    background-color: #41c172;
+}
+.cart-heard{
+    width: 100%;
+    height: 100%;
+}
+.cart-heard .label-checkbox{
+    line-height: 2.2rem;
+    margin-top: -2px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+.cart-heard .label-checkbox:active{
+    background-color: #f7f7f8 !important;
+}
+.cart-heard .s-text{
+    margin-left: .5rem;
+    font-size: .7rem;
+}
 .cart-list{
     list-style: none;
     padding: 0;
@@ -28,6 +52,10 @@
     border-bottom: 1px solid #e7e7e7;
     overflow: hidden;
     position: relative;
+}
+.cart-list li .label-checkbox{
+    padding: 0 .5rem;
+    line-height: 5.5rem;
 }
 .cart-list .goods-img{
     width: 5.5rem;
@@ -41,26 +69,19 @@
     padding-left: .25rem;
 }
 .cart-list .goods-name{
-    margin-top: .5rem;
+    margin-top: .2rem;
+    font-size: .85rem;
 }
-.cart-list .goods-buy{
-    display: flex;
-}
-.cart-list .goods-rule{
-    padding: .5rem 0 .2rem 0;
-}
-.cart-list .rule{
-    font-size: .7rem;
-}
-.cart-list .rule.active .rule_price{
+.cart-list .goods-price{
+    font-size: .75rem;
     color: #ff655b;
+}
+.cart-list .goods-spec{
+    font-size: .7rem;
+    color: #999;
 }
 .cart-list .amount-input{
     width: 2rem;
-}
-.cart-list .goods-action{
-    width: 5rem;
-    position: relative;
 }
 .cart-list .action-group{
     position: absolute;
@@ -75,28 +96,28 @@
     border: 1px solid #d9d9d9;
     color: #41c172;
     display: inline-block;
-    height: 1.3rem;
-    line-height: 1.3rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
     text-align: center;
-    width: 1.3rem;
+    width: 1.6rem;
 }
 .cart-list .amount-down{
     border-bottom-left-radius: 0.2rem;
     border-top-left-radius: 0.2rem;
 }
 .cart-list .amount-input{
-    border-color: #d9d9d9 -moz-use-text-color;
+    border-color: #d9d9d9;
     border-style: solid none;
     border-width: 0.05rem medium;
-    height: 1.3rem;
+    height: 1.6rem;
     text-align: center;
-    width: 2rem;
+    width: 2.2rem;
 }
 .cart-list .amount-up{
     border-bottom-right-radius: 0.2rem;
     border-top-right-radius: 0.2rem;
 }
-.button.button-clearing,.button.button-clearing:active{
+.button.btn-clearing,.button.btn-clearing:active{
     top: .45rem;
     background-color: #41c172;
 }

@@ -2,9 +2,8 @@
 
 namespace app\admin\Controller;
 
-use app\admin\Model\Products;
+use app\common\model\Products as ProductsModel;
 use think\Db;
-use think\Loader;
 use think\Request;
 use app\admin\Model\Goods as GoodsModel;
 
@@ -90,7 +89,7 @@ class Goods extends Admin
     //更新商品
     public function update(){
         if(Request::instance()->isAjax()){
-            $productModel = new Products();
+            $productModel = new ProductsModel();
             $action = Request::instance()->post('action');
             if($action == 'price'){ //更新价格
                 $result = $this->updatePrice($productModel,$_POST);
@@ -180,6 +179,7 @@ class Goods extends Admin
 
     public function del($id){
         $result = GoodsModel::destroy($id);
+        GoodsModel::update(['status'=>0],['id'=>$id]);
         if($result){
             $result = ['code'=>1,'msg'=>'删除成功'];
         }else{
