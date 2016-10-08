@@ -81,7 +81,6 @@ p{margin: 0}
 .icon-right:before { content: "\e63f"; }
 .icon-up:before { content: "\e640"; }
 
-.page{background-color: #f0f4f0;}
 .bar-nav a{color: #ffffff;}
 .bar-nav .title{background-color: #41c172;color: #ffffff;}
 .bar-tab .tab-item.active, .bar-tab .tab-item:active{color: #41c172;}
@@ -94,7 +93,7 @@ p{margin: 0}
 .flex-1 {-webkit-box-flex: 1;-webkit-flex: 1;-ms-flex: 1;flex: 1;width: 0}
 
 .no-radius{border-radius: 0 !important;-moz-border-radius: 0 !important;-webkit-border-radius: 0 !important;}
-
+.absolute{position: absolute;}
 .btn{-webkit-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none;background-image: none;
 border: .1rem solid transparent;-moz-border-radius: .2rem; /* Firefox */-webkit-border-radius: .2rem; /* Safari 和 Chrome */border-radius: .2rem;
 cursor: pointer;display: inline-block;font-size: .7rem;font-weight: 400;margin-bottom: 0;padding: .3rem .6rem;text-align: center;

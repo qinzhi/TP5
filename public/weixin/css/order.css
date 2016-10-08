@@ -1,0 +1,108 @@
+.page-order_create .list-block{
+    margin: 0;
+}
+.order-address .no-address.list-block .item-title{
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+.goods-info .content-block-title{
+    margin-top: 1rem;
+}
+.list-block .item-price{
+    color: #ff655b;
+}
+.goods-info .item-num{
+    right: .75rem;
+    bottom: 50%;
+    margin-bottom: -5px;
+    color: #999;
+}
+.order-goods-statistics{
+    background-color: white;
+    text-align: right;
+    padding: 0 .75rem;
+    line-height: 2.2rem;
+}
+.order-goods-statistics p{
+    display: inline-block;
+    font-size: .75rem;
+    margin-left: .75rem;
+}
+.order-goods-statistics .total-price{
+    color: #ff655b;
+}
+.page-order_create div.order-pay-type{
+    margin-top: 1rem;
+}
+.bar-order_create .order-amount{
+    line-height: 2.2rem;
+    font-size: .75rem;
+}
+.bar-order_create .order-amount span{
+    color: #ff655b;
+    margin: 0 .2rem;
+}
+.bar-order_create .btn-submit{
+    background-color: #41c172;
+}
+/********************* address-panel *****************************/
+.all-shade{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+    z-index: 99;
+    display: none;
+    -webkit-transition: background .3s;
+    transition: background .3s;
+}
+.fade_toggle{
+    display: block;
+    background: rgba(0, 0, 0, 0.3);
+}
+.address-panel{
+    position: fixed;
+    background-color: #f0f4f0;
+    overflow: hidden;
+    z-index: 9999;
+    left: 0;
+    bottom: 0;
+    height: 60%;
+    width: 100%;
+    -webkit-transform: translate(0, 100%);
+    transform: translate(0, 100%);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: -webkit-transform .3s ease-out;
+    transition: -webkit-transform .3s ease-out;
+    transition: transform .3s ease-out;
+    transition: transform .3s ease-out, -webkit-transform .3s ease-out;
+}
+.address-panel .address-header{
+    text-align: center;
+    line-height: 2rem;
+    background-color: #fff;
+}
+.address-panel.active{
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+}
+.address-panel .address-action{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.address-panel .address-action .address-ok{
+    padding: .5rem;
+}
+.address-panel .panel-close{
+    position: absolute;
+    right: .3rem;
+    top: .3rem;
+    color: #9c9c9c;
+    cursor: default;
+}
+/**************************************************/
