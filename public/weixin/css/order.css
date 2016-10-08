@@ -70,7 +70,7 @@
     z-index: 9999;
     left: 0;
     bottom: 0;
-    height: 60%;
+    height: 18.5rem;
     width: 100%;
     -webkit-transform: translate(0, 100%);
     transform: translate(0, 100%);
@@ -104,5 +104,11 @@
     top: .3rem;
     color: #9c9c9c;
     cursor: default;
+}
+.address-panel .address-default .item-input{
+    text-align: right;
+}
+.address-picker .close-picker{
+    color: #41c172;
 }
 /**************************************************/

@@ -1,29 +1,68 @@
 $(document).on("pageInit", "#page-cart", function(e, id, page) {
     var selectAll =page.find('#selectAll');
     var selectSon = page.find('input[name="chk-id"]');
-    selectAll.click(function () {
-        if(this.checked == true){
-            selectSon.each(function () {
-                this.checked = true;
-            });
-        }else{
-            selectSon.each(function () {
-                this.checked = false;
-            });
-        }
-        Cart.statistics();
+    selectAll.change(function () {
+        $.ajax({
+            type: 'post',
+            url: '/weixin/cart/setSelected',
+            data: {cart_id: 0,is_selected: this.checked?1:0},
+            context: this,
+            beforeSend: function () {
+                $.showIndicator();
+            },
+            success: function (result) {
+                if(result.code == 1){
+                    if(this.checked == true){
+                        selectSon.each(function () {
+                            this.checked = true;
+                        });
+                    }else{
+                        selectSon.each(function () {
+                            this.checked = false;
+                        });
+                    }
+                    Cart.statistics();
+                }else{
+                    this.checked = !this.checked;
+                    $.alert(result.msg);
+                }
+            },
+            complete: function () {
+                $.hideIndicator()
+            }
+        });
+        
     });
-    selectSon.click(function () {
-        if(this.checked){
-            var status = true;
-            selectSon.each(function () {
-                if(this.checked === false) status = false;
-            });
-            if(status) selectAll.get(0).checked = true;
-        }else{
-            selectAll.get(0).checked = false;
-        }
-        Cart.statistics();
+    selectSon.change(function () {
+        $.ajax({
+            type: 'post',
+            url: '/weixin/cart/setSelected',
+            data: {cart_id: this.value,is_selected: this.checked?1:0},
+            context: this,
+            beforeSend: function () {
+                $.showIndicator();
+            },
+            success: function (result) {
+                if(result.code == 1){
+                    if(this.checked){
+                        var status = true;
+                        selectSon.each(function () {
+                            if(this.checked === false) status = false;
+                        });
+                        if(status) selectAll.get(0).checked = true;
+                    }else{
+                        selectAll.get(0).checked = false;
+                    }
+                    Cart.statistics();
+                }else{
+                    this.checked = !this.checked;
+                    $.alert(result.msg);
+                }
+            },
+            complete: function () {
+                $.hideIndicator()
+            }
+        });
     });
     var Cart = {
         widget: {
@@ -118,7 +157,11 @@ $(document).on("pageInit", "#page-cart", function(e, id, page) {
             this.widget.clearing.bind('click',function (e) {
                 self.clearing(e);
             });
-            return this;
+            var chk_len = this.widget.ul.find('li input[name="chk-id"]:checked').length;
+            var len = this.widget.ul.find('li input[name="chk-id"]').length;
+            if(chk_len == len)
+                selectAll.attr('checked',true);
+            return this.statistics();
         }
     }.init();
 });

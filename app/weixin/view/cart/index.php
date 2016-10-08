@@ -18,8 +18,8 @@
         </header>
         <div class="bar bar-footer bar-cart-footer">
             <div class="pull-left cart-total">
-                <p> 共<span class="quantity">{$totalNum}</span>件</p>
-                <p>货款总计¥ <span class="cash">{$totalPrice}</span>（不含运费）</p>
+                <p> 共<span class="quantity">0</span>件</p>
+                <p>货款总计¥ <span class="cash">0.00</span>（不含运费）</p>
             </div>
             <button class="button button-fill btn-clearing pull-right">去结算</button>
         </div>
@@ -29,7 +29,7 @@
                     <li class="flex" data-sku="{$vo.store_nums}" data-id="{$vo.cart_id}" data-unit="{$vo.unit}"
                         data-product_id="{$vo.product_id}" data-price="{$vo.sell_price}">
                         <label class="label-checkbox">
-                            <input type="checkbox" name="chk-id" value="{$vo.cart_id}" autocomplete="off">
+                            <input type="checkbox" name="chk-id" value="{$vo.cart_id}" autocomplete="off" {if condition="$vo.is_selected eq 1"}checked{/if}>
                             <div class="item-media">
                                 <i class="icon icon-form-checkbox"></i>
                             </div>

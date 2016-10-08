@@ -16,8 +16,6 @@ class Cart extends Controller
     }
 
     public function index(){
-        $this->assign('totalNum',1);
-        $this->assign('totalPrice',10);
         $cartModel = new CartModel();
         $products = $cartModel->getList($this->user_id);
         if(!empty($products)){
@@ -75,5 +73,21 @@ class Cart extends Controller
         }else{
             return json(['code'=>-1,'msg'=>'添加失败','num'=> $num]);
         }
+    }
+
+    public function setSelected($cart_id,$is_selected){
+        if(empty($cart_id)){
+            Db::name('cart')->where('user_id',$this->user_id)->setField('is_selected',boolval($is_selected));
+            return json(['code'=>1,'msg'=>'更新成功']);
+        }else{
+            $cart = Db::name('cart')->where('user_id',$this->user_id)->where('id',$cart_id)->find();
+            if(!empty($cart)){
+                Db::name('cart')->where('user_id',$this->user_id)->where('id',$cart_id)->setField('is_selected',boolval($is_selected));
+                return json(['code'=>1,'msg'=>'更新成功']);
+            }else{
+                return json(['code'=>-1,'msg'=>'购物车不存在该商品']);
+            }
+        }
+
     }
 }

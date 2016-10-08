@@ -23,7 +23,7 @@
                     <ul>
                         <?php $total_num = $total_price = 0;?>
                         {volist name='products' id='product'}
-                            <?php $total_num+= $product['cart_num'];$total_price+=$product['sell_price'];?>
+                            <?php $total_num+= $product['cart_num'];$total_price+= ($product['sell_price'] * $product['cart_num']);?>
                             <li class="item-content">
                                 <div class="item-media"><img src="{$product.cover_image|get_img}" style='width: 4rem;height: 4rem;'></div>
                                 <div class="item-inner">
@@ -86,8 +86,8 @@
         <button class="button button-fill btn-submit">提交订单</button>
     </div>
     <section class="order-address_add">
-        <div class="all-shade fade_toggle"></div>
-        <div class="address-panel active">
+        <div class="all-shade"></div>
+        <div class="address-panel">
             <header class="address-header"><h4>编辑收货地址</h4></header>
             <form class="address-area list-block" autocomplete="off">
                 <ul>
@@ -95,7 +95,7 @@
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-input">
-                                    <input type="text" name="name" placeholder="姓名" maxlength="8">
+                                    <input type="text" name="name" placeholder="收货人" maxlength="8">
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                         <div class="item-content">
                             <div class="item-inner">
                                 <div class="item-input">
-                                    <input type="tel" name="tel" placeholder="联系电话" maxlength="11">
+                                    <input type="tel" name="tel" placeholder="收货人手机号" maxlength="11">
                                 </div>
                             </div>
                         </div>
@@ -114,6 +114,28 @@
                             <div class="item-inner">
                                 <div class="item-input">
                                     <input type="text" name="address" id="city-picker" placeholder="省、市、区/县">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <textarea name="detail_address" placeholder="详细地址" maxlength="126"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="address-default">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title label">默认地址</div>
+                                <div class="item-input">
+                                    <label class="label-switch">
+                                        <input type="checkbox" name="default">
+                                        <div class="checkbox"></div>
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -135,14 +157,32 @@
 </div>
 {/block}
 {block name="quote-js"}
-    <script type="text/javascript" src="__LIGHT7__/js/light7-city-picker.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__LIGHT7__/js/light7-city-picker.min.js" charset="utf-8"></script>
 {/block}
 {block name="js"}
 <script>
     $(function () {
         $("#city-picker").cityPicker({
             toolbarTemplate: '<header class="bar bar-nav"><button class="button button-link pull-right close-picker">确定</button></header>',
-            cssClass: 'address-picker'
+            cssClass: 'address-picker city-picker'
+        });
+        $('.order-address .no-address').bind('click',function () {
+            var address_add = $('.order-address_add');
+            var shade = address_add.find('.all-shade');
+            var panel = address_add.find('.address-panel');
+            shade.addClass('fade_toggle');
+            panel.addClass('active');
+
+            panel.find('.action-close').one('click',function () {
+                close();
+            });
+            shade.one('click',function () {
+                close();
+            });
+            var close = function () {
+                shade.removeClass('fade_toggle');
+                panel.removeClass('active');
+            }
         });
     });
 </script>

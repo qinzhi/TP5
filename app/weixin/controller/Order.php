@@ -18,7 +18,6 @@ class Order extends Controller
             $cart_id = json_decode($_COOKIE['cart_id'],true);
             $products = $cartModel->getList($this->user_id,$cart_id);
             $this->assign('products',$products);
-            fb($products);
             return $this->fetch();
         }else{
 
