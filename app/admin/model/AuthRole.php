@@ -5,7 +5,7 @@
  * Date: 2015/5/27
  * Time: 14:40
  */
-namespace app\admin\Model;
+namespace app\admin\model;
 
 use think\Request;
 

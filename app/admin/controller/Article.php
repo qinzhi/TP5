@@ -1,8 +1,7 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
-use think\Loader;
 use think\Request;
 use app\admin\model\Article as ArticleModel;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
-use app\admin\Model\AuthRole;
+use app\admin\model\AuthRole;
 use \app\common\tools\Tree;
 use think\Loader;
 use think\Request;

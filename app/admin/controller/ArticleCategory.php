@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
 use app\common\tools\Tree;
 use app\admin\model\ArticleCategory as ArticleCategoryModel;

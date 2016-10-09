@@ -6,6 +6,7 @@
     text-align: center;
     width: 100%;
 }
+.address-area .item-text{height: auto;}
 .goods-info .content-block-title{
     margin-top: 1rem;
 }
@@ -43,7 +44,7 @@
     color: #ff655b;
     margin: 0 .2rem;
 }
-.bar-order_create .btn-submit{
+.bar-order_create .btn-submit,.bar-order_create .btn-submit:active{
     background-color: #41c172;
 }
 /********************* address-panel *****************************/
@@ -108,7 +109,23 @@
 .address-panel .address-default .item-input{
     text-align: right;
 }
-.address-picker .close-picker{
+.address-picker .close-picker,.address-picker .close-picker:active{
     color: #41c172;
+}
+.address-list .item-content{
+    padding-left: 0;
+}
+.address-list .item-text{
+    height: auto;
+}
+.address-list .label-checkbox{
+    padding: 0 .75rem;
+}
+.address-list *{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 /**************************************************/

@@ -1,11 +1,11 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
 use app\common\model\Products as ProductsModel;
 use think\Db;
 use think\Request;
-use app\admin\Model\Goods as GoodsModel;
+use app\admin\model\Goods as GoodsModel;
 
 class Goods extends Admin
 {

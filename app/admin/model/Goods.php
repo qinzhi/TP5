@@ -1,14 +1,14 @@
 <?php
 
-namespace app\admin\Model;
+namespace app\admin\model;
 
-use app\common\Model\GoodsToAttr;
-use app\common\Model\GoodsToCategory;
-use app\common\Model\GoodsToCommend;
-use app\common\Model\GoodsToDetail;
-use app\common\Model\GoodsToImages;
-use app\common\Model\GoodsToSeo;
-use app\common\Model\Products;
+use app\common\model\GoodsToAttr;
+use app\common\model\GoodsToCategory;
+use app\common\model\GoodsToCommend;
+use app\common\model\GoodsToDetail;
+use app\common\model\GoodsToImages;
+use app\common\model\GoodsToSeo;
+use app\common\model\Products;
 use think\Request;
 use traits\model\SoftDelete;
 

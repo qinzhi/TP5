@@ -2,7 +2,7 @@
 /**
  * 商品SEO表
  */
-namespace app\common\Model;
+namespace app\common\model;
 
 use think\Model;
 

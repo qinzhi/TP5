@@ -1,11 +1,10 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
 use app\common\tools\Tree;
-use think\Loader;
 use think\Request;
-use app\admin\Model\GoodsCategory as GoodsCategoryModel;
+use app\admin\model\GoodsCategory as GoodsCategoryModel;
 
 class GoodsCategory extends Admin {
 

@@ -24,7 +24,7 @@
     {block name="css"}{/block}
     <script type='text/javascript' src='__STATIC__/js/jquery-2.1.4.min.js' charset='utf-8'></script>
     <!--<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>-->
-    {include file="Layout:config"/}
+    {include file="layout:config"/}
 </head>
 <body>
     {block name="page"}{/block}

@@ -1,12 +1,13 @@
 {extend name="Layout/base" /}
 {block name="quote-css"}
     <link href="__CSS__/order.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="__LIGHT7__/css/light7-swipeout.css">
 {/block}
 {block name="page"}
 <div class="page page-order_create" id="page-order_create">
     <div class="content">
         <section class="order-address">
-            <div class="no-address list-block">
+            <div class="no-address list-block" {if condition="$address"}style="display:none;"{/if}>
                 <ul>
                     <li class="item-content item-link">
                         <div class="item-inner">
@@ -14,6 +15,20 @@
                         </div>
                     </li>
                 </ul>
+            </div>
+            <div class="address-area list-block media-list"  {if condition="!$address"}style="display:none;"{/if}>
+                <ul>
+                    <li class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">收件人：<span class="consignee">{$address.consignee??''}</span></div>
+                                <div class="item-after"><span class="mobile">{$address.mobile??''}</span></div>
+                            </div>
+                            <div class="item-text"><span class="address">{$address.area_info??''}</span></div>
+                        </div>
+                    </li>
+                </ul>
+                <input type="hidden" name="address_id" value="{$address.id??0}"/>
             </div>
         </section>
         <section class="order-form">
@@ -85,105 +100,10 @@
         <p class="order-amount flex-1">实付<span>¥{$total_price}</span>(不含运费)</p>
         <button class="button button-fill btn-submit">提交订单</button>
     </div>
-    <section class="order-address_add">
-        <div class="all-shade"></div>
-        <div class="address-panel">
-            <header class="address-header"><h4>编辑收货地址</h4></header>
-            <form class="address-area list-block" autocomplete="off">
-                <ul>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <input type="text" name="name" placeholder="收货人" maxlength="8">
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <input type="tel" name="tel" placeholder="收货人手机号" maxlength="11">
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <input type="text" name="address" id="city-picker" placeholder="省、市、区/县">
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-input">
-                                    <textarea name="detail_address" placeholder="详细地址" maxlength="126"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="address-default">
-                        <div class="item-content">
-                            <div class="item-inner">
-                                <div class="item-title label">默认地址</div>
-                                <div class="item-input">
-                                    <label class="label-switch">
-                                        <input type="checkbox" name="default">
-                                        <div class="checkbox"></div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </form>
-            <div class="address-action">
-                <div class="flex">
-                    <div class="flex-1">
-                        <a class="btn btn-primary no-radius btn-block address-ok">保存</a>
-                    </div>
-                </div>
-            </div>
-            <div class="panel-close">
-                <i class="icon icon-cha action-close"></i>
-            </div>
-        </div>
-    </section>
+    {include file="order:address"/}
 </div>
 {/block}
 {block name="quote-js"}
     <script type="text/javascript" src="__LIGHT7__/js/light7-city-picker.min.js" charset="utf-8"></script>
-{/block}
-{block name="js"}
-<script>
-    $(function () {
-        $("#city-picker").cityPicker({
-            toolbarTemplate: '<header class="bar bar-nav"><button class="button button-link pull-right close-picker">确定</button></header>',
-            cssClass: 'address-picker city-picker'
-        });
-        $('.order-address .no-address').bind('click',function () {
-            var address_add = $('.order-address_add');
-            var shade = address_add.find('.all-shade');
-            var panel = address_add.find('.address-panel');
-            shade.addClass('fade_toggle');
-            panel.addClass('active');
-
-            panel.find('.action-close').one('click',function () {
-                close();
-            });
-            shade.one('click',function () {
-                close();
-            });
-            var close = function () {
-                shade.removeClass('fade_toggle');
-                panel.removeClass('active');
-            }
-        });
-    });
-</script>
+    <script type='text/javascript' src='__LIGHT7__/js/light7-swipeout.js' charset='utf-8'></script>
 {/block}

@@ -2,9 +2,8 @@
 /**
  * 购车表
  */
-namespace app\common\Model;
+namespace app\common\model;
 
-use phpDocumentor\Reflection\Types\Integer;
 use think\Model;
 
 class Cart extends Model{

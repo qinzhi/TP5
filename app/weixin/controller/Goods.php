@@ -1,7 +1,7 @@
 <?php
 namespace app\weixin\controller;
 
-use app\common\Model\Products;
+use app\common\model\Products;
 use think\Controller;
 
 class Goods extends Controller

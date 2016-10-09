@@ -1,6 +1,6 @@
 <?php
 
-namespace app\weixin\Model;
+namespace app\weixin\model;
 
 use traits\model\SoftDelete;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
-use app\admin\Model\BannerPosition;
+use app\admin\model\BannerPosition;
 use think\Request;
 use think\Url;
-use app\admin\Model\Banner as BannerModel;
+use app\admin\model\Banner as BannerModel;
 
 class Banner extends Admin {
 

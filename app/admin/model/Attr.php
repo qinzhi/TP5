@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\Model;
+namespace app\admin\model;
 
 class Attr extends Common{
 

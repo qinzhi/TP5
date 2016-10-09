@@ -1,10 +1,10 @@
 <?php
 
-namespace app\admin\Controller;
+namespace app\admin\controller;
 
-use app\admin\Model\Attr;
+use app\admin\model\Attr;
 use think\Db;
-use app\admin\Model\Model;
+use app\admin\model\Model;
 use think\Request;
 
 class GoodsAttr extends Admin {

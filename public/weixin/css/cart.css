@@ -18,10 +18,6 @@
 .empty-cart .btn-empty-cart{
     width: 7.5rem;
 }
-#page-cart label.label-checkbox input[type="checkbox"]:checked + .item-media i.icon-form-checkbox,
-#page-cart label.label-checkbox input[type="radio"]:checked + .item-media i.icon-form-checkbox{
-    background-color: #41c172;
-}
 .cart-heard{
     width: 100%;
     height: 100%;

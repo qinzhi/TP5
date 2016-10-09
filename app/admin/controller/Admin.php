@@ -1,7 +1,7 @@
 <?php
 namespace app\admin\controller;
 
-use app\admin\Model\AuthRole;
+use app\admin\model\AuthRole;
 use app\common\tools\Tree;
 use think\Request;
 use think\Controller;
