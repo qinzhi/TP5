@@ -24,6 +24,7 @@
 .product-content .product-list-item{
     border-bottom: .05rem solid #e7e7e7;
     width: 100%;
+    display: block;
 }
 .product-content .product-list-item a{
     width: 100%;
@@ -207,7 +208,10 @@
 }
 .product-panel .product-select-box{
     padding: .5rem;
-    margin-bottom: 2.2rem;
+    overflow-y: auto;
+    height: calc(100% - 8.4rem);
+    height: -moz-calc(100% - 8.4rem);
+    height: -webkit-calc(100% - 8.4rem);
 }
 .product-panel .product-property-type{
     border-bottom: 1px solid #CCCCCC;

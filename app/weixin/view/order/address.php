@@ -101,7 +101,7 @@
                             <div class="item-title">收件人：<span class="consignee">{%addr.consignee%}</span></div>
                             <div class="item-after"><span class="mobile">{%addr.mobile%}</span></div>
                         </div>
-                        <div class="item-text"><span class="address">{%addr.area_info%}</span></div>
+                        <div class="item-text"><span class="address" data-address="{%addr.address%}">{%addr.area_info%}</span></div>
                     </div>
                 </div>
             </div>
@@ -187,8 +187,6 @@
                 this.address_area.find('.mobile').text(address.mobile);
                 this.address_area.find('.address').text(address.address);
                 this.address_area.find('input[name="address_id"]').val(address.address_id);
-                console.log(address);
-                console.log(this);
                 return this;
             },
             close: function () {
@@ -196,7 +194,21 @@
                 this.panel.removeClass('active');
                 this.panel.find('.address-ok').unbind('click');
             },
-            edit: function () {
+            edit: function (data) {
+                this.form.consignee.value = data.consignee;
+                this.form.mobile.value = data.mobile;
+                this.form.area.value = data.area;
+                this.form.address.value = data.address;
+                if(data.is_default){
+                    this.form.default.checked = true;
+                }else{
+                    this.form.default.checked = false;
+                }
+                this.form.consignee.value = data.consignee;
+                $("#city-picker").cityPicker({
+                    toolbarTemplate: '<header class="bar bar-nav"><button class="button button-link pull-right close-picker">确定</button></header>',
+                    cssClass: 'address-picker city-picker'
+                });
                 return this;
             }
         }.init();
@@ -254,7 +266,16 @@
             },
             edit: function (target,e) {
                 this.close();
-                address.edit().show();
+                var li = $(target).closest('li');
+                var data = {
+                    id: li.data('id'),
+                    consignee: li.find('.consignee').text(),
+                    mobile: li.find('.mobile').text(),
+                    address: li.find('.address').data('address'),
+                };
+                data.area = $.trim(li.find('.address').text().replace(data.address,''));
+                data.is_default = li.find('input[name="address_id"]').get(0).checked?1:0;
+                address.edit(data).show();
             },
             del: function (target,e) {
                 var address_id = $(target).data('id');
