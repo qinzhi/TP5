@@ -10,10 +10,36 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2016-10-08 18:00:13
+Date: 2016-10-09 18:01:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `fruiter_address`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_address`;
+CREATE TABLE `fruiter_address` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) NOT NULL COMMENT '会员id',
+  `consignee` varchar(8) NOT NULL COMMENT '收货人',
+  `mobile` char(11) NOT NULL COMMENT '收货人手机号',
+  `province_id` int(6) NOT NULL COMMENT '省id',
+  `city_id` int(6) NOT NULL COMMENT '市id',
+  `county_id` int(6) NOT NULL COMMENT '区/县id',
+  `address` varchar(126) NOT NULL COMMENT '详细地址',
+  `area_info` varchar(255) NOT NULL COMMENT '地区内容',
+  `is_default` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1默认收货地址',
+  `add_time` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user_id,is_default` (`user_id`,`is_default`) USING BTREE,
+  KEY `user_id` (`user_id`) USING BTREE
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='买家地址信息表';
+
+-- ----------------------------
+-- Records of fruiter_address
+-- ----------------------------
+INSERT INTO `fruiter_address` VALUES ('1', '1', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园', '1', '1476007039');
 
 -- ----------------------------
 -- Table structure for `fruiter_admin`
@@ -53,7 +79,7 @@ CREATE TABLE `fruiter_area` (
   KEY `name` (`name`) USING BTREE,
   KEY `parentid` (`parentid`) USING BTREE,
   KEY `pinyin` (`pinyin`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='地区表';
 
 -- ----------------------------
 -- Records of fruiter_area
@@ -4038,7 +4064,7 @@ CREATE TABLE `fruiter_cart` (
 -- ----------------------------
 -- Records of fruiter_cart
 -- ----------------------------
-INSERT INTO `fruiter_cart` VALUES ('1', '3', '1', '2', '1');
+INSERT INTO `fruiter_cart` VALUES ('1', '3', '1', '1', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods`
