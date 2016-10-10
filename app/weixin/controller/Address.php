@@ -26,11 +26,17 @@ class Address extends Controller
 
     public function del($address_id){
         $addressModel = new AddressModel($this->user_id);
-        return $addressModel->where('user_id',$this->user_id)->where('address_id',$address_id)->delete();
+        $address = $addressModel->getDefault();
+        $result = $addressModel->where('user_id',$this->user_id)->where('id',$address_id)->delete();
+        if(isset($address->user_id) && $address->user_id['id'] == $address_id){
+            $addressModel->setDefault();
+        }
+        return $result;
     }
 
     public function save(){
         $addressModel = new AddressModel($this->user_id);
+        $id = Request::instance()->request('id','','intval');
         $consignee = Request::instance()->request('consignee','','trim');
         if(empty($consignee)){
             return json(['code'=>-1,'msg'=>'收货人不能为空']);
@@ -47,14 +53,18 @@ class Address extends Controller
         if(empty($address)){
             return json(['code'=>-1,'msg'=>'详细地址不能为空']);
         }
-        $is_defalut = Request::instance()->request('is_defalut','','boolval');
-        if($is_defalut){
+        $is_default = Request::instance()->request('is_default','','boolval');
+        if($is_default){
             $addressModel->clearDefault();
+        }else{
+            $defaultAddress = $addressModel->getDefault();
+            if(empty($defaultAddress->user_id)){
+                $is_default = 1;
+            }
         }
         list($province_id,$city_id,$county_id) = $this->getAreaId($area);
 
-        $addressModel->data([
-            'user_id' => $this->user_id,
+        $data = [
             'consignee' => $consignee,
             'mobile' => $mobile,
             'province_id' => $province_id,
@@ -62,16 +72,25 @@ class Address extends Controller
             'county_id' => $county_id,
             'address' => $address,
             'area_info' => $area . ' ' . $address,
-            'is_default' => $is_defalut,
-            'add_time' => time()
-        ])->save();
-
-        if($addressModel->id > 0){
-            return json(['code'=>1,'msg'=>'添加成功','address_id'=> $addressModel->id]);
-        }else{
-            return json(['code'=>-1,'msg'=>'添加失败']);
+            'is_default' => $is_default
+        ];
+        if($id > 0){//更新
+            $result = $addressModel->where('id', $id)->where('user_id',$this->user_id)->update($data);
+            if($result){
+                return json(['code'=>1,'msg'=>'更新成功','address_id'=> $id]);
+            }else{
+                return json(['code'=>-1,'msg'=>'更新失败']);
+            }
+        }else{//添加
+            $data['user_id'] = $this->user_id;
+            $data['add_time'] = time();
+            $addressModel->data($data)->save();
+            if($addressModel->id > 0){
+                return json(['code'=>1,'msg'=>'添加成功','address_id'=> $addressModel->id]);
+            }else{
+                return json(['code'=>-1,'msg'=>'添加失败']);
+            }
         }
-
     }
 
     private function getAreaId($area){

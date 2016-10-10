@@ -28,7 +28,7 @@
                         </div>
                     </li>
                 </ul>
-                <input type="hidden" name="address_id" value="{$address.id??0}"/>
+                <input type="hidden" name="address_id" value="{$address.id??0}" autocomplete="off"/>
             </div>
         </section>
         <section class="order-form">
@@ -106,4 +106,16 @@
 {block name="quote-js"}
     <script type="text/javascript" src="__LIGHT7__/js/light7-city-picker.min.js" charset="utf-8"></script>
     <script type='text/javascript' src='__LIGHT7__/js/light7-swipeout.js' charset='utf-8'></script>
+{/block}
+{block name="js"}
+<script>
+    $(function(){
+        $('.btn-submit').click(function () { /* 提交订单 */
+            var address_id = $('.address-area').find('input[name="address_id"]').val();
+            if(!address_id || address_id <= 0){
+                return $.toast('请填写收货地址');
+            }
+        });
+    });
+</script>
 {/block}

@@ -44,6 +44,7 @@ namespace app\common\service;
 
 use think\Config;
 use think\Cache;
+use think\Log;
 
 class Wechat
 {
@@ -86,6 +87,7 @@ class Wechat
     private $appsecret;
     private $access_token;
     private $user_token;
+    private $ticket;
     private $_msg;
     private $_funcflag = false;
     private $_receive;
@@ -236,7 +238,6 @@ class Wechat
                     die('no access');
             }
         }
-        return false;
     }
 
     /**
@@ -273,7 +274,7 @@ class Wechat
                 if (is_array($log)) $log = print_r($log, true);
                 return call_user_func($this->_logcallback, $log);
             } elseif (class_exists('Log')) {
-                Log::write('wechat：' . $log, Log::DEBUG);
+                Log::write('wechat：' . $log, 'debug');
             }
         }
         return false;

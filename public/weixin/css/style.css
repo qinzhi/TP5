@@ -2,3 +2,6 @@ label.label-checkbox input[type="checkbox"]:checked + .item-media i.icon-form-ch
 label.label-checkbox input[type="radio"]:checked + .item-media i.icon-form-checkbox{
     background-color: #41c172;
 }
+.modal-button{
+    color: #41c172;
+}

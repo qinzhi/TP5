@@ -27,6 +27,9 @@ class Order extends Controller
         }else{
 
         }
+    }
+
+    public function add(){
 
     }
 }

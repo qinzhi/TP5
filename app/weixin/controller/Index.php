@@ -3,9 +3,8 @@ namespace app\weixin\controller;
 
 use app\admin\model\Banner;
 use app\weixin\model\Goods;
-use think\Controller;
 
-class Index extends Controller
+class Index extends Weixin
 {
     public function index(){
         /*D('Common/Wechat','Service');*/
