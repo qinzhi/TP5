@@ -1,4 +1,4 @@
-{extend name="Layout/base" /}
+{extend name="layout/base" /}
 {block name="quote-css"}
     <link href="__CSS__/order.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="__LIGHT7__/css/light7-swipeout.css">

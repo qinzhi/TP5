@@ -1,4 +1,4 @@
-{extend name="Layout/base" /}
+{extend name="layout/base" /}
 {block name="quote-css"}
     <link href="__CSS__/cart.css" rel="stylesheet" type="text/css">
 {/block}
