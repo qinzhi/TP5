@@ -39,7 +39,7 @@ class Weixin extends Controller
                 $user_token = $result['access_token'];//用户令牌
 
                 $memberModel = new Member();
-                $this->member = $member = D('Wap/Member')->getMemberByOpenId($this->openid);
+                $this->member = $member = $memberModel::getByWeixinopenid($this->openid);
 
                 $result = $wechatService->getOauthUserinfo($user_token,$this->openid);//拉取用户信息
 
@@ -54,7 +54,7 @@ class Weixin extends Controller
                     $memberModel->data($this->member)->save();
                     $this->member['id'] = $memberModel->id;
                 }else{//更新用户
-                    $memberModel->save($this->member);
+                    $memberModel->update($this->member);
                 }
                 Session::set('openid',$this->openid);
                 Cookie::set('openid',$this->openid,30 * 86400); //保存一年
