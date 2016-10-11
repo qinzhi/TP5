@@ -17,6 +17,10 @@ class Index extends Controller
 
     const COOKIE_EXPIRE = 604800;//7天
 
+    public function index(){
+        $this->redirect(url('index/login'));
+    }
+
     /**
      * 登录
      */
