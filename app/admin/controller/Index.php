@@ -26,6 +26,7 @@ class Index extends Controller
      */
     public function login()
     {
+        dump($_SERVER);exit;
         if (Request::instance()->isPost()) {
             $captcha = Request::instance()->post('captcha','','trim');
             if (captcha_check($captcha)) {
