@@ -22,7 +22,7 @@ Purchase: http://wrapbootstrap.com
         <link rel="shortcut icon" href="__IMG__/favicon.png" type="image/x-icon">
     {/block}
 
-    {include file="Layout/basic_css" /}
+    {include file="layout/basic_css" /}
 
     {block name="plugin_css"}
         <link href="__CSS__/dataTables.bootstrap.css" rel="stylesheet" />
@@ -108,7 +108,7 @@ Purchase: http://wrapbootstrap.com
     </div>
 
     {block name="plugin_js"}
-        {include file="Layout/plugin_js" /}
+        {include file="layout/plugin_js" /}
     {/block}
 
     {block name="js"}{/block}
