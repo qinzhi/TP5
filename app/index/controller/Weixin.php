@@ -35,22 +35,22 @@ class Weixin extends Controller
 
         if($wechatService->valid(true) === false){
             //明文或兼容模式可以在接口验证通过后注释此句，但加密模式一定不能注释，否则会验证失败
-            //die('valid no success');
+            die('valid no success');
         };
 
         $type = $wechatService->getRev()->getRevType();
 
-        Log::record('-------------');
-        Log::record($type);
-        Log::record('-------------');
-
         $data = $wechatService->getRevData();
-        Log::record(json_encode($data));
+        Log::record('data: ' . json_encode($data));
 
         switch($type) {
             case Wechat::MSGTYPE_TEXT:
+                $content = $data['Content'];
+                if($content == '签到'){
+                    $wechatService->text('签到成功')->reply();
+                    break;
+                }
                 $wechatService->text("hello, I'm wechat")->reply();
-                exit;
                 break;
             case Wechat::MSGTYPE_EVENT:
                 $eventKey = $data['EventKey'];
@@ -63,5 +63,6 @@ class Weixin extends Controller
             default:
                 $wechatService->text("help info")->reply();
         }
+        exit;
     }
 }

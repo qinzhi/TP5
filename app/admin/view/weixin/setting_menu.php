@@ -19,6 +19,21 @@
                                         <?php if(!empty(!empty($menu['url']))){echo "data-url='" . $menu['url'] ."'";}?>
                                         <?php if(!empty(!empty($menu['key']))){echo "data-keyword='" . $menu['key'] ."'";}?>>
                                         <a class="pre_menu_link" href="javascript:;"><span>{$menu.name}</span></a>
+                                        <div class="sub_menu_box">
+                                            <ul class="sub_menu_list">
+                                                <li class="sub_menu_item" data-name="子菜单名称">
+                                                    <a class="sub_menu_link"><span>子菜单名称</span></a>
+                                                </li>
+                                                <li class="sub_menu_item active" data-name="子菜单名称">
+                                                    <a class="sub_menu_link"><span>子菜单名称</span></a>
+                                                </li>
+                                                <li class="sub_menu_item no-extra">
+                                                    <a class="sub_menu_link js_addLBtn" title="最多添加5个子菜单"><i class="fa fa-plus"></i></a>
+                                                </li>
+                                            </ul>
+                                            <i class="arrow arrow_out"></i>
+                                            <i class="arrow arrow_in"></i>
+                                        </div>
                                     </li>
                                 <?php endforeach;?>
                             {else /}
@@ -254,13 +269,42 @@
             $('input[name="status"]').change(function(){
                 menu.chang_show($(this));
             });
-            $(document).on('click','.pre_menu_item',function(){
+            $(document).on('click','.pre_menu_item',function(e){
+                var cur_li = $(e.target).closest('li');
+                if(!cur_li.hasClass('pre_menu_item')){
+                    return;
+                }
                 var ul = $(this).parent();
                 if(!$(this).hasClass('no-extra')){
+                    if($(this).hasClass('active-invalid')) $(this).removeClass('active-invalid');
+                    cur_li.find('li.active').removeClass('active');
                     if(!$(this).hasClass('active')){
                         ul.children('.active').removeClass('active');
                         $(this).addClass('active');
                         menu.set_entity($(this));
+                    }
+                }else{
+                    var li = template('menuTpl');
+                    $(this).before(li);
+                    ul.children('.active').removeClass('active');
+                    $(this).prev().addClass('active');
+                    menu.set_entity($(this).prev());
+                    if(ul.children().length === 4){
+                        $(this).addClass('hidden');
+                    }
+                }
+            });
+            $(document).on('click','.sub_menu_item',function () {
+                var parent_ul = $(this).closest('.pre_menu_list');
+                var parent_li = $(this).closest('.pre_menu_item');
+                var cur_ul = $(this).parent();
+                var cur_li = $(this).parent();;
+                if(!$(this).hasClass('no-extra')){
+                    if(!$(this).hasClass('active')){
+                        parent_li.addClass('active-invalid');
+                        cur_li.children('.active').removeClass('active');
+                        $(this).addClass('active');
+                        //menu.set_entity($(this));
                     }
                 }else{
                     var li = template('menuTpl');
