@@ -234,6 +234,7 @@ return [
         'token' => 'guoduqianxun',
         'app_id' => 'wx20375ac755d2f51a',
         'app_secret' => 'e53f87ed1d174c5ba02b5d40a18e2887',
+        'encodingAesKey' => 'wPiXNJISGuFkzfIRJOwfVUvwJgsP7zeFQS7HVN2V1uK',
     ),
 
     // +----------------------------------------------------------------------

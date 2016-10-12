@@ -62,7 +62,7 @@
 .mobile_menu_preview .js_addL1Btn{font-size: 18px}
 .mobile_menu_preview .no-extra a{color: #c1c1c1;}
 .pre_menu_item.active{border: 1px solid #53a93f;background-color: #fff;}
-.pre_menu_item.active a{color: #53a93f}
+.pre_menu_item.active a,.pre_menu_item.active a:hover{color: #53a93f}
 .menu_form_area{
     margin-left: 350px;
 }

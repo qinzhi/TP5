@@ -15,7 +15,9 @@
                         <ul class="pre_menu_list flex">
                             {if condition="!empty($menu)"}
                                 <?php foreach($menu['button'] as $key => $menu):?>
-                                    <li class="pre_menu_item menu_item flex-1 {$key==0?'active':''}" data-name="{$menu.name}" data-type="{$menu.type}" data-url="{$menu.url}">
+                                    <li class="pre_menu_item menu_item flex-1 {$key?'':'active'}" data-name="{$menu.name}" data-type="{$menu.type}"
+                                        <?php if(!empty(!empty($menu['url']))){echo "data-url='" . $menu['url'] ."'";}?>
+                                        <?php if(!empty(!empty($menu['key']))){echo "data-keyword='" . $menu['key'] ."'";}?>>
                                         <a class="pre_menu_link" href="javascript:;"><span>{$menu.name}</span></a>
                                     </li>
                                 <?php endforeach;?>
@@ -60,15 +62,21 @@
                                         </div>
                                         <div class="radio line-radio">
                                             <label>
-                                                <input type="radio" value="1" name="status" autocomplete="off">
+                                                <input type="radio" value="1" data-type="view" name="status" autocomplete="off">
                                                 <span class="text">跳转网页</span>
+                                            </label>
+                                        </div>
+                                        <div class="radio line-radio">
+                                            <label>
+                                                <input type="radio" value="2" data-type="click" name="status" autocomplete="off">
+                                                <span class="text">触发关键字</span>
                                             </label>
                                         </div>
                                     </span>
                                 </div>
                             </div>
                             <div class="menu_content_container">
-                                <div class="menu_content_edit">
+                                <div class="menu_content menu_content_edit">
                                     <label class="col-sm-2 control-label no-padding-right" for="name"></label>
                                     <div class="menu_edit col-sm-10">
                                         <ul class="tab_navs">
@@ -102,14 +110,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="menu_content_url hidden">
+                                <div class="menu_content menu_content_url hidden">
                                     <label class="col-sm-2 control-label no-padding-right" for="name"></label>
                                     <div class="menu_url col-sm-10">
-                                        <p>订阅者点击该子菜单会跳到以下链接</p>
+                                        <p>指定点击此菜单时要跳转的链接（注：链接需加http://）</p>
                                         <div class="row">
                                             <label class="col-md-2 frm_label">页面地址</label>
                                             <div class="col-md-10 frm_controls">
                                                 <input type="text" id="site_url" name="site_url" class="form-control" autocomplete="off"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="menu_content menu_content_key hidden">
+                                    <label class="col-sm-2 control-label no-padding-right" for="name"></label>
+                                    <div class="menu_url col-sm-10">
+                                        <p>指定点击此菜单时要执行的操作, 你可以在这里输入关键字</p>
+                                        <div class="row">
+                                            <label class="col-md-2 frm_label">关键字</label>
+                                            <div class="col-md-10 frm_controls">
+                                                <input type="text" id="keyword" name="keyword" class="form-control" autocomplete="off"/>
                                             </div>
                                         </div>
                                     </div>
@@ -145,11 +165,17 @@
                     var status = $('input[name="status"]');
                     if(type == 'view'){
                         $('#site_url').val(this.get_url());
+                        var target = $(status.get(1));
                         status.get(1).checked = true;
+                    }else if(type == 'click'){
+                        $('#keyword').val(this.get_keyword());
+                        var target = $(status.get(2));
+                        status.get(2).checked = true;
                     }else{
+                        var target = $(status.get(0));
                         status.get(0).checked = true;
                     }
-                    this.chang_show(status);
+                    this.chang_show(target);
                     return this;
                 },
                 set_type: function(type){
@@ -181,6 +207,12 @@
                 get_url: function(){
                     return this.entity.data('url');
                 },
+                set_keyword: function (keyword) {
+                    return this.entity.data('keyword',keyword);
+                },
+                get_keyword: function () {
+                    return this.entity.data('keyword');
+                },
                 set_media_id: function(media_id){
                     this.entity.data('media_id',media_id);
                     return this;
@@ -193,13 +225,9 @@
                     obj.each(function(e){
                         if(this.checked && this.value==1)return value = 1;
                     });
-                    if(value == 1){
-                        $('.menu_content_edit').addClass('hidden');
-                        $('.menu_content_url').removeClass('hidden');
-                    }else{
-                        $('.menu_content_edit').removeClass('hidden');
-                        $('.menu_content_url').addClass('hidden');
-                    }
+                    this.set_type(obj.data('type'));
+                    var index = $(obj).closest('.radio').index();
+                    $($('.menu_content').addClass('hidden').get(index)).removeClass('hidden');
                     return this;
                 }
             }.set_entity($('.pre_menu_item.active'));
@@ -253,6 +281,10 @@
                 var value = $.trim(this.value);
                 menu.set_url(value);
             });
+            $('#keyword').keyup(function () {
+                var value = $.trim(this.value);
+                menu.set_keyword(value);
+            });
             $('#release').click(function(){
                 var buttons = [];
                 var menus = $('.pre_menu_list').children();
@@ -261,17 +293,20 @@
                         buttons[i] = {};
                         var name = $(menus[i]).data('name');
                         if(name == ''){
-                            Notify('菜单名称不能为空', 'bottom-right', '5000', 'warning', 'fa-warning', true);
-                            return;
+                            return Notify('菜单名称不能为空', 'bottom-right', '5000', 'warning', 'fa-warning', true);
                         }
                         buttons[i].name = name;
                         buttons[i].type = $(menus[i]).data('type');
-                        var url = $(menus[i]).data('url');
-                        if(url == ''){
-                            Notify('页面地址不能为空', 'bottom-right', '5000', 'warning', 'fa-warning', true);
-                            return;
+                        if(buttons[i].type == 'view'){ //连接地址
+                            var url = $(menus[i]).data('url');
+                            if(url == ''){
+                                return Notify('页面地址不能为空', 'bottom-right', '5000', 'warning', 'fa-warning', true);
+                            }
+                            buttons[i].url = url;
+                        }else if(buttons[i].type == 'click'){ //触发关键字
+                            var keyword = $(menus[i]).data('keyword');
+                            buttons[i].key = keyword;
                         }
-                        buttons[i].url = url;
                     }
                 }
                 $.post('',{buttons:buttons},function(result){

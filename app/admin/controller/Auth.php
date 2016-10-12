@@ -36,7 +36,7 @@ class Auth extends Admin {
 
     public function add(){
         if(Request::instance()->isPost()){
-            $pid = Request::instance()->request('p_id');
+            $pid = Request::instance()->request('p_id','','intval');
             $pauth = $this->authRole->getAuthByPid($pid);
             if($pid == 0) $level = 0;
             else{
