@@ -36,4 +36,6 @@ class Weixin extends Admin {
             return $this->fetch();
         }
     }
+
+
 }
