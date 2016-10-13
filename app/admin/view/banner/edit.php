@@ -186,8 +186,8 @@
     <script>
         $(document).ready(function(){
 
-            $('#goods_save').click(function(){
-                var form = document.getElementById('goodsForm');
+            $('#banner_save').click(function(){
+                var form = document.getElementById('bannerForm');
                 if($.validateOnSubmit(form) == true){
                     form.submit();
                 }

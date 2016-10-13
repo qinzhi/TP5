@@ -6,13 +6,13 @@ use think\Model;
 
 class Common extends Model{
 
-    public $user_id;//用户id
+    public $member_id;//用户id
 
     public function initialize()
     {
         parent::initialize();
         //parent::__construct();
 
-        $this->user_id = 1;
+        $this->member_id = 1;
     }
 }

@@ -10,19 +10,19 @@ class Order extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->user_id = 1;
+        $this->member_id = 1;
     }
 
     public function create(){
         if(!empty($_COOKIE['cart_id'])){
             $cartModel = new Cart();
             $cart_id = json_decode($_COOKIE['cart_id'],true);
-            $products = $cartModel->getList($this->user_id,$cart_id);
+            $products = $cartModel->getList($this->member_id,$cart_id);
             $this->assign('products',$products);
 
-            $addressModel = new Address($this->user_id);
+            $addressModel = new Address($this->member_id);
             $address = $addressModel->getDefault();
-            $this->assign('address',!empty($address->user_id)?$address->user_id:'');
+            $this->assign('address',!empty($address->member_id)?$address->member_id:'');
             return $this->fetch();
         }else{
 
