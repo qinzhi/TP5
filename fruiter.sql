@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2016-10-09 18:01:57
+Date: 2016-10-13 11:10:39
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,7 +21,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `fruiter_address`;
 CREATE TABLE `fruiter_address` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NOT NULL COMMENT '会员id',
+  `member_id` int(10) NOT NULL COMMENT '会员id',
   `consignee` varchar(8) NOT NULL COMMENT '收货人',
   `mobile` char(11) NOT NULL COMMENT '收货人手机号',
   `province_id` int(6) NOT NULL COMMENT '省id',
@@ -32,14 +32,14 @@ CREATE TABLE `fruiter_address` (
   `is_default` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1默认收货地址',
   `add_time` int(10) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id,is_default` (`user_id`,`is_default`) USING BTREE,
-  KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='买家地址信息表';
+  UNIQUE KEY `member_id,is_default` (`member_id`,`is_default`) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='买家地址信息表';
 
 -- ----------------------------
 -- Records of fruiter_address
 -- ----------------------------
-INSERT INTO `fruiter_address` VALUES ('1', '1', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园', '1', '1476007039');
+INSERT INTO `fruiter_address` VALUES ('12', '1', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园', '1', '1476077987');
 
 -- ----------------------------
 -- Table structure for `fruiter_admin`
@@ -3972,7 +3972,7 @@ CREATE TABLE `fruiter_auth_role` (
   `sort` mediumint(5) NOT NULL COMMENT '排序',
   `level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '级别: 0.根节点 1.二级节点 2.叶节点',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_auth_role
@@ -3995,6 +3995,11 @@ INSERT INTO `fruiter_auth_role` VALUES ('15', '11', 'Admin', '1', '编辑文章'
 INSERT INTO `fruiter_auth_role` VALUES ('16', '0', 'Admin', '2', '广告管理', 'Banner', '2', '0');
 INSERT INTO `fruiter_auth_role` VALUES ('17', '16', 'Admin', '2', '广告位列表', 'Banner/position', '0', '1');
 INSERT INTO `fruiter_auth_role` VALUES ('18', '16', 'Admin', '2', '广告列表', 'Banner/index', '1', '1');
+INSERT INTO `fruiter_auth_role` VALUES ('19', '0', 'admin', '2', '微信管理', 'weixin', '1', '0');
+INSERT INTO `fruiter_auth_role` VALUES ('20', '19', 'admin', '2', '自定义菜单', 'weixin/setting_menu', '0', '1');
+INSERT INTO `fruiter_auth_role` VALUES ('21', '0', 'admin', '2', '活动管理', 'activity', '1', '0');
+INSERT INTO `fruiter_auth_role` VALUES ('22', '21', 'admin', '2', '天天签到', 'activity/checkin', '0', '1');
+INSERT INTO `fruiter_auth_role` VALUES ('23', '16', 'admin', '1', '广告位添加', 'banner/position_add', '1', '2');
 
 -- ----------------------------
 -- Table structure for `fruiter_banner`
@@ -4053,18 +4058,44 @@ DROP TABLE IF EXISTS `fruiter_cart`;
 CREATE TABLE `fruiter_cart` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_id` int(11) NOT NULL COMMENT '商品ID',
-  `user_id` int(11) NOT NULL COMMENT '会员ID',
+  `member_id` int(11) NOT NULL COMMENT '会员ID',
   `cart_num` mediumint(8) NOT NULL DEFAULT '1' COMMENT '数量',
   `is_selected` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否选中:0-否,1-是(默认)',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id,product_id` (`product_id`,`user_id`) USING BTREE,
-  KEY `user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='购物车';
+  UNIQUE KEY `member_id,product_id` (`product_id`,`member_id`) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='购物车';
 
 -- ----------------------------
 -- Records of fruiter_cart
 -- ----------------------------
 INSERT INTO `fruiter_cart` VALUES ('1', '3', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '1');
+
+-- ----------------------------
+-- Table structure for `fruiter_checkin`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_checkin`;
+CREATE TABLE `fruiter_checkin` (
+  `id` smallint(5) NOT NULL AUTO_INCREMENT,
+  `start_time` time NOT NULL DEFAULT '00:00:00' COMMENT '每天签到开始时间',
+  `end_time` time NOT NULL DEFAULT '23:59:59' COMMENT '每天签到结束时间',
+  `first_give_integral` smallint(5) NOT NULL DEFAULT '2' COMMENT '首次签到赠送积分',
+  `second_give_integral` smallint(5) NOT NULL DEFAULT '4' COMMENT '连续2天签到赠送积分',
+  `third_give_integral` smallint(5) NOT NULL DEFAULT '6' COMMENT '连续3天签到赠送积分',
+  `four_give_integral` smallint(5) NOT NULL DEFAULT '8' COMMENT '连续4天签到赠送积分',
+  `fifth_give_integral` smallint(5) NOT NULL DEFAULT '10' COMMENT '连续5天或超过5天签到赠送积分',
+  `success_tip` varchar(126) DEFAULT '签到成功提示',
+  `failure_tip` varchar(126) DEFAULT '签到失败提示',
+  `is_show_rank` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示积分排行 1显示',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '开启状态 1开启',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='天天签到';
+
+-- ----------------------------
+-- Records of fruiter_checkin
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `fruiter_goods`
@@ -4264,6 +4295,44 @@ CREATE TABLE `fruiter_goods_to_seo` (
 -- Records of fruiter_goods_to_seo
 -- ----------------------------
 INSERT INTO `fruiter_goods_to_seo` VALUES ('1', '1', '手机', '小米手机');
+
+-- ----------------------------
+-- Table structure for `fruiter_member`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_member`;
+CREATE TABLE `fruiter_member` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '会员id',
+  `name` varchar(50) DEFAULT NULL COMMENT '会员名称',
+  `truename` varchar(20) DEFAULT NULL COMMENT '真实姓名',
+  `avatar` varchar(255) DEFAULT NULL COMMENT '会员头像',
+  `sex` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '性别(0:未知,1:男性,2:女性)',
+  `birthday` date DEFAULT NULL COMMENT '生日',
+  `passwd` char(32) DEFAULT NULL COMMENT '会员密码',
+  `paypwd` char(32) DEFAULT NULL COMMENT '支付密码',
+  `email` varchar(100) DEFAULT NULL COMMENT '会员邮箱',
+  `mobile` varchar(11) DEFAULT NULL,
+  `qq` varchar(12) DEFAULT NULL COMMENT 'qq',
+  `login_num` int(10) DEFAULT NULL,
+  `add_time` int(10) NOT NULL,
+  `login_time` int(10) DEFAULT NULL COMMENT '当前登录时间',
+  `old_login_time` int(10) DEFAULT NULL COMMENT '上次登录时间',
+  `login_ip` varchar(20) DEFAULT NULL,
+  `old_login_ip` varchar(20) DEFAULT NULL,
+  `weixinopenid` varchar(80) DEFAULT NULL COMMENT '微信用户标识id',
+  `weixininfo` text COMMENT '微信账号关联信息',
+  `complete_first_time` datetime DEFAULT NULL COMMENT '完成首单时间',
+  `Integral` int(10) NOT NULL DEFAULT '0' COMMENT '会员积分',
+  `is_buy` tinyint(1) NOT NULL DEFAULT '1' COMMENT '会员是否有购买权限 1为开启 0为关闭',
+  `level` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户等级(上级级别+1)',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '会员的开启状态 1为开启 0为关闭',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `weixinopenid` (`weixinopenid`) USING BTREE,
+  UNIQUE KEY `mobile` (`mobile`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of fruiter_member
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `fruiter_model`
