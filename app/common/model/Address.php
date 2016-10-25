@@ -13,12 +13,12 @@ class Address extends Model{
      */
     const TABLE_NAME = 'address';
 
-    public $user_id;
+    public $member_id;
 
-    public function __construct($user_id)
+    public function __construct($member_id)
     {
         parent::__construct();
-        $this->user_id = $user_id;
+        $this->member_id = $member_id;
     }
 
     /**
@@ -26,7 +26,7 @@ class Address extends Model{
      * @return mixed
      */
     public function getList(){
-        return $this->query($this->where('user_id',$this->user_id)->order(['is_default desc','id desc'])->buildSql());
+        return $this->query($this->where('member_id',$this->member_id)->order(['is_default desc','id desc'])->buildSql());
     }
 
     /**
@@ -34,7 +34,7 @@ class Address extends Model{
      * @return array|false|\PDOStatement|string|Model
      */
     public function getDefault(){
-        return $this->where('user_id',$this->user_id)->where('is_default',1)->find();
+        return $this->where('member_id',$this->member_id)->where('is_default',1)->find();
     }
 
     /**
@@ -42,14 +42,14 @@ class Address extends Model{
      * @return mixed
      */
     public function setDefault(){
-        $sql = $this->field('max(id) as id')->where('user_id',$this->user_id)->buildSql();
+        $sql = $this->field('max(id) as id')->where('member_id',$this->member_id)->buildSql();
         return $this->alias('t')
                         ->join($sql . ' t1','t1.id=t.id')
-                            ->where('user_id',$this->user_id)->setField('is_default',1);
+                            ->where('member_id',$this->member_id)->setField('is_default',1);
     }
 
     //清除用户默认地址
     public function clearDefault(){
-        return $this->where('user_id',$this->user_id)->update(['is_default' => 0]);;
+        return $this->where('member_id',$this->member_id)->update(['is_default' => 0]);;
     }
 }

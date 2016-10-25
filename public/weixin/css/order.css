@@ -40,6 +40,9 @@
     line-height: 2.2rem;
     font-size: .75rem;
 }
+.order-form .order-amount ul{
+    border-top: none;
+}
 .bar-order_create .order-amount span{
     color: #ff655b;
     margin: 0 .2rem;

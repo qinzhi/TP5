@@ -95,6 +95,7 @@
                 </ul>
             </div>
         </section>
+        <div style="height: 2.2rem;"></div>
     </div>
     <div class="bar bar-footer bar-order_create flex">
         <p class="order-amount flex-1">实付<span>¥{$total_price}</span>(不含运费)</p>

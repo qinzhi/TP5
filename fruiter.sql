@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50711
+Source Server Version : 50714
 Source Host           : localhost:3306
 Source Database       : fruiter
 
 Target Server Type    : MYSQL
-Target Server Version : 50711
+Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-10-13 11:10:39
+Date: 2016-10-25 17:58:56
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -4070,7 +4070,7 @@ CREATE TABLE `fruiter_cart` (
 -- Records of fruiter_cart
 -- ----------------------------
 INSERT INTO `fruiter_cart` VALUES ('1', '3', '1', '1', '1');
-INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '2', '1');
 INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '1');
 
 -- ----------------------------
@@ -4302,37 +4302,39 @@ INSERT INTO `fruiter_goods_to_seo` VALUES ('1', '1', '手机', '小米手机');
 DROP TABLE IF EXISTS `fruiter_member`;
 CREATE TABLE `fruiter_member` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '会员id',
-  `name` varchar(50) DEFAULT NULL COMMENT '会员名称',
+  `nickname` varchar(50) DEFAULT NULL COMMENT '会员名称',
   `truename` varchar(20) DEFAULT NULL COMMENT '真实姓名',
-  `avatar` varchar(255) DEFAULT NULL COMMENT '会员头像',
+  `avator` varchar(255) DEFAULT NULL COMMENT '会员头像',
   `sex` enum('0','1','2') NOT NULL DEFAULT '0' COMMENT '性别(0:未知,1:男性,2:女性)',
   `birthday` date DEFAULT NULL COMMENT '生日',
   `passwd` char(32) DEFAULT NULL COMMENT '会员密码',
   `paypwd` char(32) DEFAULT NULL COMMENT '支付密码',
   `email` varchar(100) DEFAULT NULL COMMENT '会员邮箱',
   `mobile` varchar(11) DEFAULT NULL,
-  `qq` varchar(12) DEFAULT NULL COMMENT 'qq',
-  `login_num` int(10) DEFAULT NULL,
-  `add_time` int(10) NOT NULL,
+  `login_num` int(10) DEFAULT '0' COMMENT '登录次数',
+  `add_time` int(10) NOT NULL COMMENT '添加时间',
   `login_time` int(10) DEFAULT NULL COMMENT '当前登录时间',
   `old_login_time` int(10) DEFAULT NULL COMMENT '上次登录时间',
-  `login_ip` varchar(20) DEFAULT NULL,
-  `old_login_ip` varchar(20) DEFAULT NULL,
-  `weixinopenid` varchar(80) DEFAULT NULL COMMENT '微信用户标识id',
-  `weixininfo` text COMMENT '微信账号关联信息',
+  `login_ip` varchar(20) DEFAULT NULL COMMENT '登录ip',
+  `old_login_ip` varchar(20) DEFAULT NULL COMMENT '上一次登录IP',
+  `openid` varchar(80) DEFAULT NULL COMMENT '微信用户标识id',
+  `wxinfo` text COMMENT '微信用户信息',
   `complete_first_time` datetime DEFAULT NULL COMMENT '完成首单时间',
   `Integral` int(10) NOT NULL DEFAULT '0' COMMENT '会员积分',
+  `is_subscribe` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否关注公众号 1.关注',
+  `subscribe_time` int(10) DEFAULT NULL COMMENT '关注时间',
   `is_buy` tinyint(1) NOT NULL DEFAULT '1' COMMENT '会员是否有购买权限 1为开启 0为关闭',
-  `level` tinyint(3) NOT NULL DEFAULT '0' COMMENT '用户等级(上级级别+1)',
+  `level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户等级(上级级别+1)',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '会员的开启状态 1为开启 0为关闭',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `weixinopenid` (`weixinopenid`) USING BTREE,
+  UNIQUE KEY `weixinopenid` (`openid`) USING BTREE,
   UNIQUE KEY `mobile` (`mobile`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_member
 -- ----------------------------
+INSERT INTO `fruiter_member` VALUES ('1', '啊秦智', null, 'http://wx.qlogo.cn/mmopen/Q3auHgzwzM6dkNLaHQBND38jBNUPmib8dxd6z6Pvh6DRrUks3AgmrmqSibv1RFMEQiaJ12p09M92JQt8zf14dwH4CZgEEo3eSXHxxmuhAEWPJU/0', '1', null, null, null, null, null, '0', '1477383456', null, null, null, null, 'ooRHgvi8QVqAVsFm4IvyokDv2U8E', '{\"subscribe\":1,\"openid\":\"ooRHgvi8QVqAVsFm4IvyokDv2U8E\",\"nickname\":\"啊秦智\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"长沙\",\"province\":\"湖南\",\"country\":\"中国\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/Q3auHgzwzM6dkNLaHQBND38jBNUPmib8dxd6z6Pvh6DRrUks3AgmrmqSibv1RFMEQiaJ12p09M92JQt8zf14dwH4CZgEEo3eSXHxxmuhAEWPJU\\/0\",\"subscribe_time\":1477385292,\"remark\":\"\",\"groupid\":0,\"tagid_list\":[]}', null, '0', '1', '1477385292', '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_model`
@@ -4351,6 +4353,62 @@ CREATE TABLE `fruiter_model` (
 INSERT INTO `fruiter_model` VALUES ('2', '小米手机', null);
 
 -- ----------------------------
+-- Table structure for `fruiter_order`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_order`;
+CREATE TABLE `fruiter_order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `member_id` int(10) NOT NULL COMMENT '会员id',
+  `order_sn` varchar(20) NOT NULL COMMENT '订单号',
+  `pay_sn` varchar(50) DEFAULT NULL COMMENT '支付流水号',
+  `pay_type` tinyint(1) DEFAULT NULL COMMENT '支付类型1.微信支付',
+  `pay_price` decimal(10,2) NOT NULL COMMENT '支付金额',
+  `payment_time` int(10) NOT NULL DEFAULT '0' COMMENT '支付时间 0.未支付',
+  `order_price` decimal(10,2) NOT NULL COMMENT '订单金额',
+  `goods_price` decimal(10,2) NOT NULL COMMENT '商品总金额',
+  `freight` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态-1.已取消 0.未支付 1.已支付 2.已发货 3.已收货',
+  `evaluation_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '评价状态 1.部分评价 2.全部评价',
+  `add_time` int(10) NOT NULL COMMENT '订单生成时间',
+  `finished_time` int(10) NOT NULL DEFAULT '0' COMMENT '完成时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `order_sn` (`order_sn`) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+-- ----------------------------
+-- Records of fruiter_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `fruiter_order_product`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_order_product`;
+CREATE TABLE `fruiter_order_product` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_sn` varchar(20) NOT NULL,
+  `product_id` int(10) NOT NULL COMMENT '产品id',
+  `goods_name` varchar(50) NOT NULL COMMENT '商品名称',
+  `spec_array` text COMMENT 'json规格数据',
+  `buy_num` mediumint(8) NOT NULL COMMENT '购买数量',
+  `sell_price` decimal(10,2) NOT NULL COMMENT '销售价格',
+  `cost_price` decimal(10,2) NOT NULL COMMENT '成本价格',
+  `is_send` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发货',
+  `send_time` int(10) DEFAULT NULL COMMENT '发货时间',
+  `is_receive` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否收货 1.已收货',
+  `receive_time` int(10) DEFAULT NULL COMMENT '收货时间',
+  `logistics_id` smallint(3) DEFAULT NULL COMMENT '物流公司id',
+  `logistics_no` varchar(20) DEFAULT NULL COMMENT '物流单号',
+  `is_evaluation` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否评价 1.已评价',
+  `evaluation_time` int(10) DEFAULT NULL COMMENT '评价时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单商品表';
+
+-- ----------------------------
+-- Records of fruiter_order_product
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `fruiter_products`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_products`;
@@ -4363,7 +4421,7 @@ CREATE TABLE `fruiter_products` (
   `market_price` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场价格',
   `sell_price` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价格',
   `cost_price` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
-  `weight` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
+  `weight` double(10,2) NOT NULL DEFAULT '0.00' COMMENT '重量',
   `is_default` tinyint(1) NOT NULL DEFAULT '0',
   `products_delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
