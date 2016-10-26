@@ -12,7 +12,8 @@
             }
             return true;
         },
-        getWeixinSign: '{:url("home/getWeixinSign")}'
+        getWeixinSign: '{:url("home/getWeixinSign")}',
+        cookie_prefix: '{:config("cookie.prefix")}'
     };
     $(function () {
         template.config('openTag', '{%');

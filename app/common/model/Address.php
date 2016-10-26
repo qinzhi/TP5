@@ -38,6 +38,13 @@ class Address extends Model{
     }
 
     /**
+     *  获取收货地址
+     */
+    public function getAddressById($id){
+        return $this->where('member_id',$this->member_id)->where('id',$id)->find();
+    }
+
+    /**
      * 设置用户默认地址
      * @return mixed
      */

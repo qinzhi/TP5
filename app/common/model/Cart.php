@@ -20,7 +20,7 @@ class Cart extends Model{
 
     public function getList($member_id,$cart_id = []){
         $cart_field = 'c.id as cart_id,c.product_id,c.cart_num,c.member_id,c.is_selected';
-        $product_field = ',p.goods_id,p.products_no,p.spec_array,p.store_nums,p.sell_price,p.market_price';
+        $product_field = ',p.goods_id,p.products_no,p.spec_array,p.store_nums,p.sell_price,p.market_price,p.cost_price';
         $goods_field = ',g.name,g.cover_image,g.unit,g.sale';
         $this->field($cart_field . $product_field . $goods_field)
                         ->alias('c')

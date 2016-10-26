@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-10-25 17:58:56
+Date: 2016-10-26 17:48:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,13 +24,13 @@ CREATE TABLE `fruiter_address` (
   `member_id` int(10) NOT NULL COMMENT '会员id',
   `consignee` varchar(8) NOT NULL COMMENT '收货人',
   `mobile` char(11) NOT NULL COMMENT '收货人手机号',
-  `province_id` int(6) NOT NULL COMMENT '省id',
-  `city_id` int(6) NOT NULL COMMENT '市id',
-  `county_id` int(6) NOT NULL COMMENT '区/县id',
+  `province_id` mediumint(6) NOT NULL COMMENT '省id',
+  `city_id` mediumint(6) NOT NULL COMMENT '市id',
+  `county_id` mediumint(6) NOT NULL COMMENT '区/县id',
   `address` varchar(126) NOT NULL COMMENT '详细地址',
   `area_info` varchar(255) NOT NULL COMMENT '地区内容',
   `is_default` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1默认收货地址',
-  `add_time` int(10) NOT NULL,
+  `add_time` int(10) NOT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `member_id,is_default` (`member_id`,`is_default`) USING BTREE,
   KEY `member_id` (`member_id`) USING BTREE
@@ -4070,7 +4070,7 @@ CREATE TABLE `fruiter_cart` (
 -- Records of fruiter_cart
 -- ----------------------------
 INSERT INTO `fruiter_cart` VALUES ('1', '3', '1', '1', '1');
-INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '2', '1');
+INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '1');
 INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '1');
 
 -- ----------------------------
@@ -4359,16 +4359,16 @@ DROP TABLE IF EXISTS `fruiter_order`;
 CREATE TABLE `fruiter_order` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `member_id` int(10) NOT NULL COMMENT '会员id',
-  `order_sn` varchar(20) NOT NULL COMMENT '订单号',
+  `order_sn` varchar(20) NOT NULL COMMENT '订单编号',
   `pay_sn` varchar(50) DEFAULT NULL COMMENT '支付流水号',
   `pay_type` tinyint(1) DEFAULT NULL COMMENT '支付类型1.微信支付',
   `pay_price` decimal(10,2) NOT NULL COMMENT '支付金额',
   `payment_time` int(10) NOT NULL DEFAULT '0' COMMENT '支付时间 0.未支付',
-  `order_price` decimal(10,2) NOT NULL COMMENT '订单金额',
-  `goods_price` decimal(10,2) NOT NULL COMMENT '商品总金额',
+  `goods_amount` decimal(10,2) NOT NULL COMMENT '商品总金额',
   `freight` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态-1.已取消 0.未支付 1.已支付 2.已发货 3.已收货',
   `evaluation_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '评价状态 1.部分评价 2.全部评价',
+  `note` varchar(126) DEFAULT NULL COMMENT '买家留言',
   `add_time` int(10) NOT NULL COMMENT '订单生成时间',
   `finished_time` int(10) NOT NULL DEFAULT '0' COMMENT '完成时间',
   PRIMARY KEY (`id`),
@@ -4381,6 +4381,27 @@ CREATE TABLE `fruiter_order` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `fruiter_order_address`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_order_address`;
+CREATE TABLE `fruiter_order_address` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_sn` varchar(20) NOT NULL COMMENT '订单编号',
+  `consignee` varchar(8) NOT NULL COMMENT '收货人',
+  `mobile` char(11) NOT NULL COMMENT '收货人手机号',
+  `province_id` mediumint(6) NOT NULL COMMENT '省id',
+  `city_id` mediumint(6) NOT NULL COMMENT '市id',
+  `county_id` mediumint(6) NOT NULL COMMENT '区/县id',
+  `address` varchar(126) NOT NULL COMMENT '详细地址',
+  `area_info` varchar(255) NOT NULL COMMENT '地区内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单地址表';
+
+-- ----------------------------
+-- Records of fruiter_order_address
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `fruiter_order_product`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_order_product`;
@@ -4388,6 +4409,7 @@ CREATE TABLE `fruiter_order_product` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `order_sn` varchar(20) NOT NULL,
   `product_id` int(10) NOT NULL COMMENT '产品id',
+  `goods_id` int(10) NOT NULL COMMENT '商品id',
   `goods_name` varchar(50) NOT NULL COMMENT '商品名称',
   `spec_array` text COMMENT 'json规格数据',
   `buy_num` mediumint(8) NOT NULL COMMENT '购买数量',
