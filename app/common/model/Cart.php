@@ -32,4 +32,8 @@ class Cart extends Model{
         }
         return $this->query($this->buildSql());
     }
+
+    public function deleteByIds($ids){
+        return $this->where('id','in',$ids)->delete();
+    }
 }

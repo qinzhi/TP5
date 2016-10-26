@@ -6,6 +6,7 @@ use app\common\model\Address;
 use app\common\model\Cart;
 use think\Controller;
 use think\Cookie;
+use think\Db;
 
 class Order extends Controller
 {
@@ -82,7 +83,25 @@ class Order extends Controller
                 'address' => $address['address'],
                 'area_info' => $address['area_info'],
             ];
-            //Cookie::delete('cart_id');
+            // 启动事务
+            Db::startTrans();
+            try{
+                $order_status = Db::name('order')->insert($arr_order);
+                $address_status = Db::name('order_address')->insert($arr_address);
+                $product_status = Db::name('order_product')->insertAll($arr_product);
+                if($order_status && $address_status && $product_status){
+                    // 提交事务
+                    Db::commit();
+                    //清空购物车
+                    Cookie::delete('cart_id');
+                    $cartModel->deleteByIds($cart_id);
+
+                    return ['code' => 1,'msg' => '订单创建成功','ordersn',$ordersn];
+                }
+            } catch (\Exception $e) {
+                // 回滚事务
+                Db::rollback();
+            }
         }else{
             return ['code' => 0,'msg' => '没有支付商品'];
         }
