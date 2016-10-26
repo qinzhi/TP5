@@ -18,6 +18,8 @@ class Weixin extends Controller
 
     public $request;
 
+    public $openid;//微信用户id
+
     public function __construct()
     {
         parent::__construct();
@@ -41,7 +43,7 @@ class Weixin extends Controller
         $type = $wechatService->getRev()->getRevType();
 
         $data = $wechatService->getRevData();
-        Log::record('data: ' . json_encode($data));
+        Log::record('data: '. json_encode($data));
 
         switch($type) {
             case Wechat::MSGTYPE_TEXT:
