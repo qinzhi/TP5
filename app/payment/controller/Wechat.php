@@ -4,11 +4,11 @@
  */
 namespace app\payment\controller;
 
-use Common\Library\Org\Util\Validate;
-use Think\Controller;
+use app\common\model\Order;
+use think\Controller;
 use think\Request;
 
-class WxPay extends Controller {
+class Wechat extends Controller {
 
     /**
      * 金额数字长度，金额单位为分。
@@ -16,7 +16,22 @@ class WxPay extends Controller {
     const MONEY_LENGTH	= 8;
 
     public function index(){
-
+        $ordersn = Request::instance()->get('ordersn');
+        $order = Order::getByOrderSn($ordersn);
+        if(!empty($order) && $order['status'] == 0){
+            $this->assign('order',$order);
+            return $this->fetch();
+        }else{
+            if(empty($order)){
+                $msg = '该订单不存在';
+            }elseif($order['status'] == -1){
+                $msg = '该订单已取消';
+            }else{
+                $msg = '该订单已支付';
+            }
+            $this->error($msg);
+        }
+        return;
         $order_id = Request::instance()->request('orderId');
         if(empty($order_id)){
             throw new \Exception("订单编号不能为空");

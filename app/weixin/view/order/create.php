@@ -120,8 +120,13 @@
                 return $.toast('请填写收货地址');
             }
             var note = $('#note').val().trim();
-            $.post('{:url("order/add")}',{address_id:address_id,note:note},function () {
-
+            $.post('{:url("order/add")}',{address_id:address_id,note:note},function (result) {
+                $.toast(result.msg);
+                if(result.code == 1){
+                    setTimeout(function(){
+                        window.location.href = result.url;
+                    },2000);
+                }
             });
         });
     });

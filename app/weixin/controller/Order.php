@@ -96,7 +96,7 @@ class Order extends Controller
                     Cookie::delete('cart_id');
                     $cartModel->deleteByIds($cart_id);
 
-                    return ['code' => 1,'msg' => '订单创建成功','ordersn',$ordersn];
+                    return ['code' => 1,'msg' => '订单创建成功','url'=>url('/payment/wechat/index') . '?ordersn=' . $ordersn];
                 }
             } catch (\Exception $e) {
                 // 回滚事务
