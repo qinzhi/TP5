@@ -65,7 +65,10 @@
                     <div class="order-goods-statistics">
                         <p>共<span class="total-num">{$total_num}</span>件商品</p>
                         <p>合计：<span class="total-price">￥{$total_price}</span></p>
-                </div>
+                    </div>
+                    <div class="order-note">
+                        <textarea name="note" id="note" autocomplete="off" maxlength="126" placeholder="给卖家留言"></textarea>
+                    </div>
                 </div>
             </div>
             <div class="list-block order-pay-type">
@@ -95,6 +98,7 @@
                 </ul>
             </div>
         </section>
+        <div style="height: 2.7rem;"></div>
     </div>
     <div class="bar bar-footer bar-order_create flex">
         <p class="order-amount flex-1">实付<span>¥{$total_price}</span>(不含运费)</p>
@@ -115,6 +119,10 @@
             if(!address_id || address_id <= 0){
                 return $.toast('请填写收货地址');
             }
+            var note = $('#note').val().trim();
+            $.post('{:url("order/add")}',{address_id:address_id,note:note},function () {
+
+            });
         });
     });
 </script>

@@ -12,13 +12,11 @@ var GoodsImage = function(config){
     window[this.id] = this;
     document.getElementById(this.id).onclick = function(e){
         var id = $(this).attr('id');
-        var me = $(this);
         var $_ = window[id];
+        if($_.getLen() >= $_.limit){
+            return Notify('最多添加'+$_.limit+'张', 'bottom-right', '5000', 'warning', 'fa-warning', true);
+        }
         BrowseServer('',function(fileUrl,saveUrl){
-            if($_.getLen() > $_.limit){
-                Notify('最多添加'+$_.limit+'条', 'bottom-right', '5000', 'warning', 'fa-warning', true);
-                return;
-            }
             $_.addImage(fileUrl,saveUrl,$_);
         });
     };

@@ -180,7 +180,7 @@ class WxPay extends Controller {
                         $pay_point = round($order['money_paid']);
 
                         $score_log=array(
-                            'user_id'=>$order['uid'],
+                            'member_id'=>$order['uid'],
                             'wecha_id'=>$order['wecha_id'],
                             'pay_point'=>$pay_point,
                             'change_time'=>time(),

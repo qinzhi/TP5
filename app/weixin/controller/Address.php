@@ -15,27 +15,27 @@ class Address extends Controller
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->user_id = 1;
+        $this->member_id = 1;
     }
 
     public function get(){
-        $addressModel = new AddressModel($this->user_id);
+        $addressModel = new AddressModel($this->member_id);
         $address = $addressModel->getList();
         return json($address);
     }
 
     public function del($address_id){
-        $addressModel = new AddressModel($this->user_id);
+        $addressModel = new AddressModel($this->member_id);
         $address = $addressModel->getDefault();
-        $result = $addressModel->where('user_id',$this->user_id)->where('id',$address_id)->delete();
-        if(isset($address->user_id) && $address->user_id['id'] == $address_id){
+        $result = $addressModel->where('member_id',$this->member_id)->where('id',$address_id)->delete();
+        if(isset($address->member_id) && $address->member_id['id'] == $address_id){
             $addressModel->setDefault();
         }
         return $result;
     }
 
     public function save(){
-        $addressModel = new AddressModel($this->user_id);
+        $addressModel = new AddressModel($this->member_id);
         $id = Request::instance()->request('id','','intval');
         $consignee = Request::instance()->request('consignee','','trim');
         if(empty($consignee)){
@@ -58,7 +58,7 @@ class Address extends Controller
             $addressModel->clearDefault();
         }else{
             $defaultAddress = $addressModel->getDefault();
-            if(empty($defaultAddress->user_id)){
+            if(empty($defaultAddress->member_id)){
                 $is_default = 1;
             }
         }
@@ -75,14 +75,14 @@ class Address extends Controller
             'is_default' => $is_default
         ];
         if($id > 0){//更新
-            $result = $addressModel->where('id', $id)->where('user_id',$this->user_id)->update($data);
+            $result = $addressModel->where('id', $id)->where('member_id',$this->member_id)->update($data);
             if($result){
                 return json(['code'=>1,'msg'=>'更新成功','address_id'=> $id]);
             }else{
                 return json(['code'=>-1,'msg'=>'更新失败']);
             }
         }else{//添加
-            $data['user_id'] = $this->user_id;
+            $data['member_id'] = $this->member_id;
             $data['add_time'] = time();
             $addressModel->data($data)->save();
             if($addressModel->id > 0){

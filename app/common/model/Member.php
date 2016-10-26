@@ -13,7 +13,7 @@ class Member extends Model{
      */
     const TABLE_NAME = 'member';
 
-    public $user_id;
+    public $member_id;
 
     public function __construct()
     {

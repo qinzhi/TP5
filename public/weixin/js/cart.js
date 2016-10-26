@@ -119,7 +119,7 @@ $(document).on("pageInit", "#page-cart", function(e, id, page) {
                 cart_id.push(this.value);
             });
             if(cart_id.length){
-                $.setCookie('cart_id',JSON.stringify(cart_id));
+                $.setCookie($.config.cookie_prefix + 'cart_id',JSON.stringify(cart_id));
                 window.location.href = '/weixin/order/create';
             }
         },
