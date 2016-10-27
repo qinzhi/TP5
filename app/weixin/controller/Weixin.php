@@ -6,6 +6,7 @@ namespace app\weixin\controller;
 
 use app\common\model\Member;
 use app\common\service\Wechat;
+use app\common\tools\Str;
 use think\Controller;
 use think\Cookie;
 use think\Db;
@@ -86,6 +87,36 @@ class Weixin extends Controller
         }
 
         $this->assign('member',$this->member);
+    }
+
+    public static function getWeixinSign(){
+        $wx = array(
+            'appid' => config('weixin.app_id'),
+            'timestamp' => time(),
+            'nonceStr' => Str::getRandChar(8),
+            'jsApiList' => ["scanQRCode","hideMenuItems"]
+        );
+
+        $wechatService = new Wechat();
+        $ticket = $wechatService->getJsTicket();
+
+        if(Request::instance()->has('url')){
+            $url = urldecode(Request::instance()->request('url'));
+        }else{
+            $url = getFullUrl();
+        }
+
+        $data = array(
+            'noncestr' =>$wx['nonceStr'],
+            'timestamp' => $wx['timestamp'],
+            'jsapi_ticket' => $ticket,
+            'url' => $url,
+        );
+        ksort($data);
+        $data = urldecode(http_build_query($data));
+        $wx['signature'] = sha1($data);//签名
+
+        return $wx;
     }
 
 }

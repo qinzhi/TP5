@@ -235,6 +235,11 @@ return [
         'app_id' => 'wx20375ac755d2f51a',
         'app_secret' => 'e53f87ed1d174c5ba02b5d40a18e2887',
         'encodingAesKey' => 'wPiXNJISGuFkzfIRJOwfVUvwJgsP7zeFQS7HVN2V1uK',
+        'mch_id' => '1346292501',
+        'mch_key' => 'bc1391441eb3fea0f8c080c003f71c32',
+        'ssl_cert_path' => PRODUCT_PATH . '/app/payment/library/wxpay/cert/apiclient_cert.pem',
+        'ssl_key_path' => PRODUCT_PATH . '/app/payment/library/wxpay/cert/apiclient_key.pem',
+        'root_ca_path' => PRODUCT_PATH . '/app/payment/library/wxpay/cert/rootca.pem',
     ),
 
     // +----------------------------------------------------------------------

@@ -62,6 +62,22 @@
                 <li class="nob">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="kuang">
                         <tr>
+                            <th width="30%">订单号</th>
+                            <td>{$order.order_sn}</td>
+                        </tr>
+                    </table>
+                </li>
+                <li class="nob">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="kuang">
+                        <tr>
+                            <th width="30%">下单时间</th>
+                            <td>{$order.add_time|date='Y-m-d H:i:s',###}</td>
+                        </tr>
+                    </table>
+                </li>
+                <li class="nob">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="kuang">
+                        <tr>
                             <th>支付失败</th>
                             <td>
                                 <div id="failRt"></div>
@@ -97,35 +113,26 @@
 <script type='text/javascript' src='__LIGHT7__/js/light7.min.js' charset='utf-8'></script>
 <script type='text/javascript' src='__LIGHT7__/js/i18n/cn.min.js' charset='utf-8'></script>
 <script type="application/javascript">
-    (function wx_init(){
-        $.ajax({
-            type: 'POST',
-            url: '',
-            data: { url: encodeURIComponent(window.location.href)},
-            success: function(config){
-                wx.config({
-                    debug: false,
-                    appId: config.appid,
-                    timestamp: config.timestamp,
-                    nonceStr: config.nonceStr,
-                    signature: config.signature,
-                    jsApiList: ['hideOptionMenu']
-                });
-            }
-        });
-    })();
+    wx.config({
+        debug: false,
+        appId: '{$wx_config.appid}',
+        timestamp: '{$wx_config.timestamp}',
+        nonceStr: '{$wx_config.nonceStr}',
+        signature: '{$wx_config.signature}',
+        jsApiList: ['hideOptionMenu']
+    });
     wx.ready(function(){
         wx.hideOptionMenu();
     });
     function callpay() {
-        WeixinJSBridge.invoke('getBrandWCPayRequest', '', function (res) {
+        WeixinJSBridge.invoke('getBrandWCPayRequest', JSON.parse('{$json}'), function (res) {
             WeixinJSBridge.log(res.err_msg);
 
             $('#payDom').hide();
             if (res.err_msg == 'get_brand_wcpay_request:ok') {
                 $('#successDom').show();
                 setTimeout(function () {
-                    window.location.href = '';
+                    window.location.href = '{$returnUrl}';
                 }, 3000);
             }else {
                 $('#failDom').show();

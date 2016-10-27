@@ -4,16 +4,19 @@ namespace app\weixin\controller;
 use app\common\controller\Number;
 use app\common\model\Address;
 use app\common\model\Cart;
-use think\Controller;
+use app\common\service\WxPay;
 use think\Cookie;
 use think\Db;
 
-class Order extends Controller
+class Order extends Weixin
 {
+
+    public $member_id;
+
     public function __construct()
     {
         parent::__construct();
-        $this->member_id = 1;
+        $this->member_id = $this->member['id'];
     }
 
     public function create(){
@@ -96,7 +99,9 @@ class Order extends Controller
                     Cookie::delete('cart_id');
                     $cartModel->deleteByIds($cart_id);
 
-                    return ['code' => 1,'msg' => '订单创建成功','url'=>url('/payment/wechat/index') . '?ordersn=' . $ordersn];
+                    $params['ordersn'] = $ordersn;
+                    $params['openid'] = $this->openid;
+                    return ['code' => 1,'msg' => '订单创建成功','url'=>url('/payment/wechat/index') . '?' . http_build_query($params)];
                 }
             } catch (\Exception $e) {
                 // 回滚事务
@@ -105,5 +110,12 @@ class Order extends Controller
         }else{
             return ['code' => 0,'msg' => '没有支付商品'];
         }
+    }
+
+    public function test(){
+        $wxPayService = new WxPay();
+        $money = 1;
+        $wxPayService->sendRedpacket($this->member['nickname'], $this->openid, $money,
+            '账户余额提现', '祝您生活工作愉快！', '请尽快提现！');
     }
 }

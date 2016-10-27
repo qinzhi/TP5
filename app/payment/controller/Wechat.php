@@ -5,10 +5,21 @@
 namespace app\payment\controller;
 
 use app\common\model\Order;
+use app\common\service\WxPay;
+use app\weixin\controller\Weixin;
 use think\Controller;
+use think\Log;
 use think\Request;
 
+
 class Wechat extends Controller {
+
+    public function __construct()
+    {
+        parent::__construct();
+        \think\Config::set('session.prefix','wx_');//session前缀
+        \think\Config::set('cookie.prefix','wx_');//cookie前缀
+    }
 
     /**
      * 金额数字长度，金额单位为分。
@@ -20,6 +31,22 @@ class Wechat extends Controller {
         $order = Order::getByOrderSn($ordersn);
         if(!empty($order) && $order['status'] == 0){
             $this->assign('order',$order);
+
+            $openid = Request::instance()->request('openid');
+
+            $wxPayService = new WxPay();
+            if(empty($openid)){
+                $openid = $wxPayService->getOpenid();
+            }
+            $notifyUrl = url('wechat/notify','',true,true);
+
+            $json = $wxPayService->createJsapiOrder($ordersn, $openid, $order['pay_price'], '订单支付',$notifyUrl);
+
+            $returnUrl = url('/weixin/order/payReturn');
+            $this->assign('wx_config',Weixin::getWeixinSign());
+            $this->assign('returnUrl',$returnUrl);
+            $this->assign('json',$json);
+            $this->assign('caption','微信支付');
             return $this->fetch();
         }else{
             if(empty($order)){
@@ -31,85 +58,20 @@ class Wechat extends Controller {
             }
             $this->error($msg);
         }
-        return;
-        $order_id = Request::instance()->request('orderId');
-        if(empty($order_id)){
-            throw new \Exception("订单编号不能为空");
-        };
-
-        $token = I('request.token');
-        $attach = array();
-        $attach['type'] = I('request.type');
-        $attach['token'] = $token;
-        $attach['companyId'] = I('request.companyId/d');
-        $attach['rid'] = $order_id;//订单编号
-
-        if($attach['type'] == 'recharge'){
-
-            $price = I('request.price/f');
-            if($price <= 0){
-                throw new \Exception("金额必须大于0");
-            }
-
-            $order_id = 'CZ' . $order_id;
-            $returnUrl = U('/Merchant/Store/center');
-            $description = '充值';
-
-            $this->assign('getSign',U("/Merchant/Home/getWeixinSign"));
-        }elseif($attach['type'] == 'pay'){
-            $order = M('ProductCart')->where(array(
-                'token' => $token,
-                'cid' => $attach['companyId'],
-                'orderid' => $order_id
-            ))->find();
-            if(empty($order)){
-                throw new \Exception("订单异常");
-            }else{
-                $returnUrl = U('/Mall/Store/payReturn',array('token'=>$token,'orderid'=>$order_id));
-                if($order['paid']){
-                    $this->redirect($returnUrl);
-                }
-                $price = $order['money_paid'];
-            }
-
-            $description = '订单支付';
-
-            $this->assign('title','微信支付');
-            $this->assign('getSign',U("/Mall/Home/getWeixinSign"));
-        }
-
-
-        $tradeNumber = $this->createTradeNumber($order_id,$price);
-
-        $openid = I('request.openId','','trim');
-
-        $wxPayService = D('Common/WxPay','Service')->initConfig($token);
-        if(empty($openid)){
-            $openid = $wxPayService->getOpenid();
-        }
-
-        $notifyUrl = getSiteUrl() . U('WxPay/notify');
-
-        $json = $wxPayService->createJsapiOrder($tradeNumber, $openid, $price, $description,$notifyUrl, http_build_query($attach));
-
-        $this->assign('returnUrl',$returnUrl);
-        $this->assign('json',$json);
-        $this->assign('money',$price);
-        $this->assign('caption','微信支付');
-        $this->display();
     }
 
+    /**
+     * 微信异步通知
+     */
     public function notify(){
-        $wxPayService = D('Common/WxPay','Service');
+        $wxPayService = new WxPay();
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
         $result = $wxPayService->ToArray($xml);
-        parse_str($result['attach'],$attach);//附加参数
-        $token = $attach['token'];
-        $companyId = $attach['companyId'];
 
-        $wxPayService->initConfig($token);
+        Log::record('微信异步通知：' . json_encode($result));
+
         if($result['return_code'] == 'SUCCESS' && $wxPayService->CheckSign($result) === true){
-
+            Log::record('微信异步通知：验证成功');return;
             $orderId = $result['out_trade_no'];//商户系统的订单号
             $total_fee = $result['total_fee'];//订单总金额，单位为分
 
@@ -211,203 +173,14 @@ class Wechat extends Controller {
 
                 }
             }
-
-            $this->replyNotify($wxPayService,array(
-                'return_code' => 'SUCCESS',
-                'return_msg' => 'OK'
-            ));
+            call_user_func_array([$this,'replyNotify'],[$wxPayService,['return_code' => 'SUCCESS','return_msg' => 'OK']]);
         }else{
-            $this->replyNotify($wxPayService,array(
-                'return_code' => 'FAIL',
-                'return_msg' => '签名错误'
-            ));
-        }
-    }
-
-    public function payHandle($thisOrder,$transaction_id){
-        $token = $thisOrder['token'];
-        $wecha_id = $thisOrder['wecha_id'];
-        $member_card_create_db=M('Member_card_create');
-        $userCard=$member_card_create_db->where(array('token'=>$token,'wecha_id'=>$wecha_id))->find();
-        $userinfo_db=M('Userinfo');
-        if ($userCard){
-            $member_card_set_db=M('Member_card_set');
-            $thisCard=$member_card_set_db->where(array('id'=>intval($userCard['cardid'])))->find();
-            if ($thisCard){
-                $set_exchange = M('Member_card_exchange')->where(array('cardid'=>intval($thisCard['id'])))->find();
-                //
-                $arr['token']=$token;
-                $arr['wecha_id']=$wecha_id;
-                $arr['expense']=$thisOrder['price'];
-                $arr['time']=time();
-                $arr['cat']=99;
-                $arr['staffid']=0;
-                $arr['score']=intval($set_exchange['reward'])*$arr['expense'];
-
-                if(isset($_GET['redirect'])){
-                    $infoArr = explode('|',$_GET['redirect']);
-
-                    $param = explode(',',$infoArr[1]);
-                    if($param){
-                        foreach ($param as $pa){
-                            $pas=explode(':',$pa);
-                            if($pas[0] == 'itemid'){
-                                $arr['itemid']=$pas[1];
-                            }
-                        }
-                    }
-
-                }
-
-                M('Member_card_use_record')->add($arr);
-
-                $thisUser = $userinfo_db->where(array('token'=>$thisCard['token'],'wecha_id'=>$arr['wecha_id']))->find();
-                $userArr=array();
-                $userArr['total_score']=$thisUser['total_score']+$arr['score'];
-                $userArr['expensetotal']=$thisUser['expensetotal']+$arr['expense'];
-                $userinfo_db->where(array('token'=>$token,'wecha_id'=>$arr['wecha_id']))->save($userArr);
-            }
-        }
-        $data_order['id'] = $thisOrder['id'];
-        $data_order['paid'] = 1;
-
-        $order_model= M('ProductCart');
-        $data_order['paytype'] = 'weixin';
-        $data_order['third_id'] = $transaction_id;
-        $data_order['transactionid'] = $transaction_id;
-        $data_order['buytime'] = time();
-        $data_order['is_read'] = 0;
-
-        $order_model->save($data_order);
-
-        if($_GET['pl']){
-            $database_platform_pay = D('Platform_pay');
-            $data_platform_pay['orderid'] = $thisOrder['orderid'];
-            $data_platform_pay['price'] = $thisOrder['price'];
-            $data_platform_pay['wecha_id'] = $thisOrder['wecha_id'];
-            $data_platform_pay['token'] = $thisOrder['token'];
-            //$data_platform_pay['from'] = $this->from;
-            $data_platform_pay['time'] = $_SERVER['REQUEST_TIME'];
-            $database_platform_pay->data($data_platform_pay)->add();
-        }
-
-        return $thisOrder;
-    }
-
-    //发送短信
-    private function orderPaidSms($order) {
-        if (empty($order)) return;
-
-        //查找公司信息
-        $company = M('company')->find($order['cid']);
-        if (empty($company)) return;
-
-        //导入短信
-        $smsService = D('Common/Sms','Service');
-
-        // 御宝羊奶商城不提醒提货，只提醒安排发货通知！
-        if ($order['delivery'] == 1 && $order['token'] != 'efjdyb1396147388') {
-            //如果是快递方式是“上门取货”，
-            $content = "尊敬的客户，请您去{$company['address']}提货,门店电话:{$company['mp']},提货码{$order['validate_pwd']}，回复TD退订";
-        } else {
-            //其他快递方式，
-            $msg = '';
-            if(!empty($order['validate_pwd'])){
-                $msg = '提货码：'.$order['validate_pwd'].',';
-            }
-            $content = "尊敬的客户，您的订单已经提交成功,我们会第一时间为您安排发货，{$msg}回复TD退订";
-        }
-
-        if(Validate::mobi($order['tel']) === true){
-            $smsService->verificationSmsSend($order['tel'],$content);
-        }
-        //短信通知商家
-        if($company['mp']!=''){
-            $tel = $company['mp'];
-        }else{
-            $tel = $company['mp1'];
-        }
-        if ($tel) $smsService->verificationSmsSend($tel,"您好，会员{$order['truename']}刚刚对订单号：{$order['orderid']}的订单进行了支付，请及时处理，回复TD退订");
-    }
-
-    private  function autoAllotByOrderId($order)
-    {
-        //根据订单号反查 总公司id
-
-        $goodsOrderModel = new \Common\Model\ProductOrderModel();
-        //查询为类型总公司的订单
-        $orderInfo=$goodsOrderModel->getOrderInfoByOrderId($order['orderid']);
-        if(!empty($orderInfo))
-        {
-            //首先查询总商城是否开启
-            $storeSetting 	= new \Common\Model\StoreSettingsModel();
-            $storeInfo 		= $storeSetting->getStoreSettings($orderInfo['cid']);
-            //首先查询门店是否开启配送点
-            $companyModel	= new \Common\Model\CompanyModel();
-            //获取总商城下对应的所有门店
-            $allStoreInfo 	= $companyModel->listAllStore($orderInfo['token']);
-            //过滤掉所有未开启的门店信息
-
-            $stores=array();
-
-            foreach ($allStoreInfo as $key=> $store)
-            {
-                if($store['is_dilivery']== 1 && $store['addr_keyword'])
-                {
-                    $stores[]=$allStoreInfo[$key];
-                }
-            }
-            if($storeInfo['head_store_open'] && $storeInfo['order_allot'])
-            {
-                $keyWordCount=array();
-                $fullAddress=$companyModel->getFullAddress($orderInfo);
-
-                foreach($stores as $data)
-                {
-                    $count=0;
-                    $allotAddress   =explode(";",$data['addr_keyword']);
-
-                    foreach($allotAddress as $address)
-                    {
-                        if(strpos($fullAddress,$address) !== false)
-                        {
-
-                            $count++;
-
-                        }
-                    }
-
-                    $keyWordCount[$data['id']]+=$count;
-
-                }
-                //此处循环了一个订单的最佳匹配
-                if(count($keyWordCount)>=1)
-                {
-                    arsort($keyWordCount);
-                    $allotCompanyId=key($keyWordCount);
-
-                    if($keyWordCount[$allotCompanyId]>0 && !empty($orderInfo['id']))//此处找到了最佳匹配,将订单分配给该门店
-                    {
-                        $goodsOrderModel->updateAllotOrder($orderInfo['id'],$allotCompanyId);
-                    }
-                }
-                //}
-            }
+            call_user_func_array([$this,'replyNotify'],[$wxPayService,['return_code' => 'FAIL','return_msg' => '签名错误']]);
         }
     }
 
     private function replyNotify($wxPayService,array $replay){
         echo $wxPayService->ToXml($replay);
     }
-
-    /**
-     * 创建交易号。
-     * 由于订单价格有时需要修改，如果交易号不变而金额变化了是不能重复提交付款的（因为微信已经生成了预付订单，交易号和金额不能再变化！），所以订单号带上金额就可以解决修改价格的问题。
-     */
-    public static function createTradeNumber($orderNumber, $money, $moneyLength = self::MONEY_LENGTH)
-    {
-        return $orderNumber.str_pad($money * 100, $moneyLength, '0', STR_PAD_LEFT);
-    }
-
 
 }
