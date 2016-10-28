@@ -4,9 +4,10 @@ namespace app\weixin\controller;
 use app\common\controller\Number;
 use app\common\model\Address;
 use app\common\model\Cart;
-use app\common\service\WxPay;
+use app\payment\service\WxPay;
 use think\Cookie;
 use think\Db;
+use think\Log;
 
 class Order extends Weixin
 {
@@ -17,6 +18,10 @@ class Order extends Weixin
     {
         parent::__construct();
         $this->member_id = $this->member['id'];
+    }
+
+    public function index(){
+        return $this->fetch();
     }
 
     public function create(){
@@ -115,7 +120,8 @@ class Order extends Weixin
     public function test(){
         $wxPayService = new WxPay();
         $money = 1;
-        $wxPayService->sendRedpacket($this->member['nickname'], $this->openid, $money,
+        $result = $wxPayService->sendRedpacket('果度千寻', $this->openid, $money,
             '账户余额提现', '祝您生活工作愉快！', '请尽快提现！');
+        Log::record('@@@@@@@@@@ ' . json_encode($result));
     }
 }

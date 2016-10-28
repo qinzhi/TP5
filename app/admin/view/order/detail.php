@@ -1,9 +1,13 @@
 {extend name="layout/base" /}
 {block name="css"}
 <style>
+    .order-detail-area .widget > .widget-header,.order-detail-area .widget .widget-body{
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    }
     .ncap-order-style {
         margin: 0 auto;
         width: 1000px;
+        margin-top: -9px;
     }
     .ncap-order-flow {
         background-color: #f5f5f5;
@@ -29,16 +33,16 @@
         z-index: 1;
     }
     .ncap-order-flow li.current h5 {
-        color: #2cbca3;
+        color: #53a93f;
         font-weight: 600;
     }
     .ncap-order-flow li h5 {
         font-size: 16px;
-        font-weight: normal;
+        font-weight: normal !important;
         height: 20px;
         line-height: 20px;
     }.ncap-order-flow li.current i {
-         color: #2cbca3;
+         color: #53a93f;
      }
     .ncap-order-flow li i {
         color: #d7d7d7;
@@ -68,12 +72,56 @@
         width: 140px;
         z-index: 1;
     }
+    .ncap-order-details .misc-info,.ncap-order-details .addr-note{
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e6e6e6;
+    }
+    .ncap-order-details h4{
+        font-weight: bold !important;
+        font-size: 14px;
+    }
+    .ncap-order-details dl{
+        margin-bottom: 5px;
+    }
+    .ncap-order-details dt,.ncap-order-details dd{
+        display: inline-block;
+    }
+    .ncap-order-details dt{
+        width: 10%;
+        text-align: right;
+        color: #999;
+    }
+    .ncap-order-details dd{
+        min-width: 20%;
+        text-align: left;
+        color: #333;
+    }
+    .ncap-order-details .total-amount{
+        padding: 10px 0;
+        text-align: right;
+    }
+    .ncap-order-details .total-amount h3{
+        color: #777;
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 24px;
+    }
+    .ncap-order-details .total-amount .red_common{
+        color: #d73d32;
+        font-size: 20px;
+    }
 </style>
 {/block}
 {block name="content"}
-<div class="row no-margin">
+<div class="row margin-20 order-detail-area">
     <div class="col-lg-12 col-sm-12 col-xs-12 no-padding">
         <div class="widget flat no-margin">
+            <div class="widget-header">
+                <div class="widget-buttons margin-5">
+                    <button class="btn btn-success">一键发货</button>
+                </div>
+            </div>
             <div class="widget-header widget-fruiter padding-bottom-5">
                 <div class="ncap-order-style">
                     <div class="ncap-order-flow">
@@ -81,26 +129,26 @@
                             <li class="current">
                                 <h5>生成订单</h5>
                                 <i class="fa fa-arrow-circle-right"></i>
-                                <time>2016-04-05 14:51:26</time>
+                                <time>{$order.add_time|date='Y-m-d H:i:s',###}</time>
                             </li>
-                            <li class="current">
+                            <li class="{if condition='$order.payment_time gt 0'}current{/if}">
                                 <h5>完成付款</h5>
                                 <i class="fa fa-arrow-circle-right"></i>
-                                <time>2016-04-05 14:51:38</time>
+                                <time>{$order.payment_time|date='Y-m-d H:i:s',###}</time>
                             </li>
-                            <li class="">
+                            <li class="{if condition='$order.send_status eq 2'}current{/if}">
                                 <h5>商家发货</h5>
                                 <i class="fa fa-arrow-circle-right"></i>
-                                <time></time>
+                                <time>{if condition='$order.send_status eq 2'}{$order.send_time|date='Y-m-d H:i:s',###}{/if}</time>
                             </li>
-                            <li class="">
+                            <li class="{if condition='$order.receive_status eq 2'}current{/if}">
                                 <h5>收货确认</h5>
                                 <i class="fa fa-arrow-circle-right"></i>
-                                <time></time>
+                                <time>{if condition='$order.receive_status eq 2'}{$order.receive_time|date='Y-m-d H:i:s',###}{/if}</time>
                             </li>
-                            <li class="">
+                            <li class="{if condition='$order.evaluation_status eq 2'}current{/if}">
                                 <h5>完成评价</h5>
-                                <time></time>
+                                <time>{if condition='$order.evaluation_status eq 2'}{$order.evaluation_time|date='Y-m-d H:i:s',###}{/if}</time>
                             </li>
                         </ol>
                     </div>
@@ -123,17 +171,17 @@
                                         <h4>下单/支付</h4>
                                         <dl>
                                             <dt>订单号：</dt>
-                                            <dd>8000000000744201</dd>
+                                            <dd>{$order.order_sn}</dd>
                                             <dt>订单来源：</dt>
-                                            <dd>PC端</dd>
+                                            <dd>{$order.source_text}</dd>
                                             <dt>下单时间：</dt>
-                                            <dd>2016-02-03 15:30:18</dd>
+                                            <dd>{$order.add_time|date='Y-m-d H:i:s',###}</dd>
                                         </dl>
                                         <dl>
                                             <dt>支付单号：</dt>
                                             <dd>420507828618553666</dd>
-                                            <dt>支付方式：</dt>
-                                            <dd>站内余额支付</dd>
+                                            <dt>支付类型：</dt>
+                                            <dd>{$order.pay_type_text}</dd>
                                             <dt>支付时间：</dt>
                                             <dd>2016-02-03 15:30:38</dd>
                                         </dl>
@@ -141,70 +189,58 @@
                                     <div class="addr-note">
                                         <h4>购买/收货方信息</h4>
                                         <dl>
-                                            <dt>买家：</dt>
-                                            <dd>hhr002</dd>
-                                            <dt>联系方式：</dt>
-                                            <dd>13286868686</dd>
+                                            <dt>收货人：</dt>
+                                            <dd>{$order.consignee}</dd>
+                                            <dt>收货人手机：</dt>
+                                            <dd>{$order.mobile}</dd>
                                         </dl>
                                         <dl>
                                             <dt>收货地址：</dt>
-                                            <dd>测试账号测试数据测试数据测试数据测试&nbsp;&nbsp;,&nbsp;广东广州市萝岗区 化信大厦</dd>
-                                        </dl>
-                                        <dl>
-                                            <dt>发票信息：</dt>
-                                            <dd>
-                                            </dd>
+                                            <dd>{$order.area_info}</dd>
                                         </dl>
                                         <dl>
                                             <dt>买家留言：</dt>
-                                            <dd></dd>
+                                            <dd>{$order.note}</dd>
                                         </dl>
                                     </div>
                                     <div class="goods-info">
                                         <h4>商品信息</h4>
-                                        <table>
+                                        <table class="table table-bordered table-hover">
                                             <thead>
-                                            <tr>
-                                                <th colspan="2">商品</th>
-                                                <th>单价</th>
-                                                <th>数量</th>
-                                                <th>一级</th>
-                                                <th>二级</th>
-                                                <th>三级</th>
-                                                <th>四级</th>
-                                                <th>优惠活动</th>
-                                                <th>佣金比例</th>
-                                                <th>商品技术服务费</th>
-                                                <th>运费技术服务费</th>
-                                            </tr>
+                                                <th>商品名称</th>
+                                                <th>商品规格</th>
+                                                <th>商品单价</th>
+                                                <th>商品数量</th>
+                                                <th>运费</th>
+                                                <th>总计</th>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td class="w30"><div class="goods-thumb"><a href="http://test.cunctao.com/index.php?act=goods&amp;goods_id=103765" target="_blank"><img alt="" src="http://test.cunctao.com/data/upload/shop/common/default_goods_image_60.gif"> </a></div></td>
-                                                <td style="text-align: left;"><a href="URL_WHOLESALE/index.php?act=goods&amp;goods_id=103765" target="_blank">瑞士瑞动-单肩包 MT-5786-02T00公文包休闲包电脑包 黑色 21.5*18.8CM</a></td>
-                                                <td class="w80">￥66.00</td>
-                                                <td class="w60">5</td>
+                                                {volist name="orderList" id="vo"}
+                                                    <tr>
+                                                        <td><a href="javascript:;" target="_blank">{$vo.goods_name}</a></td>
+                                                        <td>
 
-                                                <td>箱包皮具</td>
-                                                <td>男士包袋</td>
-                                                <td>无</td>
-                                                <td>无</td>
-                                                <td class="w100"></td>
-                                                <td class="w60">0%</td>
-                                                <td class="w80">0.00</td>
-                                                <td></td>
-                                            </tr>
-                                            <!-- S 赠品列表 -->
-                                            <!-- E 赠品列表 -->
+                                                            <?php if(!empty($vo['product_spec_array'])):
+                                                                $spec_arr = json_decode($vo['product_spec_array'],true);
+                                                                foreach ($spec_arr as $spec):
+                                                                    echo $spec['name'] . ":". $spec['value'] . "&nbsp;&nbsp;&nbsp;&nbsp;";
+                                                                endforeach;
+                                                            endif;?>
+
+                                                        </td>
+                                                        <td>{$vo.product_sell_price}</td>
+                                                        <td>{$vo.product_buy_num}</td>
+                                                        <td>{$vo.product_freight}</td>
+                                                        <td>{$vo.product_buy_num*$vo.product_sell_price+$vo.product_freight}</td>
+                                                    </tr>
+                                                {/volist}
                                             </tbody>
-                                            <!-- S 促销信息 -->
-                                            <!-- E 促销信息 -->
                                         </table>
                                     </div>
                                     <div class="total-amount">
-                                        <h3>订单总额：<strong class="red_common">￥330.00</strong></h3>
-                                        <h4>(运费：免运费)</h4>
-                                        (退款：￥330.00)
+                                        <h3>支付总额：<strong class="red_common">￥{$order.pay_price}</strong></h3>
+                                        <h3>订单总额：<strong class="red_common">￥{$order.goods_amount}</strong></h3>
+                                        <h5>(运费：免运费)</h5>
                                     </div>
                                 </div>
                             </div>

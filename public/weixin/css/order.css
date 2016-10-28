@@ -148,3 +148,33 @@
     user-select: none;
 }
 /**************************************************/
+#page-order_index .card ul{
+    padding: 0;
+}
+#page-order_index .card .product-info{
+    padding-left: 1rem;
+    position: relative;
+}
+#page-order_index .card .product_price {
+    color: #ff655b;
+    margin-right: 1rem;
+}
+#page-order_index .card .product_price sup {
+    font-size: 0.6rem;
+    line-height: 0.9rem;
+    margin-right: -0.25rem;
+}
+#page-order_index .card .product_price em {
+    font-size: 0.9rem;
+}
+#page-order_index .card .product_price i {
+    font-style: normal;
+    margin: 0 -0.15rem;
+}
+#page-order_index .card .product_num{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    font-size: .85rem;
+    color: #666;
+}

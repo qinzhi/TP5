@@ -6,8 +6,9 @@
  * Date: 16-6-12
  * Time: 上午10:57
  */
-namespace app\common\service;
+namespace app\payment\service;
 
+use app\common\service\Wechat;
 use app\common\tools\Str;
 use think\Config;
 use think\Controller;
