@@ -12,7 +12,7 @@
         <span class="tab-label">购物车</span>
         <span class="badge" id="cart_num">{$cartNum|default=0}</span>
     </a>
-    <a class="tab-item {$nav_type == 4?'active':''}" href="{:url('me/index')}">
+    <a class="tab-item {$nav_type == 4?'active':''}" href="{:url('member/index')}">
         <span class="icon icon-quanyonghu"></span>
         <span class="tab-label">我的</span>
     </a>

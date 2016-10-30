@@ -37,7 +37,7 @@
         </section>
         <section class="me-center">
             <div class="center_inner me-order first">
-                <a href="javascript:;" class="flex">
+                <a href="{:url('order/index')}" class="flex">
                     <div class="inner-name">全部订单</div>
                     <div class="text-right inner-icon flex-1">
                         <span class="order-tip">查看全部订单</span>

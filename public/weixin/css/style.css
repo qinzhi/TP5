@@ -5,3 +5,6 @@ label.label-checkbox input[type="radio"]:checked + .item-media i.icon-form-check
 .modal-button{
     color: #41c172;
 }
+.price_com{
+    color: #ff655b;
+}
