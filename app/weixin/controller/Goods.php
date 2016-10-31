@@ -6,6 +6,11 @@ use think\Controller;
 
 class Goods extends Controller
 {
+    
+    public function lists(){
+        return $this->fetch();
+    }
+
     public function getProductList($goods_id){
         $products = Products::where('goods_id',$goods_id)->select();
         if(count($products) == 1){
