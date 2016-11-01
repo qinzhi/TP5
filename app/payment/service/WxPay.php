@@ -142,7 +142,7 @@ class WxPay{
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码
-            $baseUrl = getFullUrl();
+            $baseUrl = get_full_url();
             $url =$wechatService->getOauthRedirect($baseUrl,'STATE','snsapi_base');
             header('Location: ' . $url);
             exit;
@@ -283,7 +283,7 @@ class WxPay{
         $params = array(
             'appId' => $UnifiedOrderResult["appid"],
             'timeStamp' => strval(time()),
-            'nonceStr' => String::getRandChar(16),
+            'nonceStr' => Str::getRandChar(16),
             'package' => "prepay_id=" . $UnifiedOrderResult['prepay_id'],//$UnifiedOrderResult['prepay_id'],
             'signType' => 'MD5'
         );

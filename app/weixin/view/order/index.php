@@ -43,7 +43,7 @@
                     </div>
                     <div class="card-footer">
                         <span>下单时间: 2016-10-28 17:47</span>
-                        <a href="#" class="button button-fill button-warning">去支付</a>
+                        <a href="{:url('/payment/wechat/index',['ordersn'=>'222'])}" class="button button-fill button-warning">去支付</a>
                     </div>
                 </li>
             </ul>

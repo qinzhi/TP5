@@ -12,7 +12,7 @@ function get_img($src){
  * 获取站点URL
  * @return string
  */
-function getSiteUrl()
+function get_site_url()
 {
     $scheme	= (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https://' : 'http://';
     $host	= isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_ADDR'];
@@ -25,7 +25,7 @@ function getSiteUrl()
  * 获取当前页面的完整URL，包括协议、域名、路径和查询字符串。
  * @return string
  */
-function getFullUrl()
+function get_full_url()
 {
-    return getSiteUrl().$_SERVER['REQUEST_URI'];
+    return get_site_url().$_SERVER['REQUEST_URI'];
 }

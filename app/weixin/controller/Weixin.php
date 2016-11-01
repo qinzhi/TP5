@@ -68,7 +68,7 @@ class Weixin extends Controller
                 Session::set('openid',$this->openid);
                 Cookie::set('openid',$this->openid,30 * 86400); //保存一年
             }else{
-                $url = $this->wechatService->getOauthRedirect(getFullUrl());
+                $url = $this->wechatService->getOauthRedirect(get_full_url());
                 $this->redirect($url);
             }
         }
@@ -103,7 +103,7 @@ class Weixin extends Controller
         if(Request::instance()->has('url')){
             $url = urldecode(Request::instance()->request('url'));
         }else{
-            $url = getFullUrl();
+            $url = get_full_url();
         }
 
         $data = array(

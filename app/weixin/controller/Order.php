@@ -5,6 +5,7 @@ use app\common\controller\Number;
 use app\common\model\Address;
 use app\common\model\Cart;
 use app\payment\service\WxPay;
+use think\Config;
 use think\Cookie;
 use think\Db;
 use think\Log;
@@ -21,6 +22,7 @@ class Order extends Weixin
     }
 
     public function index(){
+        Config::set('url_common_param',true);
         return $this->fetch();
     }
 
