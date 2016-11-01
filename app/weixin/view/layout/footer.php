@@ -1,5 +1,5 @@
 <nav class="bar bar-tab">
-    <a class="tab-item {$nav_type == 1?'active':''}" href="index">
+    <a class="tab-item {$nav_type == 1?'active':''}" href="{:url('index/index')}">
         <span class="icon icon-zhuye"></span>
         <span class="tab-label">首页</span>
     </a>

@@ -4,14 +4,10 @@
 {/block}
 {block name="page"}
 <div class="page page-order_create" id="page-member_index">
-    <header class="header clearfix">
-        <div class="row-2-left flex">
-            <div class="back">
-                <a href="javascript:history.go(-1);"><i class="icon icon-left"></i></a>
-            </div>
-            <div class="title flex-1">个人中心</div>
-        </div>
+    <header class="bar bar-nav">
+        <h1 class="title">个人中心</h1>
     </header>
+    {include file="Layout:footer"/}
     <div class="content">
         <section class="me-box">
             <div class="me-avatar">
@@ -99,9 +95,9 @@
                 </a>
             </div>
 
-            <div class="me-logout">
+            <!--<div class="me-logout">
                 <a class="btn btn-block btn-danger no-radius">退出</a>
-            </div>
+            </div>-->
         </section>
     </div>
 </div>

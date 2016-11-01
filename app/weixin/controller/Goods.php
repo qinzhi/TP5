@@ -3,11 +3,40 @@ namespace app\weixin\controller;
 
 use app\common\model\Products;
 use think\Controller;
+use app\common\model\Goods as GoodsModel;
+use think\Request;
 
 class Goods extends Controller
 {
+
+    public $limit = 10;
     
     public function lists(){
+        $this->assign('limit',$this->limit);
+        return $this->fetch();
+    }
+
+    public function getGoodsList($field = '',$sort='desc',$keyword = ''){
+        if(!empty($field)){
+            $params['field'] = $field;
+            $params['sort'] = $sort;
+        }
+        $params['status'] = 1;//上架的商品
+        $params['keyword'] = $keyword;
+        $page = Request::instance()->request('page',1);
+        $offset = ($page - 1) * $this->limit;
+        $goodsModel = new GoodsModel();
+        $goodsList = $goodsModel->getGoodsList($params,$offset,$this->limit);
+        foreach ($goodsList as $key => &$val){
+            $val['cover_image'] = get_img($val['cover_image']);
+            $val['url'] = url('goods/detail',['id'=>$val['id']]);
+        }
+        $result['goodsNum'] = $goodsModel->getGoodsNum($params);
+        $result['goodsList'] = $goodsList;
+        return $result;
+    }
+
+    public function detail($id){
         return $this->fetch();
     }
 

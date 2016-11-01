@@ -36,4 +36,62 @@ class Order extends Model
                                 ->where('t.order_sn',$order_sn)->select();
         return $orders;
     }
+
+    public function getOrderList($params = [],$offset = 0,$limit = 10){
+        if(!empty($params['member_id'])){
+            $this->where('t.member_id',$params['member_id']);
+        }
+        $orders = $this->alias('t')->field('t.*,t1.*,t2.*,t3.cover_image,t3.unit')
+                        ->join(OrderProduct::TABLE_NAME . ' as t1','t.order_sn=t1.order_sn','left')
+                        ->join(OrderAddress::TABLE_NAME . ' as t2','t.order_sn=t2.order_sn','left')
+                        ->join(Goods::TABLE_NAME . ' as t3','t1.goods_id=t3.id','left')
+                        ->limit($offset,$limit)->select();
+        $orderList = [];
+        foreach ($orders as $order){
+            if(!isset($orderList[$order['order_sn']])){
+                $orderList[$order['order_sn']] = [
+                    'order_sn' => $order['order_sn'],
+                    'pay_sn' => $order['pay_sn'],
+                    'pay_type' => $order['pay_type'],
+                    'pay_time' => $order['pay_time'],
+                    'member_id' => $order['member_id'],
+                    'pay_price' => $order['pay_price'],
+                    'goods_num' => 0,
+                    'goods_amount' => $order['goods_amount'],
+                    'freight' => $order['freight'],
+                    'status' => $order['status'],
+                    'status_text' => $order->status_text,
+                    'send_status' => $order['send_status'],
+                    'receive_status' => $order['receive_status'],
+                    'evaluation_status' => $order['evaluation_status'],
+                    'consignee' => $order['consignee'],
+                    'mobile' => $order['mobile'],
+                    'area_info' => $order['area_info'],
+                    'add_time' => date('Y/m/d H:i',$order['add_time']),
+                ];
+            }
+            $orderList[$order['order_sn']]['goods_num'] += $order['product_buy_num']; //订单商品数量
+            $spec_str = $spec_key_str = '';
+            if(!empty($order['product_spec_array'])){
+                $spec_arr = json_decode($order['product_spec_array'],true);
+                foreach ($spec_arr as $val){
+                    $spec_str .= $val['value'] . '/';
+                    $spec_key_str .= $val['name'] . ':' . $val['value'] . '/';
+                }
+            }
+            $orderList[$order['order_sn']]['goods_list'][] = [
+                'name' => $order['goods_name'],
+                'spec_array' => $order['product_spec_array'],
+                'spec_str' => trim($spec_str,'/'),
+                'spec_key_str' => trim($spec_key_str,'/'),
+                'buy_num' => $order['product_buy_num'],
+                'sell_price' => $order['product_sell_price'],
+                'cost_price' => $order['product_cost_price'],
+                'freight' => $order['product_freight'],
+                'cover_image' => get_img($order['cover_image']),
+                'unit' => $order['unit'],
+            ];
+        }
+        return $orderList;
+    }
 }

@@ -9,6 +9,7 @@ function purchases(goods){
     this.goods_id = this.goods.data('id');
     this.goods_cover = this.goods.find('.product-img img').attr('src');
     this.goods_name = this.goods.find('.product_name').text();
+    this.goods_price = this.goods.data('price');
     this.properties = null;
     this.products = null;
     this.is_single = 0;
@@ -75,6 +76,7 @@ function purchases(goods){
                 var html = render({
                     goods_cover:this.goods_cover,
                     goods_name:this.goods_name,
+                    goods_price:this.goods_price,
                     is_single:this.is_single,
                     properties:this.properties
                 });
@@ -129,7 +131,7 @@ function purchases(goods){
                             }
                             $(this).parent().find('.selected').removeClass('selected');
                             $(this).addClass('selected');
-                            entity.setProductId();
+                            entity.showSelect().setProductId().chagePirce();
                         }
                     });
                 }
@@ -172,7 +174,26 @@ function purchases(goods){
             }
         });
     };
-
+    this.chagePirce = function () {
+        if(!this.is_single && this.product_id > 0){
+            for(var i=0;i<this.products.length;i++){
+                if(this.products[i].id == this.product_id){
+                    this.panel.find('.product_price').text(this.products[i].sell_price);
+                    return;
+                }
+            }
+        }
+    };
+    this.showSelect = function () {
+        if(!this.is_single){
+            var property = this.panel.find('.product_property');
+            property.html('已选择 ');
+            this.panel.find('.property-item.selected').each(function () {
+                property.html(property.html() + $(this).text() + ' ');
+            });
+        }
+        return this;
+    };
     this.setProductId = function () {
         if(!this.is_single){
             var spec = this.getSelectSpec();
@@ -188,13 +209,11 @@ function purchases(goods){
                     if(flag) break;
                 }
                 this.product_id = flag ? this.products[i].id : 0;
-                return this.product_id;
             }else{
-                return false;
+                this.product_id = 0;
             }
-        }else{
-            return this.product_id
         }
+        return this;
     };
     this.getProductId = function () {
         return this.product_id || 0;

@@ -3,16 +3,16 @@ namespace app\weixin\controller;
 
 use app\common\model\Products;
 use app\common\model\Cart as CartModel;
-use think\Controller;
 use think\Db;
 use think\Request;
 
-class Cart extends Controller
+class Cart extends Weixin
 {
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->member_id = 1;
+        $this->member_id = $this->member['id'];
+        $this->assign('nav_type',3);
     }
 
     public function index(){

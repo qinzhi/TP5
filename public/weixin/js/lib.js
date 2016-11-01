@@ -1,4 +1,11 @@
 $.extend({
+    getObjLen: function (obj) {
+        var len = 0;
+        $.each(obj,function () {
+            len++;
+        });
+        return len;
+    },
     setCookie : function(name,value)
     {
         var Days = 30;

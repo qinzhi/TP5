@@ -1,6 +1,7 @@
 {extend name="layout/base" /}
 {block name="quote-css"}
     <link href="__CSS__/index.css" rel="stylesheet" type="text/css">
+    <link href="__CSS__/goods.css" rel="stylesheet" type="text/css">
 {/block}
 {block name="page"}
     <div class="page" id="page-home">
@@ -47,8 +48,8 @@
                     <ul class="product-list clearfix">
                         {volist name="goods" id="vo"}
                             <li class="product-list-item" data-sku="{$vo.store_nums}" data-id="{$vo.id}"
-                                data-unit="{$vo.unit}" data-cart_num="{$vo.cart_num|default=0}" >
-                                <a class="flex" href="javascript:;">
+                                data-unit="{$vo.unit}">
+                                <a class="flex" href="{:url('goods/detail',['id'=>$vo['id']])}">
                                     <div class="product-img">
                                         <img src="{$vo.cover_image|get_img}">
                                     </div>
@@ -65,11 +66,11 @@
                                             </span>
                                             <span class="product-sell_num">已售{$vo.sale}{$vo.unit}</span>
                                         </div>
-                                        <div class="product-cart_add">
-                                            <i class="icon icon-add cart_add"></i>
-                                        </div>
                                     </div>
                                 </a>
+                                <div class="product-cart_add">
+                                    <i class="icon icon-gouwuche cart_add"></i>
+                                </div>
                             </li>
                         {/volist}
                     </ul>
@@ -80,30 +81,4 @@
             {include file="public:purchases"}
         </div>
     </div>
-{/block}
-{block name="js"}
-    <script>
-        $(function(){
-            var purchase = null;
-            $(window).resize(function(e){
-                if(!!purchase){
-                    var cur_win_height = $(this).height();
-                    if(purchase.panel.length >= 1 && purchase.win_height > cur_win_height){
-                        purchase.setHeight('100%');
-                    }else{
-                        purchase.setHeight('80%');
-                    }
-                }
-            });
-            $(document).on('click','.cart_add',function(){
-                purchase = new purchases($(this).closest('li'));
-                /*if(purchase.num > 0){
-                 purchase.setTips('正在加入购物车...').setNum(purchase.num + 1).updateCart();
-                 }else{
-                 purchase.create();
-                 }*/
-                purchase.create();
-            });
-        });
-    </script>
 {/block}

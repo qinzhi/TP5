@@ -10,7 +10,7 @@
                 <div class="empty-cart">
                     <i class="icon icon-cart"></i>
                     <p class="cart-tip">购物车空空的 赶快填饱它吧~</p>
-                    <a class="btn btn-primary btn-empty-cart" href="{:url('/weixin/category')}">去进货吧</a>
+                    <a class="btn btn-primary btn-empty-cart" href="{:url('/weixin/category')}">去逛逛吧</a>
                 </div>
             </section>
         </div>

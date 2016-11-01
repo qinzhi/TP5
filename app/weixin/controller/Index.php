@@ -2,7 +2,7 @@
 namespace app\weixin\controller;
 
 use app\admin\model\Banner;
-use app\weixin\model\Goods;
+use app\common\model\Goods;
 
 class Index extends Weixin
 {

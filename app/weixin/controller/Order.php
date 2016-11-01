@@ -5,6 +5,7 @@ use app\common\controller\Number;
 use app\common\model\Address;
 use app\common\model\Cart;
 use app\payment\service\WxPay;
+use app\common\model\Order as OrderModel;
 use think\Config;
 use think\Cookie;
 use think\Db;
@@ -15,6 +16,8 @@ class Order extends Weixin
 
     public $member_id;
 
+    public $limit = 10;
+
     public function __construct()
     {
         parent::__construct();
@@ -22,8 +25,17 @@ class Order extends Weixin
     }
 
     public function index(){
-        Config::set('url_common_param',true);
+        $this->assign('limit',$this->limit);
         return $this->fetch();
+    }
+
+    public function getOrderList(){
+        Config::set('url_common_param',true);
+        $orderModel = new OrderModel();
+        $params['member_id'] = $this->member_id;
+        $orderList = $orderModel->getOrderList($params);
+        $result['orderList'] = $orderList;
+        return $result;
     }
 
     public function create(){

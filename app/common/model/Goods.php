@@ -21,4 +21,28 @@ class Goods extends Model
     protected $insert = ['create_time', 'update_time'];
 
     protected $update = ['update_time'];
+
+    public function getGoodsList($params = [],$offset = 0,$limit = 10){
+        if(isset($params['status'])){
+            $this->where('status',$params['status']);
+        }
+        if(!empty($params['keyword'])){
+            $this->where('name','like','%'.$params['keyword'].'%');
+        }
+        if(!empty($params['field'])){
+            $this->order($params['field'],$params['sort']);
+        }
+        return $this->limit($offset,$limit)->select();
+    }
+
+    public function getGoodsNum($params = []){
+        if(isset($params['status'])){
+            $this->where('status',$params['status']);
+        }
+        if(!empty($params['keyword'])){
+            $this->where('name','like','%'.$params['keyword'].'%');
+        }
+        return $this->count();
+    }
+
 }
