@@ -1,6 +1,7 @@
 <?php
 namespace app\weixin\controller;
 
+use app\common\model\GoodsToImages;
 use app\common\model\Products;
 use think\Controller;
 use app\common\model\Goods as GoodsModel;
@@ -37,6 +38,8 @@ class Goods extends Controller
     }
 
     public function detail($id){
+        $images = GoodsToImages::where('goods_id',$id)->select();
+        $this->assign('images',$images);
         return $this->fetch();
     }
 
