@@ -82,6 +82,9 @@ class Weixin extends Controller
         }
 
         if(empty($this->member)){
+            Session::delete('openid');
+            Cookie::delete('openid');
+            self::_initialize();
             die('用户不存在');
         }elseif($this->member['status'] == 0){
             die('你的用户已被禁止访问');
