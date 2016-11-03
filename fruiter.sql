@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-10-26 17:48:21
+Date: 2016-11-03 17:58:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -4064,14 +4064,14 @@ CREATE TABLE `fruiter_cart` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `member_id,product_id` (`product_id`,`member_id`) USING BTREE,
   KEY `member_id` (`member_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='购物车';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='购物车';
 
 -- ----------------------------
 -- Records of fruiter_cart
 -- ----------------------------
-INSERT INTO `fruiter_cart` VALUES ('1', '3', '1', '1', '1');
-INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '0');
 INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('4', '3', '1', '3', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_checkin`
@@ -4098,6 +4098,24 @@ CREATE TABLE `fruiter_checkin` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `fruiter_favorite`
+-- ----------------------------
+DROP TABLE IF EXISTS `fruiter_favorite`;
+CREATE TABLE `fruiter_favorite` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `member_id` int(10) NOT NULL COMMENT '用户id',
+  `goods_id` int(10) NOT NULL COMMENT '商品id',
+  `add_time` int(10) NOT NULL COMMENT '收藏时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `member_id,goods_id` (`member_id`,`goods_id`) USING BTREE,
+  KEY `member_id` (`member_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='商品收藏表';
+
+-- ----------------------------
+-- Records of fruiter_favorite
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `fruiter_goods`
 -- ----------------------------
 DROP TABLE IF EXISTS `fruiter_goods`;
@@ -4112,6 +4130,7 @@ CREATE TABLE `fruiter_goods` (
   `sell_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '销售价格',
   `market_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '市场价格',
   `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '成本价格',
+  `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否新品 1.新品',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品状态 0下架 1上架',
   `up_time` int(10) DEFAULT NULL COMMENT '上架时间',
   `down_time` int(10) DEFAULT NULL COMMENT '下架时间',
@@ -4134,7 +4153,7 @@ CREATE TABLE `fruiter_goods` (
 -- ----------------------------
 -- Records of fruiter_goods
 -- ----------------------------
-INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '为发烧而生', 's0002', '0', '手机', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1800.00', '1999.00', '500.00', '1', '1475219625', '1475215415', '1475219625', '0', '36', '200.00', '件', '0', '0', '0', '0', '1', null);
+INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '为发烧而生', 's0002', '0', '手机', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1800.00', '1999.00', '500.00', '0', '1', '1475219625', '1475215415', '1478143473', '0', '30', '200.00', '件', '0', '0', '0', '0', '1', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_category`
@@ -4192,15 +4211,15 @@ CREATE TABLE `fruiter_goods_to_attr` (
   KEY `goods_id` (`goods_id`),
   KEY `model_id` (`model_id`),
   CONSTRAINT `fruiter_goods_to_attr_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=169 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_goods_to_attr
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_attr` VALUES ('161', '1', '2', '1', '134mm*67.2mm*9.4mm', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('162', '1', '2', '2', '1280 x 720', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('163', '1', '2', '3', '8核', '0');
-INSERT INTO `fruiter_goods_to_attr` VALUES ('164', '1', '2', '5', '4G', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('165', '1', '2', '1', '134mm*67.2mm*9.4mm', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('166', '1', '2', '2', '1280 x 720', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('167', '1', '2', '3', '8核', '0');
+INSERT INTO `fruiter_goods_to_attr` VALUES ('168', '1', '2', '5', '4G', '0');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_category`
@@ -4214,12 +4233,12 @@ CREATE TABLE `fruiter_goods_to_category` (
   KEY `category_id` (`category_id`) USING BTREE,
   KEY `goods_id` (`goods_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_category_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_category
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_category` VALUES ('42', '1', '1');
+INSERT INTO `fruiter_goods_to_category` VALUES ('43', '1', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_commend`
@@ -4233,13 +4252,13 @@ CREATE TABLE `fruiter_goods_to_commend` (
   KEY `goods_id` (`goods_id`) USING BTREE,
   KEY `commend_id` (`commend_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_commend_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8 COMMENT='推荐商品类型关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COMMENT='推荐商品类型关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_commend
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_commend` VALUES ('84', '1', '1');
-INSERT INTO `fruiter_goods_to_commend` VALUES ('85', '1', '2');
+INSERT INTO `fruiter_goods_to_commend` VALUES ('86', '1', '1');
+INSERT INTO `fruiter_goods_to_commend` VALUES ('87', '1', '2');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_detail`
@@ -4257,7 +4276,7 @@ CREATE TABLE `fruiter_goods_to_detail` (
 -- ----------------------------
 -- Records of fruiter_goods_to_detail
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	反应快啊</p>');
+INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	<img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301045243046.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046094054.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301045286210.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046148141.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046205786.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301045424589.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046292475.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046317763.jpg\" /></p>');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_images`
@@ -4270,12 +4289,12 @@ CREATE TABLE `fruiter_goods_to_images` (
   `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否封面图(1.封面图)',
   PRIMARY KEY (`id`),
   KEY `goods_id` (`goods_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_images
 -- ----------------------------
-INSERT INTO `fruiter_goods_to_images` VALUES ('32', '1', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1');
+INSERT INTO `fruiter_goods_to_images` VALUES ('33', '1', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_seo`
@@ -4363,22 +4382,30 @@ CREATE TABLE `fruiter_order` (
   `pay_sn` varchar(50) DEFAULT NULL COMMENT '支付流水号',
   `pay_type` tinyint(1) DEFAULT NULL COMMENT '支付类型1.微信支付',
   `pay_price` decimal(10,2) NOT NULL COMMENT '支付金额',
-  `payment_time` int(10) NOT NULL DEFAULT '0' COMMENT '支付时间 0.未支付',
+  `pay_time` int(10) NOT NULL DEFAULT '0' COMMENT '支付时间 0.未支付',
   `goods_amount` decimal(10,2) NOT NULL COMMENT '商品总金额',
   `freight` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态-1.已取消 0.未支付 1.已支付 2.已发货 3.已收货',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态-1.已取消 0.未支付 1.已支付 2.部分发货 3.已发货 4.部分收货 5.已收货',
+  `send_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '发货状态 1.部分发货 2.全部发货',
+  `send_time` int(10) DEFAULT NULL COMMENT '订单发货时间',
+  `receive_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '收货状态1.部分收货 2.全部收货',
+  `receive_time` int(10) DEFAULT NULL COMMENT '订单收货时间',
   `evaluation_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '评价状态 1.部分评价 2.全部评价',
+  `evaluation_time` int(10) DEFAULT NULL COMMENT '订单评价时间',
   `note` varchar(126) DEFAULT NULL COMMENT '买家留言',
+  `source` tinyint(1) NOT NULL DEFAULT '1' COMMENT '订单来源 1.微信商城',
+  `is_separate` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否拆单 0.不拆单',
   `add_time` int(10) NOT NULL COMMENT '订单生成时间',
   `finished_time` int(10) NOT NULL DEFAULT '0' COMMENT '完成时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `order_sn` (`order_sn`) USING BTREE,
   KEY `member_id` (`member_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 -- Records of fruiter_order
 -- ----------------------------
+INSERT INTO `fruiter_order` VALUES ('1', '1', '116102709545579563', null, '1', '1.00', '0', '1800.00', '0.00', '0', '0', null, '0', null, '0', null, '', '1', '0', '1477533295', '0');
 
 -- ----------------------------
 -- Table structure for `fruiter_order_address`
@@ -4395,11 +4422,12 @@ CREATE TABLE `fruiter_order_address` (
   `address` varchar(126) NOT NULL COMMENT '详细地址',
   `area_info` varchar(255) NOT NULL COMMENT '地区内容',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单地址表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='订单地址表';
 
 -- ----------------------------
 -- Records of fruiter_order_address
 -- ----------------------------
+INSERT INTO `fruiter_order_address` VALUES ('1', '116102709545579563', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园');
 
 -- ----------------------------
 -- Table structure for `fruiter_order_product`
@@ -4411,24 +4439,26 @@ CREATE TABLE `fruiter_order_product` (
   `product_id` int(10) NOT NULL COMMENT '产品id',
   `goods_id` int(10) NOT NULL COMMENT '商品id',
   `goods_name` varchar(50) NOT NULL COMMENT '商品名称',
-  `spec_array` text COMMENT 'json规格数据',
-  `buy_num` mediumint(8) NOT NULL COMMENT '购买数量',
-  `sell_price` decimal(10,2) NOT NULL COMMENT '销售价格',
-  `cost_price` decimal(10,2) NOT NULL COMMENT '成本价格',
-  `is_send` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发货',
-  `send_time` int(10) DEFAULT NULL COMMENT '发货时间',
-  `is_receive` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否收货 1.已收货',
-  `receive_time` int(10) DEFAULT NULL COMMENT '收货时间',
-  `logistics_id` smallint(3) DEFAULT NULL COMMENT '物流公司id',
-  `logistics_no` varchar(20) DEFAULT NULL COMMENT '物流单号',
-  `is_evaluation` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否评价 1.已评价',
-  `evaluation_time` int(10) DEFAULT NULL COMMENT '评价时间',
+  `product_spec_array` text COMMENT 'json规格数据',
+  `product_buy_num` mediumint(8) NOT NULL COMMENT '购买数量',
+  `product_sell_price` decimal(10,2) NOT NULL COMMENT '销售价格',
+  `product_cost_price` decimal(10,2) NOT NULL COMMENT '成本价格',
+  `product_freight` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
+  `product_is_send` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发货',
+  `product_send_time` int(10) DEFAULT NULL COMMENT '发货时间',
+  `product_is_receive` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否收货 1.已收货',
+  `product_receive_time` int(10) DEFAULT NULL COMMENT '收货时间',
+  `product_logistics_id` smallint(3) DEFAULT NULL COMMENT '物流公司id',
+  `product_logistics_no` varchar(20) DEFAULT NULL COMMENT '物流单号',
+  `product_is_evaluation` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否评价 1.已评价',
+  `product_evaluation_time` int(10) DEFAULT NULL COMMENT '评价时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='订单商品表';
 
 -- ----------------------------
 -- Records of fruiter_order_product
 -- ----------------------------
+INSERT INTO `fruiter_order_product` VALUES ('1', '116102709545579563', '3', '1', '小米手机', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"16G\"},{\"id\":2,\"name\":\"颜色\",\"type\":1,\"value\":\"红色\"}]', '1', '1800.00', '500.00', '0.00', '0', null, '0', null, null, null, '0', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_products`
