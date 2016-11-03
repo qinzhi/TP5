@@ -10,6 +10,7 @@ class Category extends Weixin
     }
 
     public function index(){
+        $this->assign('cartNum',$this->getCartNum());
         return $this->fetch();
     }
 }

@@ -45,4 +45,16 @@ class Goods extends Model
         return $this->count();
     }
 
+    /**
+     * 获取单个商品
+     * @param $id
+     * @return mixed
+     */
+    public function getGoodsById($id){
+        return $this->alias('t')
+                        ->join(GoodsToDetail::TABLE_NAME . ' t1','t1.goods_id=t.id','LEFT')
+                            ->join(GoodsToSeo::TABLE_NAME . ' t2','t2.goods_id=t.id','LEFT')
+                                ->where('t.id',$id)->find();
+    }
+
 }

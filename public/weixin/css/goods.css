@@ -313,9 +313,12 @@
 .collect{
     text-align: center;
     padding: 0 .25rem;
-    width: 50px;
+    min-width: 55px;
     border-left: 1px solid #ececec;
     cursor: pointer;
+}
+.collect.active i{
+    color: #ff655b;
 }
 .collect i{
     font-size: .85rem;
@@ -353,6 +356,7 @@
 }
 .product_evaluate{
     background-color: white;
+    padding-bottom: .5rem;
 }
 .product_evaluate h4{
     border-bottom: 1px solid #ececec;
@@ -393,6 +397,32 @@
 .btn-evaluate{
     margin: 0 auto;
     width: 5.5rem;
+}
+.product_describe{
+    margin-top: .35rem;
+}
+.product_describe .buttons-tab.fixed-tab{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255,255,255,.65);
+}
+.product_describe .buttons-tab .button.active{
+    border-color: #41c172;
+    color: #41c172;
+}
+.product_describe .tab{
+    padding-top: .35rem;
+    padding-bottom: .5rem;
+}
+.product_describe #tab-detail img{
+    width: 100%;
+    display: block;
+}
+.product_describe #tab-attr .list-block{
+    margin: 0;
+    font-size: .75rem;
 }
 .footer-goods_detail{
     padding: 0;

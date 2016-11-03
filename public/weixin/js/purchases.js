@@ -7,11 +7,12 @@ function purchases(goods){
     this.unit = this.goods.data('unit');
     this.num = parseInt(this.goods.data('cart_num')) || 1;
     this.goods_id = this.goods.data('id');
-    this.goods_cover = this.goods.find('.product-img img').attr('src');
+    this.goods_cover = this.goods.find('.product-img img').attr('src') || this.goods.data('img');
     this.goods_name = this.goods.find('.product_name').text();
     this.goods_price = this.goods.data('price');
     this.properties = null;
     this.products = null;
+    this.is_memory = this.goods.data('is_memory') || 0;
     this.is_single = 0;
     this.product_id = 0;
     this.section = null;
@@ -38,18 +39,16 @@ function purchases(goods){
     this.updateCart = function(){
         if(this.product_id){
             $.showPreloader(this.tips);
-            $.post('/weixin/cart/add',{product_id:this.product_id,num:this.num},function(result){
+            $.post(goods_url.cart_add,{product_id:this.product_id,num:this.num},function(result){
                 $.hidePreloader();
                 $.toast(result.msg,2000, 'top-80');
                 if(result.code == 1){
-                    entity.goods.attr('data-cart_num',result.num);
                     $('#cart_num').text(result.totalNum);
                 }
             });
             return this;
         }else{
-            this.exception();
-            return false;
+            return this.exception();
         }
     };
 
@@ -61,10 +60,16 @@ function purchases(goods){
 
     this.create = function(){
         $.ajax({
-            url: '/weixin/goods/getProductList',
+            url: goods_url.getProductList,
             type: 'post',
             data: {goods_id:this.goods_id},
             context: this,
+            beforeSend: function () {
+                $.showIndicator();
+            },
+            complete: function () {
+                $.hideIndicator();
+            },
             success: function(result){
 
                 this.is_single = result['is_single'];
@@ -83,6 +88,27 @@ function purchases(goods){
 
                 var page = entity.goods.closest('.page');
                 page.append(html);
+                if(this.is_memory){
+                    var sel_spec = entity.goods.data('sel_spec');
+                    if(sel_spec){
+                        sel_spec = JSON.parse(sel_spec);
+                        var product_property_type = page.find('.product-property-type');
+                        var property = $('.product_property');
+                        property.html('已选择 ');
+                        for(var i in sel_spec){
+                            if(sel_spec[i] != null && sel_spec[i]){
+                                property.html(property.html() + sel_spec[i] + ' ');
+                                var property_item = $(product_property_type.get(i)).find('.property-item');
+                                for(var j=0,jlen=property_item.length;j<jlen;j++){
+                                    if($(property_item[j]).text() == sel_spec[i]){
+                                        $(property_item[j]).addClass('selected');
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
                 entity.show();
 
@@ -99,6 +125,18 @@ function purchases(goods){
                     entity.panel.find('.property-item').bind('click',function () {
                         if(!$(this).hasClass('selected') && !$(this).hasClass('disabled')){
                             var index = $(this).closest('.product-property-type').index();
+
+                            if(entity.is_memory){
+                                var sel_spec = entity.goods.data('sel_spec');
+                                if(sel_spec){
+                                    sel_spec = JSON.parse(sel_spec);
+                                }else{
+                                    sel_spec = [];
+                                }
+                                sel_spec[index] = $(this).text();
+                                entity.goods.data('sel_spec',JSON.stringify(sel_spec));
+                            }
+
                             var val = $(this).text();
                             var box = [];
                             $(entity.products).each(function (i) {
@@ -186,7 +224,7 @@ function purchases(goods){
     };
     this.showSelect = function () {
         if(!this.is_single){
-            var property = this.panel.find('.product_property');
+            var property = $('.product_property');
             property.html('已选择 ');
             this.panel.find('.property-item.selected').each(function () {
                 property.html(property.html() + $(this).text() + ' ');
@@ -230,6 +268,7 @@ function purchases(goods){
             }
         });
         $.toast(msg);
+        return this;
     }
 
     this.getSelectSpec = function () {

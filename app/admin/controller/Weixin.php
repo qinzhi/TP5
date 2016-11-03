@@ -4,6 +4,7 @@ namespace app\admin\controller;
 
 use app\common\service\Wechat;
 use app\common\tools\Emotions;
+use think\Cache;
 use think\Request;
 
 class Weixin extends Admin {
@@ -23,6 +24,7 @@ class Weixin extends Admin {
             $data['button'] = $buttons;
 
             if(!empty($buttons) && $this->wechatService->createMenu($data) !== FALSE){
+                Cache::set('wx_menu',Wechat::json_encode($data),0);
                 return ['code' => 1,'msg' => '发布成功'];
             }else{
                 return ['code' => 0,'msg' => '发布失败'];
@@ -30,7 +32,14 @@ class Weixin extends Admin {
 
         }else{
 
-            $this->assign($this->wechatService->getMenu());
+            $menu = $this->wechatService->getMenu();
+            if($menu == false){
+                if(Cache::has('wx_menu'))
+                    $menu['menu'] = json_decode(Cache::get('wx_menu'),true);
+            }
+
+            $this->assign($menu);
+            $this->assign('emotions',Emotions::get_qq());
 
             $this->assign('emotions',Emotions::get_qq());
             return $this->fetch();

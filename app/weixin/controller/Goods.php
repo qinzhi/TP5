@@ -1,13 +1,14 @@
 <?php
 namespace app\weixin\controller;
 
+use app\common\model\GoodsToAttr;
 use app\common\model\GoodsToImages;
 use app\common\model\Products;
-use think\Controller;
 use app\common\model\Goods as GoodsModel;
+use think\Db;
 use think\Request;
 
-class Goods extends Controller
+class Goods extends Weixin
 {
 
     public $limit = 10;
@@ -38,9 +39,59 @@ class Goods extends Controller
     }
 
     public function detail($id){
+        $goodsModel = new GoodsModel();
+        $goods = $goodsModel->getGoodsById($id);
+        $this->assign('goods',$goods);
+
+        $product = Products::where('goods_id',$id)->find();
+        $this->assign('product',$product);
+
         $images = GoodsToImages::where('goods_id',$id)->select();
         $this->assign('images',$images);
+
+        $goodsAttrModel = new GoodsToAttr();
+        $attr = $goodsAttrModel->getGoodsAttr($id);
+        $this->assign('attr',$attr);
+
+        $favorite = Db::name('favorite')->where('member_id',$this->member['id'])->where('goods_id',$id)->find();
+        $this->assign('is_favorite',!empty($favorite)?:0);
+
+        $this->assign('cartNum',$this->getCartNum());
         return $this->fetch();
+    }
+
+    /**
+     * 收藏商品
+     */
+    public function collect($goods_id){
+        $goodsModel = new GoodsModel();
+        $goods = $goodsModel->getGoodsById($goods_id);
+        if(!empty($goods)){
+            $favorite = Db::name('favorite')->where('member_id',$this->member['id'])->where('goods_id',$goods_id)->find();
+            if(!empty($favorite)){
+                $result = Db::name('favorite')->where('member_id',$this->member['id'])->where('goods_id',$goods_id)->delete();
+                if($result){
+                    GoodsModel::where('id',$goods_id)->setDec('favorite');
+                    return ['code' => 1,'msg'=>'已取消收藏','label'=>'收藏','action' => 'cancel'];
+                }else{
+                    return ['code' => 0,'msg'=>'取消收藏失败','label'=>'收藏'];
+                }
+            }else{
+                $result = Db::name('favorite')->insert([
+                    'member_id' => $this->member['id'],
+                    'goods_id' => $goods_id,
+                    'add_time' => time(),
+                ]);
+                if($result){
+                    GoodsModel::where('id',$goods_id)->setInc('favorite');
+                    return ['code' => 1,'msg'=>'商品已收藏','label'=>'已收藏','action' => 'plus'];
+                }else{
+                    return ['code' => 0,'msg'=>'商品收藏失败','label'=>'已收藏'];
+                }
+            }
+        }else{
+            return ['code' => -1,'msg' => '商品不存在'];
+        }
     }
 
     public function getProductList($goods_id){

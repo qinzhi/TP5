@@ -33,6 +33,10 @@ class Cart extends Model{
         return $this->query($this->buildSql());
     }
 
+    public function getNum($member_id){
+        return $this->where('member_id',$member_id)->sum('cart_num');
+    }
+
     public function deleteByIds($ids){
         return $this->where('id','in',$ids)->delete();
     }

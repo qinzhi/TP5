@@ -46,7 +46,7 @@ class Cart extends Weixin
             $result = Db::name('cart')->where('member_id',$this->member_id)->where('product_id',$product_id)->setInc('cart_num',$num);
         }
         if($result){
-            return json(['code'=>1,'msg'=>'商品已添加至购物车']);
+            return json(['code'=>1,'msg'=>'商品已添加至购物车','totalNum' => $this->getCartNum()]);
         }else{
             return json(['code'=>-1,'msg'=>'添加失败']);
         }

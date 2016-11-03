@@ -18,6 +18,7 @@ class Index extends Weixin
 
         $this->assign('goods',$goods);
 
+        $this->assign('cartNum',$this->getCartNum());
         $this->assign('nav_type',1);
         return $this->fetch();
     }

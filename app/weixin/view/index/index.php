@@ -47,7 +47,7 @@
                 <div class="product-content">
                     <ul class="product-list clearfix">
                         {volist name="goods" id="vo"}
-                            <li class="product-list-item" data-sku="{$vo.store_nums}" data-id="{$vo.id}"
+                            <li class="product-list-item goods-info" data-sku="{$vo.store_nums}" data-id="{$vo.id}"
                                 data-unit="{$vo.unit}">
                                 <a class="flex" href="{:url('goods/detail',['id'=>$vo['id']])}">
                                     <div class="product-img">

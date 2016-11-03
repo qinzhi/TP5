@@ -4,6 +4,7 @@
  */
 namespace app\weixin\controller;
 
+use app\common\model\Cart;
 use app\common\model\Member;
 use app\common\service\Wechat;
 use app\common\tools\Str;
@@ -117,6 +118,11 @@ class Weixin extends Controller
         $wx['signature'] = sha1($data);//签名
 
         return $wx;
+    }
+
+    public function getCartNum(){
+        $cartModel = new Cart();
+        return $cartModel->getNum($this->member['id']);
     }
 
 }

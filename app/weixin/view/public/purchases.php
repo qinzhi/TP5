@@ -1,3 +1,9 @@
+<script>
+    var goods_url = {
+        'getProductList' : "{:url('goods/getProductList')}",
+        'cart_add' : "{:url('cart/add')}"
+    };
+</script>
 <script src="__JS__/purchases.js"></script>
 <script type="text/html" id="purchasesTpl">
     <section class="product-purchasing">
@@ -48,7 +54,7 @@
                 <i class="icon icon-cha action-close"></i>
             </div>
         </div>
-    </section>';
+    </section>
 </script>
 <script>
     $(function(){
@@ -64,7 +70,7 @@
             }
         });
         $(document).on('click','.cart_add',function(){
-            purchase = new purchases($(this).closest('li'));
+            purchase = new purchases($(this).closest('.goods-info'));
             /*if(purchase.num > 0){
              purchase.setTips('正在加入购物车...').setNum(purchase.num + 1).updateCart();
              }else{

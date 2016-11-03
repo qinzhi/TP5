@@ -13,4 +13,8 @@ class GoodsToAttr extends Model{
      */
     const TABLE_NAME = 'goods_to_attr';
 
+
+    public function getGoodsAttr($goods_id){
+        return $this->alias('t')->join(Attr::TABLE_NAME . ' as t1','t.attr_id=t1.id')->where('goods_id',$goods_id)->select();
+    }
 }

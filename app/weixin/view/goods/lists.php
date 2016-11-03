@@ -35,7 +35,7 @@
 {block name="js"}
 <script type="text/html" id="listTpl">
     {%each goodsList as goods%}
-        <li class="product-list-item" data-sku="{%goods.store_nums%}" data-id="{%goods.id%}"
+        <li class="product-list-item goods-info" data-sku="{%goods.store_nums%}" data-id="{%goods.id%}"
             data-unit="{%goods.unit%}" data-price="{%goods.sell_price%}">
             <a class="flex" href="{%goods.url%}">
                 <div class="product-img">
@@ -55,10 +55,10 @@
                         <span class="product-sell_num">已售{%goods.sale%}{%goods.unit%}</span>
                     </div>
                 </div>
-                <div class="product-cart_add">
-                    <i class="icon icon-gouwuche cart_add"></i>
-                </div>
             </a>
+            <div class="product-cart_add">
+                <i class="icon icon-gouwuche cart_add"></i>
+            </div>
         </li>
     {%/each%}
 </script>

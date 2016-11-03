@@ -47,13 +47,13 @@
                 <span class="control-group">
                     <div class="radio line-radio">
                         <label class="no-padding">
-                            <input name="status" type="radio" value="0" <?php echo isset($goods['status']) && $goods['status'] == 0?'checked':'';?>>
+                            <input name="status" type="radio" value="0" {$goods['status']==0?'checked':''}>
                             <span class="text">下架</span>
                         </label>
                     </div>
                     <div class="radio line-radio">
                         <label>
-                            <input name="status" type="radio" value="1"  <?php echo isset($goods['status']) && $goods['status'] == 1?'checked':'';?>}>
+                            <input name="status" type="radio" value="1"  {$goods['status']==1?'checked':''}>
                             <span class="text">上架</span>
                         </label>
                     </div>
