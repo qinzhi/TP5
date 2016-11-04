@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-11-03 17:58:05
+Date: 2016-11-03 20:56:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,7 +29,7 @@ CREATE TABLE `fruiter_address` (
   `county_id` mediumint(6) NOT NULL COMMENT '区/县id',
   `address` varchar(126) NOT NULL COMMENT '详细地址',
   `area_info` varchar(255) NOT NULL COMMENT '地区内容',
-  `is_default` enum('0','1') NOT NULL DEFAULT '0' COMMENT '1默认收货地址',
+  `is_default` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1.默认收货地址',
   `add_time` int(10) NOT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `member_id,is_default` (`member_id`,`is_default`) USING BTREE,
@@ -39,7 +39,7 @@ CREATE TABLE `fruiter_address` (
 -- ----------------------------
 -- Records of fruiter_address
 -- ----------------------------
-INSERT INTO `fruiter_address` VALUES ('12', '1', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园', '1', '1476077987');
+INSERT INTO `fruiter_address` VALUES ('12', '1', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园', '2', '1476077987');
 
 -- ----------------------------
 -- Table structure for `fruiter_admin`
@@ -3946,8 +3946,7 @@ CREATE TABLE `fruiter_attr` (
   `value` varchar(255) DEFAULT NULL,
   `sort` smallint(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `model_id` (`model_id`) USING BTREE,
-  CONSTRAINT `fruiter_attr_ibfk_1` FOREIGN KEY (`model_id`) REFERENCES `fruiter_model` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `model_id` (`model_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='属性表';
 
 -- ----------------------------
@@ -4064,14 +4063,15 @@ CREATE TABLE `fruiter_cart` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `member_id,product_id` (`product_id`,`member_id`) USING BTREE,
   KEY `member_id` (`member_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='购物车';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='购物车';
 
 -- ----------------------------
 -- Records of fruiter_cart
 -- ----------------------------
-INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '0');
-INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '1');
-INSERT INTO `fruiter_cart` VALUES ('4', '3', '1', '3', '1');
+INSERT INTO `fruiter_cart` VALUES ('2', '5', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '0');
+INSERT INTO `fruiter_cart` VALUES ('4', '3', '1', '3', '0');
+INSERT INTO `fruiter_cart` VALUES ('5', '3', '2', '1', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_checkin`
@@ -4348,12 +4348,13 @@ CREATE TABLE `fruiter_member` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `weixinopenid` (`openid`) USING BTREE,
   UNIQUE KEY `mobile` (`mobile`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_member
 -- ----------------------------
 INSERT INTO `fruiter_member` VALUES ('1', '啊秦智', null, 'http://wx.qlogo.cn/mmopen/Q3auHgzwzM6dkNLaHQBND38jBNUPmib8dxd6z6Pvh6DRrUks3AgmrmqSibv1RFMEQiaJ12p09M92JQt8zf14dwH4CZgEEo3eSXHxxmuhAEWPJU/0', '1', null, null, null, null, null, '0', '1477383456', null, null, null, null, 'ooRHgvi8QVqAVsFm4IvyokDv2U8E', '{\"subscribe\":1,\"openid\":\"ooRHgvi8QVqAVsFm4IvyokDv2U8E\",\"nickname\":\"啊秦智\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"长沙\",\"province\":\"湖南\",\"country\":\"中国\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/Q3auHgzwzM6dkNLaHQBND38jBNUPmib8dxd6z6Pvh6DRrUks3AgmrmqSibv1RFMEQiaJ12p09M92JQt8zf14dwH4CZgEEo3eSXHxxmuhAEWPJU\\/0\",\"subscribe_time\":1477385292,\"remark\":\"\",\"groupid\":0,\"tagid_list\":[]}', null, '0', '1', '1477385292', '1', '0', '1');
+INSERT INTO `fruiter_member` VALUES ('2', '[小Z] 临猗苹果 15874236902', null, 'http://wx.qlogo.cn/mmopen/KetjXWSVppsJ9bOXVtRgSqrk9hyMqWibJ3AdzCfxPVH5ozdEOCB76WktuIQWyZxRYVIlZhZAkibjN5SXFWwh3GyoMIMEf2ex3x/0', '2', null, null, null, null, null, '0', '1478177147', null, null, null, null, 'ooRHgvl4dQj37S9Jjwtm4mb5OcJs', '{\"openid\":\"ooRHgvl4dQj37S9Jjwtm4mb5OcJs\",\"nickname\":\"[小Z] 临猗苹果 15874236902\",\"sex\":2,\"language\":\"zh_CN\",\"city\":\"Changsha\",\"province\":\"Hunan\",\"country\":\"CN\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/KetjXWSVppsJ9bOXVtRgSqrk9hyMqWibJ3AdzCfxPVH5ozdEOCB76WktuIQWyZxRYVIlZhZAkibjN5SXFWwh3GyoMIMEf2ex3x\\/0\",\"privilege\":[]}', null, '0', '0', null, '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_model`

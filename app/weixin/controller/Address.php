@@ -53,7 +53,7 @@ class Address extends Controller
         if(empty($address)){
             return json(['code'=>-1,'msg'=>'详细地址不能为空']);
         }
-        $is_default = Request::instance()->request('is_default','','boolval');
+        $is_default = Request::instance()->request('is_default',0,'boolval');
         if($is_default){
             $addressModel->clearDefault();
         }else{
