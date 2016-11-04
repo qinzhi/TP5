@@ -7,7 +7,6 @@ use app\common\model\Goods;
 class Index extends Weixin
 {
     public function index(){
-        /*D('Common/Wechat','Service');*/
         $bannerModel = new Banner();
         $banners = $bannerModel->getBannersByPositionId(1);
         $this->assign('banners',$banners);

@@ -113,7 +113,7 @@
                     <p class="evaluate_content">苹果压坏了5个</p>
                 </li>
             </ul>
-            <a class="button button-warning btn-evaluate">查看全部评论</a>
+            <a class="button button-warning btn-evaluate" href="{:url('evaluate/index',['goods_id'=>$goods['id']])}">查看全部评论</a>
         </div>
         <div class="product_describe">
             <div class="buttons-tab">

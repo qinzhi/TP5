@@ -8,11 +8,25 @@
         <a class="button button-link button-nav pull-left back" href="{:url('member/index')}">
             <span class="icon icon-left"></span>
         </a>
-        <h1 class="title">全部订单</h1>
+        <h1 class="title"><a href="javascript:;" class="open-popover" data-popover=".popover-order_status">全部订单(0)</a><span class="icon icon-down"></span></h1>
     </header>
+
     <div class="content">
         <div class="list-block cards-list">
             <ul class="order-list"></ul>
+        </div>
+    </div>
+</div>
+<div class="popover popover-order_status">
+    <div class="popover-angle"></div>
+    <div class="popover-inner">
+        <div class="list-block">
+            <ul>
+                <li><a href="javascript:;" class="list-button item-link close-popover">待支付(0)</a></li>
+                <li><a href="javascript:;" class="list-button item-link close-popover">待发货(0)</a></li>
+                <li><a href="javascript:;" class="list-button item-link close-popover">待收货(0)</a></li>
+                <li><a href="javascript:;" class="list-button item-link close-popover">待评价(0)</a></li>
+            </ul>
         </div>
     </div>
 </div>

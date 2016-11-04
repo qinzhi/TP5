@@ -194,3 +194,6 @@
     font-size: .85rem;
     color: #808080;
 }
+.popover-order_status a.list-button.item-link{
+    color: #ff6600;
+}
