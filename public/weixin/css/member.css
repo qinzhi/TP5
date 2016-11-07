@@ -20,6 +20,8 @@
     width: 100%;
     border: .1rem solid #41c172;
     border-radius: 50%;
+    -moz-border-radius: 50%; /* Firefox */
+    -webkit-border-radius: 50%; /* Safari 和 Chrome */
 }
 .me-box .me-name{
     margin-top: .25rem;
