@@ -43,26 +43,26 @@
             </div>
             <div class="list-box flex">
                 <div class="order-status flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('order/index',['status'=>1])}">
                         <i class="icon icon-daifukuan"></i>
                         <p class="order-status-name">待付款</p>
                         <i class="badge badge-danger order-count">1</i>
                     </a>
                 </div>
                 <div class="order-status flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('order/index',['status'=>2])}">
                         <i class="icon icon-daifahuo"></i>
                         <p>待发货</p>
                     </a>
                 </div>
                 <div class="order-status flex-1">
-                    <a href="javascript:;">
-                        <i class="icon icon-shizhong"></i>
+                    <a href="{:url('order/index',['status'=>3])}">
+                        <i class="icon icon-daishouhuo"></i>
                         <p>待收货</p>
                     </a>
                 </div>
                 <div class="order-status flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('order/index',['status'=>4])}">
                         <i class="icon icon-daipingjia"></i>
                         <p>待评价</p>
                     </a>
