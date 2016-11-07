@@ -66,14 +66,14 @@
 }
 .cart-list .goods-name{
     margin-top: .2rem;
-    font-size: .85rem;
+    font-size: .75rem;
 }
 .cart-list .goods-price{
     font-size: .75rem;
     color: #ff655b;
 }
 .cart-list .goods-spec{
-    font-size: .7rem;
+    font-size: .65rem;
     color: #999;
 }
 .cart-list .amount-input{
