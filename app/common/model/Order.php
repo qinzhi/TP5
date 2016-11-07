@@ -41,6 +41,12 @@ class Order extends Model
         if(!empty($params['member_id'])){
             $this->where('t.member_id',$params['member_id']);
         }
+        if(isset($params['status'])){
+            $this->where('t.status',$params['status']);
+        }
+        if(isset($params['evaluation_status'])){
+            $this->where('t.evaluation_status',$params['evaluation_status']);
+        }
         $orders = $this->alias('t')->field('t.*,t1.*,t2.*,t3.cover_image,t3.unit')
                         ->join(OrderProduct::TABLE_NAME . ' as t1','t.order_sn=t1.order_sn','left')
                         ->join(OrderAddress::TABLE_NAME . ' as t2','t.order_sn=t2.order_sn','left')
@@ -93,5 +99,14 @@ class Order extends Model
             ];
         }
         return $orderList;
+    }
+
+    public function getOrderStatusCount(){
+        $count = $this->field('count(*) as count,
+                            count(status=0) as no_pay_count,
+                            count(status=1 or status=2 or null) as pay_count,
+                            count(status=3 or null) as receive_count,
+                            count(status=5 or null) as evaluation_count')->find();
+        return $count;
     }
 }

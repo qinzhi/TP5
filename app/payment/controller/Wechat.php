@@ -8,6 +8,7 @@ use app\common\model\Order;
 use app\payment\service\WxPay;
 use app\weixin\controller\Weixin;
 use think\Controller;
+use think\Cookie;
 use think\Log;
 use think\Request;
 
@@ -33,6 +34,9 @@ class Wechat extends Controller {
             $this->assign('order',$order);
 
             $openid = Request::instance()->request('openid');
+            if(empty($openid)){
+                $openid = Cookie::get('openid');
+            }
 
             $wxPayService = new WxPay();
             if(empty($openid)){

@@ -90,6 +90,7 @@ class Weixin extends Controller
             die('你的用户已被禁止访问');
         }
 
+        $this->assign('openid',$this->openid);
         $this->assign('member',$this->member);
     }
 

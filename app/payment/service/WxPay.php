@@ -138,7 +138,7 @@ class WxPay{
             return $openid;
         }
 
-        $wechatService = new Wechat($this->token,$this->appid,$this->appsecret,$this->encodingAesKey);
+        $wechatService = new Wechat($this->token,$this->appid,$this->secret,$this->encodingAesKey);
         //通过code获得openid
         if (!isset($_GET['code'])){
             //触发微信返回code码

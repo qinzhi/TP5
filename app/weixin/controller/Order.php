@@ -10,6 +10,7 @@ use think\Config;
 use think\Cookie;
 use think\Db;
 use think\Log;
+use think\Request;
 
 class Order extends Weixin
 {
@@ -25,14 +26,63 @@ class Order extends Weixin
     }
 
     public function index(){
+
+        $orderModel = new OrderModel();
+        $count = $orderModel->getOrderStatusCount();
+        $this->assign('count',$count);
+
+        $status = Request::instance()->request('status/d',0);
+        switch ($status){
+            case 0:{//全部订单
+                $title = "全部订单({$count['count']})";
+                break;
+            }
+            case 1:{//待支付
+                $title = "待支付({$count['no_pay_count']})";
+                break;
+            }
+            case 2:{//待发货
+                $title = "待发货({$count['pay_count']})";
+                break;
+            }
+            case 3:{//待收货
+                $title = "待收货({$count['receive_count']})";
+                break;
+            }
+            case 4:{//待评价
+                $title = "待评价({$count['evaluation_count']})";
+                break;
+            }
+        }
+        $this->assign('title',$title);
         $this->assign('limit',$this->limit);
         return $this->fetch();
     }
 
     public function getOrderList(){
-        Config::set('url_common_param',true);
         $orderModel = new OrderModel();
         $params['member_id'] = $this->member_id;
+        $status = Request::instance()->request('status/d',0);
+        switch ($status){
+            case 0:{break;}//全部订单
+            case 1:{//待支付
+                $params['status'] = 0;
+                break;
+            }
+            case 2:{//待发货
+                $params['status'] = 1;
+                break;
+            }
+            case 3:{//待收货
+                $params['status'] = 3;
+                break;
+            }
+            case 4:{//待评价
+                $params['status'] = 5;
+                $params['evaluation_status'] = 0;
+                break;
+            }
+        }
         $orderList = $orderModel->getOrderList($params);
         $result['orderList'] = $orderList;
         return $result;

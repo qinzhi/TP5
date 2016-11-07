@@ -57,6 +57,12 @@
                 </div>
                 <div class="order-status flex-1">
                     <a href="javascript:;">
+                        <i class="icon icon-shizhong"></i>
+                        <p>待收货</p>
+                    </a>
+                </div>
+                <div class="order-status flex-1">
+                    <a href="javascript:;">
                         <i class="icon icon-daipingjia"></i>
                         <p>待评价</p>
                     </a>
