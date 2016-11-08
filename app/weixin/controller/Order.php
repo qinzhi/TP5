@@ -139,7 +139,7 @@ class Order extends Weixin
             ];
             $addressModel = new Address($this->member_id);
             $address = $addressModel->getAddressById($address_id)->member_id;
-            if(!empty($address)){
+            if(empty($address)){
                 $address = $addressModel->getDefault()->member_id;
                 if(empty($address)){
                     return ['code' => 0,'msg' => '收货地址不能为空'];
@@ -158,6 +158,7 @@ class Order extends Weixin
             // 启动事务
             Db::startTrans();
             try{
+                Log::record($arr_product);
                 $order_status = Db::name('order')->insert($arr_order);
                 $address_status = Db::name('order_address')->insert($arr_address);
                 $product_status = Db::name('order_product')->insertAll($arr_product);
@@ -171,6 +172,8 @@ class Order extends Weixin
                     $params['ordersn'] = $ordersn;
                     $params['openid'] = $this->openid;
                     return ['code' => 1,'msg' => '订单创建成功','url'=>url('/payment/wechat/index') . '?' . http_build_query($params)];
+                }else{
+                    return ['code' => 0,'msg'=>'订单创建失败'];
                 }
             } catch (\Exception $e) {
                 // 回滚事务
