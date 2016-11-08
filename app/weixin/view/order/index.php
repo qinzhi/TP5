@@ -153,6 +153,7 @@
         $(document).on('infinite', '.infinite-scroll',function() {
             order.getList();
         });
+
         $('#filtrate').keydown(function (e) {
             if(e.keyCode == 13){
                 var keyword = $(this).val().trim();

@@ -30,7 +30,7 @@ class Goods extends Weixin
         $goodsModel = new GoodsModel();
         $goodsList = $goodsModel->getGoodsList($params,$offset,$this->limit);
         foreach ($goodsList as $key => &$val){
-            $val['cover_image'] = get_img($val['cover_image']);
+            $val['cover_image'] = get_img_url($val['cover_image']);
             $val['url'] = url('goods/detail',['id'=>$val['id']]);
         }
         $result['goodsNum'] = $goodsModel->getGoodsNum($params);

@@ -1,6 +1,6 @@
 {extend name="layout/base" /}
 {block name="quote-css"}
-    <link href="__CSS__/member.css" rel="stylesheet" type="text/css">
+<link href="__CSS__/member.css" rel="stylesheet" type="text/css">
 {/block}
 {block name="page"}
 <div class="page page-order_create" id="page-member_index">
@@ -12,19 +12,19 @@
         <section class="me-box">
             <div class="me-avatar">
                 <div class="img-border">
-                    <img src="{$member.avator}"/>
+                    <img src="{$member.avator|wx_headimgurl=###,96}"/>
                 </div>
                 <p class="me-name">啊秦智</p>
             </div>
             <div class="me-asset flex">
                 <div class="me-coupon flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('integral/index')}">
                         <p class="num">0</p>
                         <p class="name">积分</p>
                     </a>
                 </div>
                 <div class="me-wallet flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('recharge/index')}">
                         <p class="num">0</p>
                         <p class="name">余额</p>
                     </a>
@@ -77,7 +77,7 @@
                 </a>
             </div>
             <div class="center_inner me-order">
-                <a href="javascript:;" class="flex">
+                <a href="{:url('collect/index')}" class="flex">
                     <div class="inner-name">我的收藏</div>
                     <div class="text-right inner-icon flex-1">
                         <i class="icon icon-right"></i>

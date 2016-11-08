@@ -197,3 +197,6 @@
 .popover-order_status a.list-button.item-link{
     color: #ff6600;
 }
+.popover-order_status a.list-button.item-link:active{
+    background-color: #fafafa;
+}

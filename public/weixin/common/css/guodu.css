@@ -85,6 +85,7 @@ p{margin: 0}
 .bar.bar-nav a,.bar.bar-nav a:active{color: #ffffff;}
 .bar.bar-nav .icon{line-height: 2.2rem}
 .bar.bar-nav .icon-down{margin-left: .15rem;top: .15rem;font-size: .85rem}
+.search-input .icon{font-size: .8rem}
 .bar-nav .title{background-color: #41c172;color: #ffffff;}
 .bar-tab .tab-item.active, .bar-tab .tab-item:active{color: #41c172;}
 .buttons-tab .button.active{border-color: #41c172;color: #41c172;}
@@ -154,7 +155,7 @@ vertical-align: middle;white-space: nowrap;}
     clear: both
 }
 .top-80{top: 80%;}
-.loaded-tip{line-height: 1.6rem;background-color: #f0f4f0;display: none;margin-top: .25rem;}
+.loaded-tip{line-height: 1.6rem;display: none;margin-top: .5rem;font-size: .65rem}
 .bar.bar-footer-secondary{
     bottom: 2.5rem;
 }

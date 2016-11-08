@@ -94,7 +94,7 @@ class Order extends Model
                 'sell_price' => $order['product_sell_price'],
                 'cost_price' => $order['product_cost_price'],
                 'freight' => $order['product_freight'],
-                'cover_image' => get_img($order['cover_image']),
+                'cover_image' => get_img_url($order['cover_image']),
                 'unit' => $order['unit'],
             ];
         }

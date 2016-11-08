@@ -35,7 +35,7 @@
                             </div>
                         </label>
                         <div class="goods-img">
-                            <img src="{$vo.cover_image|get_img}">
+                            <img src="{$vo.cover_image|get_img_url}">
                         </div>
                         <div class="goods-info flex-1">
                             <h3 class="goods-name">{$vo.name}</h3>

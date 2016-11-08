@@ -1,11 +1,25 @@
 <?php
 /**
+ * 获取图片绝对地址
+ * @param $src
+ * @return string
+ */
+function get_img_url($src){
+    return config('resource_url') . $src;
+}
+
+/**
  * 获取图片绝对路径
  * @param $src
  * @return string
  */
-function get_img($src){
+function get_img_path($src){
     return config('resource_path') . $src;
+}
+
+function wx_headimgurl($img_src,$type){
+    $img_src = substr($img_src,0,strlen($img_src) - 1);
+    return $img_src . $type;
 }
 
 /**

@@ -7,7 +7,7 @@
 {/block}
 {block name="page"}
 <div class="page page-goods goods-info" id="page-goods_detail" data-id="{$goods.id}"
-     data-price="{$goods.sell_price}" data-img="{$goods.cover_image|get_img}" data-is_memory="1">
+     data-price="{$goods.sell_price}" data-img="{$goods.cover_image|get_img_url}" data-is_memory="1">
     <!--<header class="bar bar-nav">
         <a class="button button-link button-nav pull-left back" href="javascript:history.go(-1);">
             <span class="icon icon-left"></span>
@@ -35,7 +35,7 @@
             <div class="swiper-wrapper">
                 {volist name="images" id="vo"}
                     <div class="swiper-slide">
-                        <img class="swiper-img" src="{$vo.image|get_img}"/>
+                        <img class="swiper-img" src="{$vo.image|get_img_url}"/>
                     </div>
                 {/volist}
             </div>
