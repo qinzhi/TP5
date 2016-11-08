@@ -120,10 +120,11 @@ class Order extends Weixin
                     'product_id' => $product['product_id'],
                     'goods_id' => $product['goods_id'],
                     'goods_name' => $product['name'],
-                    'spec_array' => $product['spec_array'],
-                    'buy_num' => $product['cart_num'],
-                    'sell_price' => $product['sell_price'],
-                    'cost_price' => $product['cost_price'],
+                    'product_spec_array' => $product['spec_array'],
+                    'product_buy_num' => $product['cart_num'],
+                    'product_sell_price' => $product['sell_price'],
+                    'product_cost_price' => $product['cost_price'],
+                    'product_freight' => $product['freight'],
                 ];
             }
             $arr_order = [
@@ -157,7 +158,6 @@ class Order extends Weixin
             // 启动事务
             Db::startTrans();
             try{
-                Log::record($arr_product);
                 $order_status = Db::name('order')->insert($arr_order);
                 $address_status = Db::name('order_address')->insert($arr_address);
                 $product_status = Db::name('order_product')->insertAll($arr_product);
@@ -175,6 +175,7 @@ class Order extends Weixin
                     return ['code' => 0,'msg'=>'订单创建失败'];
                 }
             } catch (\Exception $e) {
+                Log::error('创建订单异常： ' . $e->getMessage());
                 // 回滚事务
                 Db::rollback();
             }
