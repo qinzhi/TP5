@@ -1,5 +1,54 @@
 /********************* address/index *****************************/
-
+#page-address_list .content .product-img{
+    width: 3.5rem;
+    height: 3.5rem;
+}
+#page-address_list .card-footer{
+    padding: 0;
+}
+#page-address_list .card-footer > div{
+    text-align: center;
+    height: 1.8rem;
+    line-height: 1.8rem;
+}
+#page-address_list .card-footer > div a{
+    display: inline-block;
+    width: 100%;
+    border-left: 1px solid #e1e1e1;
+}
+#page-address_list .card-footer > div a:last-child{
+    border-right: 0;
+}
+#page-address_list .card-content-inner{
+    padding: .5rem;
+}
+#page-address_list .card-footer{
+    min-height: 1.8rem;
+}
+#page-address_list .bar-footer{
+    padding: 0;
+}
+#page-address_list .label-checkbox{
+    position: absolute;
+    right: .5rem;
+    top: 50%;
+    margin-top: -.55rem;
+}
+#page-address_list .btn-add{
+    background-color: #41c172;
+    border-radius: 0;
+    height: 2.2rem;
+    line-height: 2.2rem;
+    top: 0;
+}
+.card .btn-card_primary{
+    background-color: #c0c0c0;/*#41c172;*/
+    color: white;
+}
+.card .btn-card_danger{
+    background-color: #c0c0c0;/*#f6383a;*/
+    color: white;
+}
 /********************* address-panel *****************************/
 .all-shade{
     position: fixed;

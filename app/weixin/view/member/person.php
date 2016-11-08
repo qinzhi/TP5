@@ -34,7 +34,7 @@
                     <a class="item-content item-link" href="{:url('address/index')}">
                         <div class="item-inner">
                             <div class="item-title">收货地址</div>
-                            <div class="item-after"><span class="badge badge-danger">2</span></div>
+                            <div class="item-after"><span class="badge badge-danger">{$addressNum}</span></div>
                         </div>
                     </a>
                 </li>

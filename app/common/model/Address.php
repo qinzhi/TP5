@@ -23,10 +23,15 @@ class Address extends Model{
 
     /**
      * 获取用户收货地址列表
+     * @param int $limit
      * @return mixed
      */
-    public function getList(){
-        return $this->query($this->where('member_id',$this->member_id)->order(['is_default desc','id desc'])->buildSql());
+    public function getList($limit = 20){
+        return $this->query($this->where('member_id',$this->member_id)->limit($limit)->order(['is_default desc','id desc'])->buildSql());
+    }
+    
+    public function getNum(){
+        return $this->where('member_id',$this->member_id)->count();
     }
 
     /**

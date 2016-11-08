@@ -124,7 +124,6 @@ class Order extends Weixin
                     'product_buy_num' => $product['cart_num'],
                     'product_sell_price' => $product['sell_price'],
                     'product_cost_price' => $product['cost_price'],
-                    'product_freight' => $product['freight'],
                 ];
             }
             $arr_order = [

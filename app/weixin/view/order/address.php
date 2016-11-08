@@ -119,7 +119,7 @@
     $(function () {
         var url = {
             save: '/weixin/address/save',
-            getList: '/weixin/address/get',
+            getList: '/weixin/address/getList',
             del: '/weixin/address/del'
         };
         var address = {

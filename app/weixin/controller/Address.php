@@ -11,6 +11,8 @@ use app\common\model\Address as AddressModel;
 class Address extends Weixin
 {
 
+    public $limit = 20; //最多添加20条收货地址
+
     public $member_id;
 
     public function __construct(Request $request)
@@ -21,12 +23,22 @@ class Address extends Weixin
     }
 
     public function index(){
+        $addressList = $this->getList();
+        $this->assign('addressList',$addressList);
+        return $this->fetch();
+    }
+    
+    public function add(){
         return $this->fetch();
     }
 
-    public function get(){
+    public function edit($id){
+        return $this->fetch();
+    }
+
+    public function getList(){
         $addressModel = new AddressModel($this->member_id);
-        $address = $addressModel->getList();
+        $address = $addressModel->getList($this->limit);
         return $address;
     }
 
@@ -37,7 +49,11 @@ class Address extends Weixin
         if(isset($address->member_id) && $address->member_id['id'] == $address_id){
             $addressModel->setDefault();
         }
-        return $result;
+        if($result){
+            return ['code' => 1,'msg' => '删除成功'];
+        }else{
+            return ['code' => 1,'msg' => '删除失败'];
+        }
     }
 
     public function save(){
@@ -88,13 +104,18 @@ class Address extends Weixin
                 return json(['code'=>-1,'msg'=>'更新失败']);
             }
         }else{//添加
-            $data['member_id'] = $this->member_id;
-            $data['add_time'] = time();
-            $addressModel->data($data)->save();
-            if($addressModel->id > 0){
-                return json(['code'=>1,'msg'=>'添加成功','address_id'=> $addressModel->id]);
+            $num = $addressModel->getNum();
+            if($num < $this->limit){
+                $data['member_id'] = $this->member_id;
+                $data['add_time'] = time();
+                $addressModel->data($data)->save();
+                if($addressModel->id > 0){
+                    return json(['code'=>1,'msg'=>'添加成功','address_id'=> $addressModel->id]);
+                }else{
+                    return json(['code'=>-1,'msg'=>'添加失败']);
+                }
             }else{
-                return json(['code'=>-1,'msg'=>'添加失败']);
+                return json(['code'=>-1,'msg'=>'最多添加20条收货地址']);
             }
         }
     }

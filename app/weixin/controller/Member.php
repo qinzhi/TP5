@@ -4,6 +4,7 @@ namespace app\weixin\controller;
 
 
 
+use app\common\model\Address;
 use app\common\model\Order;
 
 class Member extends Weixin  {
@@ -22,6 +23,9 @@ class Member extends Weixin  {
     }
 
     public function person(){
+        $addressModel = new Address($this->member['id']);
+        $addressNum = $addressModel->getNum();
+        $this->assign('addressNum',$addressNum);
         return $this->fetch();
     }
 }
