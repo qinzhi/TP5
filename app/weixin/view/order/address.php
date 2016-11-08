@@ -306,8 +306,8 @@
                 $(target).remove();
                 if(ul.find('li').length > 0){
                     if(checked){
-                        var li = ul.find('li').find('input[name="address_id"]').get(0);
-                        li.checked = true;
+                        var li = ul.find('li').get(0);
+                        li..find('input[name="address_id"]').get(0).checked = true;
                         var data = {
                             address_id: $(li).data('id'),
                             consignee: $(li).find('.consignee').text().trim(),

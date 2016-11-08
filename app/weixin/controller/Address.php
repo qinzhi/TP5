@@ -5,6 +5,7 @@
 namespace app\weixin\controller;
 
 use think\Db;
+use think\Log;
 use think\Request;
 use app\common\model\Address as AddressModel;
 

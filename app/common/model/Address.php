@@ -62,6 +62,6 @@ class Address extends Model{
 
     //清除用户默认地址
     public function clearDefault(){
-        return $this->where('member_id',$this->member_id)->update(['is_default' => 0]);;
+        return $this->where('member_id',$this->member_id)->where('is_default',1)->update(['is_default' => 0]);
     }
 }
