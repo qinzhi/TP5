@@ -6,7 +6,12 @@
 {block name="page"}
     <div class="page" id="page-home">
         <header class="bar bar-nav">
-            <h1 class="title">果度商城</h1>
+            <div class="searchbar">
+                <div class="search-input">
+                    <label class="icon icon-fangdajing" for="filtrate"></label>
+                    <input id="filtrate" placeholder="搜索商品" type="search">
+                </div>
+            </div>
         </header>
         {include file="layout:footer"/}
         <div class="content">
@@ -16,7 +21,7 @@
                     {volist name="banners" id="vo"}
                         <div class="swiper-slide">
                             <a href="{$vo.link}">
-                                <img class="swiper-img" src="{$vo.image|get_img}"/>
+                                <img class="swiper-img" src="{$vo.image|get_img_url}"/>
                             </a>
                         </div>
                     {/volist}
@@ -48,10 +53,10 @@
                     <ul class="product-list clearfix">
                         {volist name="goods" id="vo"}
                             <li class="product-list-item goods-info" data-sku="{$vo.store_nums}" data-id="{$vo.id}"
-                                data-unit="{$vo.unit}">
+                                data-unit="{$vo.unit}" data-price="{$vo.sell_price}">
                                 <a class="flex" href="{:url('goods/detail',['id'=>$vo['id']])}">
                                     <div class="product-img">
-                                        <img src="{$vo.cover_image|get_img}">
+                                        <img src="{$vo.cover_image|get_img_url}">
                                     </div>
                                     <div class="product-info flex-1">
                                         <h3 class="product_name">{$vo.name}</h3>
@@ -81,4 +86,16 @@
             {include file="public:purchases"}
         </div>
     </div>
+{/block}
+{block name="js"}
+<script>
+    $(function () {
+        $('#filtrate').keydown(function (e) {
+            if(e.keyCode == 13){
+                var keyword = $(this).val().trim();
+                goods.reset().setKeyword(keyword).getList();
+            }
+        });
+    });
+</script>
 {/block}

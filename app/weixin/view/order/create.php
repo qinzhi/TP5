@@ -1,6 +1,7 @@
 {extend name="layout/base" /}
 {block name="quote-css"}
     <link href="__CSS__/order.css" rel="stylesheet" type="text/css">
+    <link href="__CSS__/address.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="__LIGHT7__/css/light7-swipeout.css">
 {/block}
 {block name="page"}
@@ -40,7 +41,7 @@
                         {volist name='products' id='product'}
                             <?php $total_num+= $product['cart_num'];$total_price+= ($product['sell_price'] * $product['cart_num']);?>
                             <li class="item-content">
-                                <div class="item-media"><img src="{$product.cover_image|get_img}" style='width: 4rem;height: 4rem;'></div>
+                                <div class="item-media"><img src="{$product.cover_image|get_img_url}" style='width: 4rem;height: 4rem;'></div>
                                 <div class="item-inner">
                                     <div class="item-title-row">
                                         <div class="item-title">{$product.name}</div>

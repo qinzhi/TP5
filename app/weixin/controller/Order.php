@@ -6,7 +6,6 @@ use app\common\model\Address;
 use app\common\model\Cart;
 use app\payment\service\WxPay;
 use app\common\model\Order as OrderModel;
-use think\Config;
 use think\Cookie;
 use think\Db;
 use think\Log;

@@ -4,24 +4,30 @@
  */
 namespace app\weixin\controller;
 
-use think\Controller;
 use think\Db;
 use think\Request;
 use app\common\model\Address as AddressModel;
 
-class Address extends Controller
+class Address extends Weixin
 {
+
+    public $member_id;
 
     public function __construct(Request $request)
     {
         parent::__construct($request);
-        $this->member_id = 1;
+
+        $this->member_id = $this->member['id'];
+    }
+
+    public function index(){
+        return $this->fetch();
     }
 
     public function get(){
         $addressModel = new AddressModel($this->member_id);
         $address = $addressModel->getList();
-        return json($address);
+        return $address;
     }
 
     public function del($address_id){

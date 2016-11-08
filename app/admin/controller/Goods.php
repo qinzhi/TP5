@@ -52,7 +52,7 @@ class Goods extends Admin
             //商品图片
             $images = $this->goodsModel->getGoodsImageById($id);
             foreach ($images as &$val){
-                $val['imageUrl'] = get_img($val['image']);
+                $val['imageUrl'] = get_img_url($val['image']);
             }
             $this->assign('images',$images);
             

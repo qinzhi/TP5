@@ -1,6 +1,6 @@
 {extend name="layout/base" /}
 {block name="quote-css"}
-    <link href="__CSS__/member.css" rel="stylesheet" type="text/css">
+<link href="__CSS__/member.css" rel="stylesheet" type="text/css">
 {/block}
 {block name="page"}
 <div class="page page-order_create" id="page-member_index">
@@ -12,19 +12,19 @@
         <section class="me-box">
             <div class="me-avatar">
                 <div class="img-border">
-                    <img src="{$member.avator}"/>
+                    <img src="{$member.avator|wx_headimgurl=###,96}"/>
                 </div>
                 <p class="me-name">啊秦智</p>
             </div>
             <div class="me-asset flex">
                 <div class="me-coupon flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('integral/index')}">
                         <p class="num">0</p>
                         <p class="name">积分</p>
                     </a>
                 </div>
                 <div class="me-wallet flex-1">
-                    <a href="javascript:;">
+                    <a href="{:url('recharge/index')}">
                         <p class="num">0</p>
                         <p class="name">余额</p>
                     </a>
@@ -46,30 +46,33 @@
                     <a href="{:url('order/index',['status'=>1])}">
                         <i class="icon icon-daifukuan"></i>
                         <p class="order-status-name">待付款</p>
-                        <i class="badge badge-danger order-count">1</i>
+                        {if condition="$count.no_pay_count gt 0"}<i class="badge badge-danger order-count">{$count.no_pay_count}</i>{/if}
                     </a>
                 </div>
                 <div class="order-status flex-1">
                     <a href="{:url('order/index',['status'=>2])}">
                         <i class="icon icon-daifahuo"></i>
                         <p>待发货</p>
+                        {if condition="$count.pay_count gt 0"}<i class="badge badge-danger order-count">{$count.pay_count}</i>{/if}
                     </a>
                 </div>
                 <div class="order-status flex-1">
                     <a href="{:url('order/index',['status'=>3])}">
                         <i class="icon icon-daishouhuo"></i>
                         <p>待收货</p>
+                        {if condition="$count.receive_count gt 0"}<i class="badge badge-danger order-count">{$count.receive_count}</i>{/if}
                     </a>
                 </div>
                 <div class="order-status flex-1">
                     <a href="{:url('order/index',['status'=>4])}">
                         <i class="icon icon-daipingjia"></i>
                         <p>待评价</p>
+                        {if condition="$count.evaluation_count gt 0"}<i class="badge badge-danger order-count">{$count.evaluation_count}</i>{/if}
                     </a>
                 </div>
             </div>
             <div class="center_inner me-order">
-                <a href="javascript:;" class="flex">
+                <a href="{:url('member/person')}" class="flex">
                     <div class="inner-name">个人资料</div>
                     <div class="text-right inner-icon flex-1">
                         <i class="icon icon-right"></i>
@@ -77,7 +80,7 @@
                 </a>
             </div>
             <div class="center_inner me-order">
-                <a href="javascript:;" class="flex">
+                <a href="{:url('collect/index')}" class="flex">
                     <div class="inner-name">我的收藏</div>
                     <div class="text-right inner-icon flex-1">
                         <i class="icon icon-right"></i>

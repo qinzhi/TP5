@@ -91,3 +91,36 @@
     margin: .5rem 0;
     padding: 0 2.5rem;
 }
+/*************************  member/penson *********************************/
+#page-member_person .list-block{
+    margin: 0.75rem 0;
+}
+#page-member_person .item-avator .item-after{
+    max-height: none;
+}
+#page-member_person .avator{
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+}
+/*************************  recharge/index *********************************/
+#page-recharge_index .bar-nav > div{
+    line-height: 2.2rem;
+}
+#page-recharge_index .amount span{
+    color: #ff655b;
+}
+#page-recharge_index .btn-recharge{
+    background-color: #41c172;
+}
+
+/*************************  integral/index *********************************/
+#page-integral_index .bar-nav > div{
+    line-height: 2.2rem;
+}
+#page-integral_index .integral span{
+    color: #ff655b;
+}
+#page-integral_index .btn-exchange{
+    background-color: #41c172;
+}

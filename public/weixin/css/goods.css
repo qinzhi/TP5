@@ -31,8 +31,8 @@
     border-bottom: none;
 }
 .product-content .product-img{
-    width: 6rem;
-    height: 6rem;
+    width: 5rem;
+    height: 5rem;
     position: relative;
 }
 .product-content .product-img img{
@@ -45,7 +45,7 @@
     width: 100%;
 }
 .product-content .product-info h3{
-    line-height: 1.75rem;
+    line-height: 1.35rem;
     font-size: .7rem;
     color: #333333;
     text-overflow:ellipsis;
@@ -75,6 +75,7 @@
 }
 .product-content .product-info .product_price em{
     font-size: 0.9rem;
+    font-style: normal;
 }
 .product-content .product-info .product_price i{
     font-style: normal;
@@ -89,14 +90,13 @@
     cursor: pointer;
     line-height: 1.6rem;
     overflow: hidden;
-    padding-top: .1rem;
     position: absolute;
-    bottom: .25rem;
+    bottom: -.15rem;
     right: .5rem;
     width: 2.5rem;
     text-align: right;
 }
-/******************************************************/
+/***********************  购买商品面板 *******************************/
 .product-purchasing p{
     margin: 0;
 }
@@ -147,8 +147,8 @@
     display:flex;
 }
 .product-panel .product-img{
-    width: 5rem;
-    height: 5rem;
+    width: 4rem;
+    height: 4rem;
 }
 .product-panel .product-img img{
     width: 100%;
@@ -160,10 +160,10 @@
     -webkit-flex: 1;
     -ms-flex: 1;
     flex: 1;
-    padding: .5rem;
+    padding: .25rem .5rem;
 }
 .product-panel .product-info .product_name{
-    font-size: .85rem;
+    font-size: .8rem;
 }
 .product-panel .product-info .product_property{
     font-size: .65rem;
@@ -172,7 +172,6 @@
 .product-panel .product-info .product_price{
     color: #ff655b;
     font-size: .8rem;
-    margin: .25rem 0;
 }
 .product-panel .product-info .product_price sup{
     font-size: 0.6rem;
@@ -216,7 +215,7 @@
     padding: .25rem 0;
 }
 .product-panel .product-property-type .property-type{
-    font-size: .9rem;
+    font-size: .75rem;
 }
 .product-panel .product-property-type .property-box{
     list-style: none;
@@ -224,12 +223,12 @@
 }
 .product-panel .product-property-type .property-item{
     display: inline-block;
-    font-size: .75rem;
+    font-size: .65rem;
     border: 1px solid #bbb;
     border-radius: 5px;
     -moz-border-radius: 5px; /* Firefox */
     -webkit-border-radius: 5px; /* Safari 和 Chrome */
-    padding: .4rem .8rem;
+    padding: .25rem .5rem;
     margin-right: .5rem;
     cursor: pointer;
 }
@@ -246,8 +245,8 @@
     padding-top: .5rem;
 }
 .product-panel .product-order .order-header{
-    font-size: .9rem;
-    line-height:1.75rem;
+    font-size: .8rem;
+    line-height: 1.75rem;
 }
 .product-panel .product-order .order-header .order-stock{
     font-size: .6rem;
@@ -338,16 +337,17 @@
     color: #ff655b;
 }
 #page-goods_detail .product_info .sell_price sup {
-    font-size: 0.6rem;
-    line-height: 0.9rem;
-    margin-right: -0.25rem;
+    font-size: .6rem;
+    line-height: .9rem;
+    margin-right: -.25rem;
 }
 #page-goods_detail .product_info .sell_price em {
     font-size: 1rem;
+    font-style: normal;
 }
 #page-goods_detail .product_info .sell_price i {
     font-style: normal;
-    margin: 0 -0.15rem;
+    margin: 0 -.15rem;
 }
 #page-goods_detail .product-sale{
     font-size: .65rem;
@@ -482,3 +482,44 @@
 }
 
 /*****************************  evaluate/index ************************************/
+
+/*****************************  collect/index ************************************/
+#page-collect_list .content .product-img{
+    width: 3.5rem;
+    height: 3.5rem;
+}
+#page-collect_list .card-footer{
+    padding: 0;
+}
+#page-collect_list .card-footer > div{
+    text-align: center;
+    height: 2.2rem;
+    line-height: 2.2rem;
+}
+#page-collect_list .card-footer > div a{
+    display: inline-block;
+    width: 100%;
+    border-left: 1px solid #e1e1e1;
+}
+#page-collect_list .card-footer > div a:last-child{
+    border-right: 0;
+}
+#page-collect_list .card{
+    margin: 0 0 .5rem;
+}
+#page-collect_list .card:last-child{
+    margin: 0;
+}
+#page-collect_list .card-content-inner{
+    padding: .5rem;
+}
+.card .btn-card_primary{
+    background-color: #c0c0c0;/*#41c172;*/
+    color: white;
+}
+.card .btn-card_danger{
+    background-color: #c0c0c0;/*#f6383a;*/
+    color: white;
+}
+
+
