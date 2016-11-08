@@ -46,30 +46,33 @@
                     <a href="{:url('order/index',['status'=>1])}">
                         <i class="icon icon-daifukuan"></i>
                         <p class="order-status-name">待付款</p>
-                        <i class="badge badge-danger order-count">1</i>
+                        {if condition="$count.no_pay_count gt 0"}<i class="badge badge-danger order-count">{$count.no_pay_count}</i>{/if}
                     </a>
                 </div>
                 <div class="order-status flex-1">
                     <a href="{:url('order/index',['status'=>2])}">
                         <i class="icon icon-daifahuo"></i>
                         <p>待发货</p>
+                        {if condition="$count.pay_count gt 0"}<i class="badge badge-danger order-count">{$count.pay_count}</i>{/if}
                     </a>
                 </div>
                 <div class="order-status flex-1">
                     <a href="{:url('order/index',['status'=>3])}">
                         <i class="icon icon-daishouhuo"></i>
                         <p>待收货</p>
+                        {if condition="$count.receive_count gt 0"}<i class="badge badge-danger order-count">{$count.receive_count}</i>{/if}
                     </a>
                 </div>
                 <div class="order-status flex-1">
                     <a href="{:url('order/index',['status'=>4])}">
                         <i class="icon icon-daipingjia"></i>
                         <p>待评价</p>
+                        {if condition="$count.evaluation_count gt 0"}<i class="badge badge-danger order-count">{$count.evaluation_count}</i>{/if}
                     </a>
                 </div>
             </div>
             <div class="center_inner me-order">
-                <a href="javascript:;" class="flex">
+                <a href="{:url('member/person')}" class="flex">
                     <div class="inner-name">个人资料</div>
                     <div class="text-right inner-icon flex-1">
                         <i class="icon icon-right"></i>

@@ -1,0 +1,83 @@
+/********************* address/index *****************************/
+
+/********************* address-panel *****************************/
+.all-shade{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+    z-index: 99;
+    display: none;
+    -webkit-transition: background .3s;
+    transition: background .3s;
+}
+.fade_toggle{
+    display: block;
+    background: rgba(0, 0, 0, 0.3);
+}
+.address-panel{
+    position: fixed;
+    background-color: #f0f4f0;
+    overflow: hidden;
+    z-index: 9999;
+    left: 0;
+    bottom: 0;
+    height: 18.5rem;
+    width: 100%;
+    -webkit-transform: translate(0, 100%);
+    transform: translate(0, 100%);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: -webkit-transform .3s ease-out;
+    transition: -webkit-transform .3s ease-out;
+    transition: transform .3s ease-out;
+    transition: transform .3s ease-out, -webkit-transform .3s ease-out;
+}
+.address-panel .address-header{
+    text-align: center;
+    line-height: 2rem;
+    background-color: #fff;
+}
+.address-panel.active{
+    transform: translate(0px, 0px);
+    -webkit-transform: translate(0px, 0px);
+}
+.address-panel .address-action{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+.address-panel .address-action .address-ok{
+    padding: .5rem;
+}
+.address-panel .panel-close{
+    position: absolute;
+    right: .3rem;
+    top: .3rem;
+    color: #9c9c9c;
+    cursor: default;
+}
+.address-panel .address-default .item-input{
+    text-align: right;
+}
+.address-picker .close-picker,.address-picker .close-picker:active{
+    color: #41c172;
+}
+.address-list .item-content{
+    padding-left: 0;
+}
+.address-list .item-text{
+    height: auto;
+}
+.address-list .label-checkbox{
+    padding: 0 .75rem;
+}
+.address-list *{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}

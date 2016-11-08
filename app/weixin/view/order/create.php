@@ -1,6 +1,7 @@
 {extend name="layout/base" /}
 {block name="quote-css"}
     <link href="__CSS__/order.css" rel="stylesheet" type="text/css">
+    <link href="__CSS__/address.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="__LIGHT7__/css/light7-swipeout.css">
 {/block}
 {block name="page"}
