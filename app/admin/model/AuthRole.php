@@ -91,7 +91,7 @@ class AuthRole extends Common{
     }
 
     public function getAuthByPid($pid){
-        return $this->where(['pid'=>$pid])->find();
+        return $this->where(['pid'=>$pid])->order('sort desc')->find();
     }
 
     public function getAuthListByPid($pid){

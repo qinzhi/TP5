@@ -41,7 +41,7 @@ class GoodsCategory extends Admin {
 
     public function add(){
         if(Request::instance()->isPost()){
-            $pid = Request::instance()->request('p_id','','intval');
+            $pid = Request::instance()->request('p_id/d',0);
             $pCategory = $this->category->getCategoryByPid($pid);
             if($pid == 0) $level = 0;
             else{
@@ -53,6 +53,7 @@ class GoodsCategory extends Admin {
                 'pid' => $pid,
                 'level' => $level,
                 'name' => Request::instance()->request('name','','trim'),
+                'icon' => Request::instance()->request('icon'),
                 'sort' => $sort,
             ];
             $seo = [
@@ -72,15 +73,16 @@ class GoodsCategory extends Admin {
     public function edit(){
         if(Request::instance()->isAjax()){
             parse_str(urldecode(Request::instance()->request('params')),$params);
-            $pid = $params['p_id'];
+            $pid = isset($params['p_id'])?intval($params['p_id']):0;
             $category = $this->category->getCategoryById($pid);
             if($pid == 0) $level = 0;
             else $level = $category['level'] + 1;
             $id = $params['id'];
             $data = array(
-                'pid' => $params['p_id'],
+                'pid' => $pid,
                 'level' => $level,
                 'name' => trim($params['name']),
+                'icon' => $params['icon'],
             );
             $seo = array(
                 'title' => trim($params['title']),
@@ -89,7 +91,7 @@ class GoodsCategory extends Admin {
             );
             $result = $this->category->updateCategoryById($data,$seo,$id);
             if($result){
-                $result = ['code'=>1,'msg'=>'保存成功'];
+                $result = ['code'=>1,'msg'=>'保存成功','icon_url'=> !empty($params['icon']) ? get_img_url($params['icon']): ''];
             }else{
                 $result = ['code'=>0,'msg'=>'保存失败'];
             }

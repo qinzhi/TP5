@@ -26,7 +26,7 @@ return [
     // 注册的根命名空间
     'root_namespace'         => [],
     // 扩展配置文件
-    'extra_config_list'      => ['database','validate','route'],
+    'extra_config_list'      => ['database','validate','route','tags'],
     // 扩展函数文件
     'extra_file_list'        => [THINK_PATH . 'helper' . EXT,EXTEND_PATH . 'fb' . EXT],
     // 默认输出类型

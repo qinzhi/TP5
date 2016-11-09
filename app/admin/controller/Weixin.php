@@ -17,6 +17,19 @@ class Weixin extends Admin {
         $this->wechatService = new Wechat();
     }
 
+    /**
+     * 首次关注回复
+     * @return mixed
+     */
+    public function attention_reply(){
+        $this->assign('emotions',Emotions::get_qq());
+        return $this->fetch();
+    }
+
+    /**
+     * 自定义菜单
+     * @return array|mixed
+     */
     public function setting_menu(){
         if(Request::instance()->isPost()){
 
@@ -39,8 +52,6 @@ class Weixin extends Admin {
             }
 
             $this->assign($menu);
-            $this->assign('emotions',Emotions::get_qq());
-
             $this->assign('emotions',Emotions::get_qq());
             return $this->fetch();
         }

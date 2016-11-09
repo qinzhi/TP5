@@ -30,11 +30,33 @@ class Address extends Weixin
     }
     
     public function add(){
-        return $this->fetch();
+        if(Request::instance()->isPost()){
+            $result = $this->save();
+            if($result['code'] == 1){
+                $this->redirect('address/index');
+            }else{
+                $this->error($result['msg']);
+            }
+        }else{
+            return $this->fetch();
+        }
     }
 
     public function edit($id){
-        return $this->fetch();
+        if(Request::instance()->isPost()){
+            $result = $this->save();
+            if($result['code'] == 1){
+                $this->redirect('address/index');
+            }else{
+                $this->error($result['msg']);
+            }
+        }else{
+            $addressModel = new AddressModel($this->member_id);
+            $address = $addressModel->getAddressById($id)->member_id;
+            $address['area'] = trim(str_replace($address['address'],'',$address['area_info']));
+            $this->assign('address',$address);
+            return $this->fetch();
+        }
     }
 
     public function getList(){
@@ -59,22 +81,22 @@ class Address extends Weixin
 
     public function save(){
         $addressModel = new AddressModel($this->member_id);
-        $id = Request::instance()->request('id','','intval');
+        $id = Request::instance()->request('id/d');
         $consignee = Request::instance()->request('consignee','','trim');
         if(empty($consignee)){
-            return json(['code'=>-1,'msg'=>'收货人不能为空']);
+            return ['code'=>-1,'msg'=>'收货人不能为空'];
         }
         $mobile = Request::instance()->request('mobile','','trim');
         if(preg_match("/^1[34578]\d{9}$/", $mobile) === false){
-            return json(['code'=>-1,'msg'=>'手机号不正确']);
+            return ['code'=>-1,'msg'=>'手机号不正确'];
         }
         $area = Request::instance()->request('area','','trim');
         if(empty($area)){
-            return json(['code'=>-1,'msg'=>'省、市、区/县不能为空']);
+            return ['code'=>-1,'msg'=>'省、市、区/县不能为空'];
         }
         $address = Request::instance()->request('address','','trim');
         if(empty($address)){
-            return json(['code'=>-1,'msg'=>'详细地址不能为空']);
+            return ['code'=>-1,'msg'=>'详细地址不能为空'];
         }
         $is_default = Request::instance()->request('is_default',0,'boolval');
         if($is_default){
@@ -100,9 +122,9 @@ class Address extends Weixin
         if($id > 0){//更新
             $result = $addressModel->where('id', $id)->where('member_id',$this->member_id)->update($data);
             if($result){
-                return json(['code'=>1,'msg'=>'更新成功','address_id'=> $id]);
+                return ['code'=>1,'msg'=>'更新成功','address_id'=> $id];
             }else{
-                return json(['code'=>-1,'msg'=>'更新失败']);
+                return ['code'=>-1,'msg'=>'更新失败'];
             }
         }else{//添加
             $num = $addressModel->getNum();
@@ -111,13 +133,23 @@ class Address extends Weixin
                 $data['add_time'] = time();
                 $addressModel->data($data)->save();
                 if($addressModel->id > 0){
-                    return json(['code'=>1,'msg'=>'添加成功','address_id'=> $addressModel->id]);
+                    return ['code'=>1,'msg'=>'添加成功','address_id'=> $addressModel->id];
                 }else{
-                    return json(['code'=>-1,'msg'=>'添加失败']);
+                    return ['code'=>-1,'msg'=>'添加失败'];
                 }
             }else{
-                return json(['code'=>-1,'msg'=>'最多添加20条收货地址']);
+                return ['code'=>-1,'msg'=>'最多添加20条收货地址'];
             }
+        }
+    }
+
+    public function setDefault($id){
+        $addressModel = new AddressModel($this->member_id);
+        $result = $addressModel->setDefaultById($id);
+        if($result){
+            return ['code'=>1,'msg'=>'设置默认地址成功'];
+        }else{
+            return ['code'=>-1,'msg'=>'设置默认地址失败'];
         }
     }
 

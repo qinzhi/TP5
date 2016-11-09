@@ -87,8 +87,10 @@ p{margin: 0}
 .bar.bar-nav .icon-down{margin-left: .15rem;top: .15rem;font-size: .85rem}
 .search-input .icon{font-size: .8rem}
 .bar-nav .title{background-color: #41c172;color: #ffffff;}
+.picker-modal .bar-nav .title{background-color: inherit;}
 .bar-tab .tab-item.active, .bar-tab .tab-item:active{color: #41c172;}
 .buttons-tab .button.active{border-color: #41c172;color: #41c172;}
+.button.button-medium{height: 1.8rem;font-size: .75rem;line-height: 1.8rem;}
 
 .swiper-home{padding-bottom: 0;background-color: #fff;}
 .swiper-home .swiper-img{width: 100%;float: left}
@@ -154,6 +156,7 @@ vertical-align: middle;white-space: nowrap;}
     display: table;
     clear: both
 }
+.hidden{display: none !important;}
 .top-80{top: 80%;}
 .loaded-tip{line-height: 1.6rem;display: none;margin-top: .5rem;font-size: .65rem}
 .bar.bar-footer-secondary{

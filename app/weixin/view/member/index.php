@@ -12,7 +12,7 @@
         <section class="me-box">
             <div class="me-avatar">
                 <div class="img-border">
-                    <img src="{$member.avator|wx_headimgurl=###,96}"/>
+                    <a href="{:url('member/person')}"><img src="{$member.avator|wx_headimgurl=###,96}"/></a>
                 </div>
                 <p class="me-name">啊秦智</p>
             </div>
@@ -87,22 +87,22 @@
                     </div>
                 </a>
             </div>
-            <div class="center_inner me-order">
+            <!--<div class="center_inner me-order">
                 <a href="javascript:;" class="flex">
                     <div class="inner-name">使用帮助</div>
                     <div class="text-right inner-icon flex-1">
                         <i class="icon icon-right"></i>
                     </div>
                 </a>
-            </div>
-            <div class="center_inner me-order last">
+            </div>-->
+            <!--<div class="center_inner me-order last">
                 <a href="javascript:;" class="flex">
                     <div class="inner-name">意见反馈</div>
                     <div class="text-right inner-icon flex-1">
                         <i class="icon icon-right"></i>
                     </div>
                 </a>
-            </div>
+            </div>-->
 
             <!--<div class="me-logout">
                 <a class="btn btn-block btn-danger no-radius">退出</a>

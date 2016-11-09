@@ -3,6 +3,9 @@
     width: 3.5rem;
     height: 3.5rem;
 }
+#page-address_list .card{
+    margin: .75rem .5rem;
+}
 #page-address_list .card-footer{
     padding: 0;
 }
@@ -19,8 +22,15 @@
 #page-address_list .card-footer > div a:last-child{
     border-right: 0;
 }
+#page-address_list .card-content:active{
+    background-color: #d9d9d9;
+}
 #page-address_list .card-content-inner{
     padding: .5rem;
+}
+#page-address_list .card-content-inner p{
+    width: 80%;
+    min-height: 1.2rem;
 }
 #page-address_list .card-footer{
     min-height: 1.8rem;
@@ -48,6 +58,16 @@
 .card .btn-card_danger{
     background-color: #c0c0c0;/*#f6383a;*/
     color: white;
+}
+/********************* address/save *****************************/
+#page-address_save .list-block{
+    margin: .75rem 0;
+}
+#page-address_save .content-block{
+    margin: .75rem 0;
+}
+#page-address_save .content-block .button{
+    width: 100%;
 }
 /********************* address-panel *****************************/
 .all-shade{
@@ -108,7 +128,7 @@
     color: #9c9c9c;
     cursor: default;
 }
-.address-panel .address-default .item-input{
+.address-default .item-input{
     text-align: right;
 }
 .address-picker .close-picker,.address-picker .close-picker:active{

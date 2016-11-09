@@ -39,7 +39,11 @@
                                                 if(empty($value['child'])){
                                                     $icon = '<i class="fa row-details"></i>';
                                                 }
-                                                $html .= '<td>' . $class . $icon . '&nbsp;<span class="category_name">' .$value['name'] . '</span></td>
+                                                $icon_img = '';
+                                                if(!empty($value['icon'])){
+                                                    $icon_img = '<img class="icon" src="'.get_img_url($value['icon']).'" height="50px" width="50px"/>';;
+                                                }
+                                                $html .= '<td>' . $class . $icon . '&nbsp;' . $icon_img . '<span class="category_name">' .$value['name'] . '</span></td>
                                                         <td>
                                                             <a class="btn btn-default btn-xs shiny icon-only success btn-move" href="javascript:void(0);" data-action="up"><i class="fa fa-arrow-up"></i></a>
                                                             <a class="btn btn-default btn-xs shiny icon-only success btn-move" href="javascript:void(0);" data-action="down"><i class="fa fa-arrow-down"></i></a>
@@ -66,6 +70,17 @@
                                         </label>
                                         <div class="col-lg-8">
                                             <input name="name" class="form-control" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group has-feedback">
+                                        <label class="col-lg-4 control-label">分类图标：</label>
+                                        <div class="col-lg-8">
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" readonly="" name="icon" id="icon-edit" class="form-control">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-default btn-success" onclick="BrowseServer('icon-edit');" type="button">选择图片</button>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group has-feedback">
@@ -125,11 +140,13 @@
                 message: function(){
                     var form = $('#addModal .col-md-12 .form-category');
                     if(form.html() == ''){
-                        form.append($('form.form-category').html());
+                        var html = $('form.form-category').html();
+                        html = html.replace(/icon-edit/g,'icon-tmp');
+                        form.append(html);
                     }
                     else{form[0].reset();}
                     form.find('.position-root').hide();
-                    return $("#addModal").html();
+                    return $("#addModal").html().replace(/icon-tmp/g,'icon-add');
                 },
                 title: "添加分类",
                 className: "modal-sky",
@@ -155,8 +172,15 @@
                 query += '&id=' + category_id;
                 $.fruiter.post('{:url("goodsCategory/edit")}',{params:encodeURIComponent(query)},function(data){
                     if(data.code == 1){
-                        $('.plugins_category- .dataTable').find('tr[data-id='+category_id+']')
-                            .find('.category_name').text($('.plugins_category- form').find('input[name=name]').val());
+                        var tr = $('.plugins_category- .dataTable').find('tr[data-id='+category_id+']');
+                        tr.find('.category_name').text($('.plugins_category- form').find('input[name=name]').val());
+                        if(data.icon_url){
+                            if(tr.find('.icon').length){
+                                tr.find('.icon').attr('src',data.icon_url);
+                            }else{
+                                tr.find('.category_name').before('<img class="icon" src="'+data.icon_url+'" width="50px" height="50px">');
+                            }
+                        }
                         Notify(data.msg, 'bottom-right', '5000', 'success', 'fa-check', true);
                     }else{
                         Notify(data.msg, 'bottom-right', '5000', 'danger', 'fa-bolt', true);
@@ -289,6 +313,7 @@
                 if(data){
                     category_id = data.id;
                     form.name.value = data.name;
+                    form.icon.value = data.icon;
                     form.p_id.value = data.pid;
                     form.title.value = data.title;
                     form.keywords.value = data.keywords;

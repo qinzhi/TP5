@@ -193,8 +193,7 @@
                 $('#tree_panel').append('<p style="position: absolute;left:5px;top:5px;">数据获取中...</p>');
                 $.post('{:url("articleCategory/getCategoriesTree")}',function(tree){
                     $('#tree_panel').find('p').remove();
-                    var zNodes = JSON.parse(tree);
-                    zTree = $.fn.zTree.init($("#tree_category"), setting, zNodes);
+                    zTree = $.fn.zTree.init($("#tree_category"), setting, tree);
                 });
             }
             $("body").bind("mousedown", onBodyDown);

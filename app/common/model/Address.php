@@ -49,6 +49,13 @@ class Address extends Model{
         return $this->where('member_id',$this->member_id)->where('id',$id)->find();
     }
 
+
+    public function setDefaultById($id){
+        $this->clearDefault();
+        return $this->alias('t')
+                        ->where('member_id',$this->member_id)->where('id',$id)->setField('is_default',1);
+    }
+
     /**
      * 设置用户默认地址
      * @return mixed

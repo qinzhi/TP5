@@ -4,7 +4,6 @@ namespace app\admin\controller;
 
 use app\admin\model\AuthRole;
 use \app\common\tools\Tree;
-use think\Loader;
 use think\Request;
 
 /**
@@ -18,7 +17,7 @@ class Auth extends Admin {
     
     public function __construct(){
         parent::__construct();
-        $this->authRole = Loader::model('AuthRole');
+        $this->authRole = new AuthRole();
     }
 
     public function index(){

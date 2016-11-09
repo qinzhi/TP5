@@ -156,22 +156,29 @@
 .menu_form_area .form-horizontal .form-group{margin: 0;padding-top: 30px;display: block}
 .menu_form_area .menu_content_container{height: 344px;padding: 20px 15px 20px 22px;}
 .menu_form_area .menu_edit{border: 1px solid #dddddd;height: 280px;padding: 0;background-color: #ffffff;}
-.menu_form_area .tab_navs{list-style: none;display: block;border-bottom: 1px solid #dddddd;padding: 0;margin: 0;}
-.menu_form_area .tab_nav{display: inline-block;line-height: 38px;}
-.menu_form_area .tab_nav .icon_msg_sender{
-    background: rgba(0, 0, 0, 0) url("../img/weixin/msg_tab.png") no-repeat scroll 0 0;display: inline-block;
-    height: 20px;
-    margin-right: 3px;
-    margin-top: -2px;
-    vertical-align: middle;
-    width: 20px;
-}
-.menu_form_area .tab_nav.active .icon_msg_sender,.menu_form_area .tab_nav:active .icon_msg_sender{
-    background: rgba(0, 0, 0, 0) url("../img/weixin/msg_tab.png") no-repeat scroll 0 -30px;display: inline-block;
-}
-.menu_form_area .tab_nav a{color: #333333;text-align: center;display: block;padding: 0 20px;text-decoration: none;}
-.menu_form_area .tabs_content{display: block;height: 100%;width: 100%;}
-.menu_form_area .tabs_type_text{}
+.tab_navs{list-style: none;display: block;border-bottom: 1px solid #dddddd;padding: 0;margin: 0;}
+.tab_nav{display: inline-block;line-height: 38px;}
+.tab_nav .icon_msg_sender{background: rgba(0, 0, 0, 0) url("../img/weixin/msg_tab.png") no-repeat scroll 0 0;display: inline-block;height: 20px;margin-right: 3px;margin-top: -2px;vertical-align: middle;width: 20px;}
+.tab_text .icon_msg_sender{background-position: 0 0;}
+.tab_text.active .icon_msg_sender,.tab_text:active .icon_msg_sender,.tab_text:hover .icon_msg_sender{background-position: 0 -30px;}
+.tab_news .icon_msg_sender{background-position: 0 -240px;}
+.tab_news.active .icon_msg_sender,.tab_news:active .icon_msg_sender,.tab_news:hover .icon_msg_sender{background-position: 0 -270px;}
+.tab_img .icon_msg_sender{background-position: 0 -60px;}
+.tab_img.active .icon_msg_sender,.tab_img:active .icon_msg_sender,.tab_img:hover .icon_msg_sender{background-position: 0 -90px;}
+.tab_audio .icon_msg_sender{background-position: 0 -180px;}
+.tab_audio.active .icon_msg_sender,.tab_audio:active .icon_msg_sender,.tab_audio:hover .icon_msg_sender{background-position: 0 -210px;}
+.tab_video .icon_msg_sender{background-position: 0 -120px;}
+.tab_video.active .icon_msg_sender,.tab_video:active .icon_msg_sender,.tab_video:hover .icon_msg_sender{background-position: 0 -150px;}
+.tab_type{height: 318px;background-color: #ffffff;padding: 20px;text-align: center;}
+.tab_type .media_cover:first-child{margin-right: 20px;}
+.tab_type .media_cover{width: 35%;display: inline-block;border: 3px dotted #d9dadc;height: 278px;padding-top: 55px;cursor: pointer;}
+.tab_type .media_cover:hover{border-color: #b3b3b3;}
+.tab_type .create_access a{color: #8d8d8d;}
+.tab_type .create_access a:hover{text-decoration: none;}
+.tab_type .create_access a .icon-add{font-size: 70px;color: #b3b3b3;}
+.tab_type .create_access a strong{font-style: normal;font-weight: 400;display: block;font-size: 14px;}
+.tab_nav a{color: #333333;text-align: center;display: block;padding: 0 20px;text-decoration: none;}
+.tabs_content{display: block;height: 100%;width: 100%;}
 .icon_emotion{
     background: rgba(0, 0, 0, 0) url("../img/weixin/emotion_editor.png") no-repeat scroll 0 0;
     display: inline-block;
@@ -183,7 +190,7 @@
     background: rgba(0, 0, 0, 0) url("../img/weixin/emotion_editor.png") no-repeat scroll 0 -30px;
 }
 .text_txt{width: 100%;resize:none;border: none;height: 200px;padding: 14px 20px;background-color: #ffffff;}
-.footer_toolbar{padding: 0 20px;border-top: 1px solid #dddddd;line-height: 100%;position: relative;}
+.footer_toolbar{padding: 0 20px;border-top: 1px solid #dddddd;line-height: 100%;position: relative;height: 38px;background-color: #ffffff;}
 .icon_emotion{line-height: 999em;float: left;margin-top: 10px;}
 .text_tip{margin: 0;float: right;color: #b3b3b3;font-size: 14px;margin-top: 8px;}
 .text_tip em{font-style: normal;}
@@ -206,4 +213,9 @@
 .menu_url .frm_label{line-height: 34px;}
 .menu_url .frm_controls{}
 .menu_action{text-align: right;padding: 8px 15px;}
-/****************************** end menu_setting *************************************/
+/****************************** reply *************************************/
+.reply_area .tab_navs{background-color: #ffffff;}
+.reply_area .tabs_content{display: block;height: 100%;width: 100%;}
+.reply_area .text_txt{height: 280px;}
+.reply_area .emotion_area{top: -282px;width: 374px;}
+.reply_area .emotions_item{width: 31px;height: 31px;text-align: center;line-height: 25px;}

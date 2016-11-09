@@ -118,7 +118,7 @@
                                             </li>
                                         </ul>
                                         <div class="tabs_content">
-                                            <div class="tabs_type_text">
+                                            <div class="tab_type tab_type_text">
                                                 <textarea class="text_txt" id="text_txt" autocomplete="off"></textarea>
                                                 <div class="footer_toolbar">
                                                     <a class="icon_emotion" href="javascript:void(0);">表情</a>

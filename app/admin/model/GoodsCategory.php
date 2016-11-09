@@ -78,7 +78,7 @@ class GoodsCategory extends Common{
     public function getCategoryByPid($pid){
         return $this->alias('t')
                         ->join(self::TABLE_SEO . ' t1','t1.category_id=t.id')
-                            ->where(array('pid'=>$pid))->find();
+                            ->order('sort desc')->where(array('pid'=>$pid))->find();
     }
 
 

@@ -24,7 +24,7 @@
                         </p>
                         <p class="area_info">{$vo.area_info}</p>
                         <label class="label-checkbox">
-                            <input name="chk-id" value="{$vo.id}" autocomplete="off" {$vo.is_default?'checked':''} type="checkbox">
+                            <input name="chk-id" value="{$vo.id}" autocomplete="off" {$vo.is_default?'checked':''} type="radio">
                             <div class="item-media">
                                 <i class="icon icon-form-checkbox"></i>
                             </div>
@@ -42,21 +42,37 @@
 {/block}
 {block name="js"}
 <script type="application/javascript">
-    $('.btn-del').click(function () {
-        var self = this;
-        $.confirm('确认是否删除?', function () {
-            var card = $(self).closest('.card');
-            var id = card.data('id');
+    $(function () {
+        $('.btn-del').click(function () {
+            var self = this;
+            $.confirm('确认是否删除?', function () {
+                var card = $(self).closest('.card');
+                var id = card.data('id');
+                $.showIndicator();
+                $.post('{:url("address/del")}',{address_id:id},function (result) {
+                    $.hideIndicator();
+                    $.toast(result.msg);
+                    if(result.code == 1){
+                        card.remove();
+                    }
+                });
+            });
+            var card = $(this).closest('.card');
+        });
+        $('.card-content').click(function () {
+            var chk = $(this).find('input[name="chk-id"]').get(0);
+            if(chk.checked === false){
+                chk.checked = true;
+                $(chk).trigger('change');
+            }
+        });
+        $('input[name="chk-id"]').change(function () {
+            var id = this.value;
             $.showIndicator();
-            $.post('{:url("address/del")}',{address_id:id},function (result) {
+            $.post("{:url('address/setDefault')}",{id:id},function (result) {
                 $.hideIndicator();
-                $.toast(result.msg);
-                if(result.code == 1){
-                    card.remove();
-                }
             });
         });
-        var card = $(this).closest('.card');
     });
 </script>
 {/block}
