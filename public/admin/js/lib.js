@@ -130,7 +130,7 @@ $.extend({
             var dW = $(window).width();
             $(obj).css({
                 left: (dW-w)/2 + 'px',
-                top: ((dH-h)/2 -50) + 'px'
+                top: (dH-h)/2 + 'px'
             });
         }(dialog);
 

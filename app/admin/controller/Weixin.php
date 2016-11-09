@@ -26,6 +26,16 @@ class Weixin extends Admin {
         return $this->fetch();
     }
 
+    public function lib_news(){
+        $limit = 10;
+        $page = Request::instance()->request('page/d',1);
+        $offset = ($page - 1) * $limit;
+        $itemList = $this->wechatService->getForeverList('news',$offset,$limit);
+        fb($itemList);
+        $this->assign('itemList',$itemList);
+        return $this->fetch('weixin/lib/news');
+    }
+
     /**
      * 自定义菜单
      * @return array|mixed

@@ -170,12 +170,13 @@
 .tab_video .icon_msg_sender{background-position: 0 -120px;}
 .tab_video.active .icon_msg_sender,.tab_video:active .icon_msg_sender,.tab_video:hover .icon_msg_sender{background-position: 0 -150px;}
 .tab_type{height: 318px;background-color: #ffffff;padding: 20px;text-align: center;}
+.tab_type.tab_type_text{height: auto;padding: 0;}
 .tab_type .media_cover:first-child{margin-right: 20px;}
 .tab_type .media_cover{width: 35%;display: inline-block;border: 3px dotted #d9dadc;height: 278px;padding-top: 55px;cursor: pointer;}
 .tab_type .media_cover:hover{border-color: #b3b3b3;}
 .tab_type .create_access a{color: #8d8d8d;}
 .tab_type .create_access a:hover{text-decoration: none;}
-.tab_type .create_access a .icon-add{font-size: 70px;color: #b3b3b3;}
+.tab_type .create_access a .icon-add{font-size: 70px;color: #b3b3b3;font-style: normal;}
 .tab_type .create_access a strong{font-style: normal;font-weight: 400;display: block;font-size: 14px;}
 .tab_nav a{color: #333333;text-align: center;display: block;padding: 0 20px;text-decoration: none;}
 .tabs_content{display: block;height: 100%;width: 100%;}
@@ -216,6 +217,18 @@
 /****************************** reply *************************************/
 .reply_area .tab_navs{background-color: #ffffff;}
 .reply_area .tabs_content{display: block;height: 100%;width: 100%;}
-.reply_area .text_txt{height: 280px;}
-.reply_area .emotion_area{top: -282px;width: 374px;}
+.reply_area .text_txt{height: 278px;}
+.reply_area .emotion_area{top: -279px;width: 374px;}
 .reply_area .emotions_item{width: 31px;height: 31px;text-align: center;line-height: 25px;}
+/****************************** widget-news *************************************/
+.widget.widget-wechat > .widget-header{
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    height: 45px;
+    line-height: 45px;
+}
+.widget-wechat_news{
+    width: 960px;
+    height: 600px;
+}

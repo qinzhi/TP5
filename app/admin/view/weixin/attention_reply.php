@@ -190,9 +190,9 @@
                 auto_close: false,
                 content : function(){
                     var content = '';
-                    /*$.post("{:url('goods/spec')}",{tpl:'add'},function(data){
+                    $.post("{:url('weixin/lib_news')}",function(data){
                         content = data;
-                    });*/
+                    });
                     return content;
                 },
                 ok : function(target){
