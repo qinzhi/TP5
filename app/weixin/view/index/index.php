@@ -63,7 +63,7 @@
                                         <p class="product_intro">{$vo.intro}</p>
                                         <div class="product-cost">
                                             <span class="product_price">
-                                                <?php list($int,$decimal) = explode('.',10.28/*$vo['sell_price']*/);?>
+                                                <?php list($int,$decimal) = explode('.',$vo['sell_price']);?>
                                                 <sup>￥</sup>
                                                 <em>{$int}.</em>
                                                 <i>{$decimal}</i>

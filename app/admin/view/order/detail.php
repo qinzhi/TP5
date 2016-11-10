@@ -103,13 +103,21 @@
     }
     .ncap-order-details .total-amount h3{
         color: #777;
-        font-size: 16px;
+        font-size: 12px;
         font-weight: normal;
         line-height: 24px;
+        margin: 5px 0;
     }
+    .ncap-order-details .total-amount h3:first-child{
+        font-size: 14px;
+    }
+    .ncap-order-details .total-amount h3:first-child .red_common{font-size: 18px;color: #d73d32;}
     .ncap-order-details .total-amount .red_common{
-        color: #d73d32;
-        font-size: 20px;
+        font-size: 16px;
+    }
+    .ncap-order-details .total-amount h5{
+        font-size: 12px;
+        margin: 5px 0;
     }
 </style>
 {/block}
@@ -119,7 +127,9 @@
         <div class="widget flat no-margin">
             <div class="widget-header">
                 <div class="widget-buttons margin-5">
-                    <button class="btn btn-success">一键发货</button>
+                    {if condition="$order.status eq 1"}
+                        <button class="btn btn-success">一键发货</button>
+                    {/if}
                 </div>
             </div>
             <div class="widget-header widget-fruiter padding-bottom-5">
@@ -131,10 +141,10 @@
                                 <i class="fa fa-arrow-circle-right"></i>
                                 <time>{$order.add_time|date='Y-m-d H:i:s',###}</time>
                             </li>
-                            <li class="{if condition='$order.payment_time gt 0'}current{/if}">
+                            <li class="{if condition='$order.pay_time gt 0'}current{/if}">
                                 <h5>完成付款</h5>
                                 <i class="fa fa-arrow-circle-right"></i>
-                                <time>{$order.payment_time|date='Y-m-d H:i:s',###}</time>
+                                <time>{$order.pay_time|date='Y-m-d H:i:s',###}</time>
                             </li>
                             <li class="{if condition='$order.send_status eq 2'}current{/if}">
                                 <h5>商家发货</h5>
@@ -177,14 +187,16 @@
                                             <dt>下单时间：</dt>
                                             <dd>{$order.add_time|date='Y-m-d H:i:s',###}</dd>
                                         </dl>
-                                        <dl>
-                                            <dt>支付单号：</dt>
-                                            <dd>420507828618553666</dd>
-                                            <dt>支付类型：</dt>
-                                            <dd>{$order.pay_type_text}</dd>
-                                            <dt>支付时间：</dt>
-                                            <dd>2016-02-03 15:30:38</dd>
-                                        </dl>
+                                        {if condition="$order.pay_status eq 1"}
+                                            <dl>
+                                                <dt>支付单号：</dt>
+                                                <dd>{$order.pay_sn}</dd>
+                                                <dt>支付类型：</dt>
+                                                <dd>{$order.pay_type_text}</dd>
+                                                <dt>支付时间：</dt>
+                                                <dd>{$order.pay_time|date='Y-m-d H:i:s',###}</dd>
+                                            </dl>
+                                        {/if}
                                     </div>
                                     <div class="addr-note">
                                         <h4>购买/收货方信息</h4>

@@ -51,11 +51,11 @@
 }
 .cart-list li .label-checkbox{
     padding: 0 .5rem;
-    line-height: 4.5rem;
+    line-height: 5rem;
 }
 .cart-list .goods-img{
-    width: 4.5rem;
-    height: 4.5rem;
+    width: 5rem;
+    height: 5rem;
 }
 .cart-list .goods-img img{
     width: 100%;
@@ -66,7 +66,7 @@
 }
 .cart-list .goods-name{
     margin-top: .2rem;
-    font-size: .75rem;
+    font-size: .7rem;
 }
 .cart-list .goods-price{
     font-size: .75rem;

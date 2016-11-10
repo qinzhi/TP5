@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50714
 File Encoding         : 65001
 
-Date: 2016-11-09 17:58:05
+Date: 2016-11-10 17:52:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,9 +47,15 @@ INSERT INTO `fruiter_address` VALUES ('13', '1', '测试', '13835993604', '11000
 DROP TABLE IF EXISTS `fruiter_admin`;
 CREATE TABLE `fruiter_admin` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
-  `account` varchar(20) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `last_login_time` int(10) NOT NULL,
+  `name` varchar(20) DEFAULT NULL COMMENT '管理员姓名',
+  `avator` varchar(126) DEFAULT NULL COMMENT '管理员头像',
+  `email` varchar(126) DEFAULT NULL,
+  `account` varchar(20) NOT NULL COMMENT '管理员账号',
+  `password` varchar(50) NOT NULL COMMENT '管理员密码',
+  `login_time` int(10) DEFAULT NULL COMMENT '登录时间',
+  `login_ip` varchar(20) DEFAULT NULL COMMENT '登录ip',
+  `login_num` int(10) NOT NULL DEFAULT '0' COMMENT '登录次数',
+  `is_super` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否超级管理员',
   PRIMARY KEY (`id`),
   UNIQUE KEY `account` (`account`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员';
@@ -57,7 +63,7 @@ CREATE TABLE `fruiter_admin` (
 -- ----------------------------
 -- Records of fruiter_admin
 -- ----------------------------
-INSERT INTO `fruiter_admin` VALUES ('1', 'admin', 'a3ab9193e5b81674b87d6b2431f3c75d', '0');
+INSERT INTO `fruiter_admin` VALUES ('1', null, null, null, 'admin', 'a3ab9193e5b81674b87d6b2431f3c75d', '1478763754', '127.0.0.1', '5', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_area`
@@ -3850,7 +3856,7 @@ CREATE TABLE `fruiter_article` (
   `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='文章表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章表';
 
 -- ----------------------------
 -- Records of fruiter_article
@@ -3869,7 +3875,7 @@ CREATE TABLE `fruiter_article_category` (
   `del_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `parent_id` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章分类表';
 
 -- ----------------------------
 -- Records of fruiter_article_category
@@ -3967,14 +3973,14 @@ CREATE TABLE `fruiter_auth_role` (
   `sort` mediumint(5) NOT NULL COMMENT '排序',
   `level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '级别: 0.根节点 1.二级节点 2.叶节点',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_auth_role
 -- ----------------------------
 INSERT INTO `fruiter_auth_role` VALUES ('1', '0', 'Admin', '2', '商品管理', 'Goods', '0', '0');
 INSERT INTO `fruiter_auth_role` VALUES ('2', '1', 'Admin', '2', '商品列表', 'Goods/index', '0', '1');
-INSERT INTO `fruiter_auth_role` VALUES ('3', '0', 'Admin', '2', '系统管理', 'System', '5', '0');
+INSERT INTO `fruiter_auth_role` VALUES ('3', '0', 'Admin', '2', '系统管理', 'System', '6', '0');
 INSERT INTO `fruiter_auth_role` VALUES ('4', '3', 'Admin', '2', '权限管理', 'Auth/index', '0', '1');
 INSERT INTO `fruiter_auth_role` VALUES ('5', '1', 'Admin', '2', '添加商品', 'Goods/add', '1', '1');
 INSERT INTO `fruiter_auth_role` VALUES ('6', '1', 'Admin', '2', '商品分类', 'GoodsCategory/index', '2', '1');
@@ -3996,6 +4002,11 @@ INSERT INTO `fruiter_auth_role` VALUES ('21', '0', 'admin', '2', '活动管理',
 INSERT INTO `fruiter_auth_role` VALUES ('22', '21', 'admin', '2', '天天签到', 'activity/checkin', '0', '1');
 INSERT INTO `fruiter_auth_role` VALUES ('23', '16', 'admin', '1', '广告位添加', 'banner/position_add', '2', '1');
 INSERT INTO `fruiter_auth_role` VALUES ('24', '19', 'admin', '2', '首次关注回复', 'weixin/attention_reply', '0', '2');
+INSERT INTO `fruiter_auth_role` VALUES ('25', '19', 'admin', '1', '新建图文消息', 'weixin/lib_add_news', '2', '2');
+INSERT INTO `fruiter_auth_role` VALUES ('26', '3', 'admin', '2', '修改密码', 'system/change_psd', '1', '2');
+INSERT INTO `fruiter_auth_role` VALUES ('27', '0', 'admin', '2', '订单管理', 'order', '5', '0');
+INSERT INTO `fruiter_auth_role` VALUES ('28', '27', 'admin', '2', '订单列表', 'order/index', '0', '1');
+INSERT INTO `fruiter_auth_role` VALUES ('29', '27', 'admin', '1', '订单详情', 'order/detail', '1', '2');
 
 -- ----------------------------
 -- Table structure for `fruiter_banner`
@@ -4060,12 +4071,12 @@ CREATE TABLE `fruiter_cart` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `member_id,product_id` (`product_id`,`member_id`) USING BTREE,
   KEY `member_id` (`member_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='购物车';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='购物车';
 
 -- ----------------------------
 -- Records of fruiter_cart
 -- ----------------------------
-INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '1');
+INSERT INTO `fruiter_cart` VALUES ('3', '6', '1', '1', '0');
 INSERT INTO `fruiter_cart` VALUES ('4', '3', '1', '2', '0');
 
 -- ----------------------------
@@ -4144,12 +4155,13 @@ CREATE TABLE `fruiter_goods` (
   PRIMARY KEY (`id`),
   KEY `is_del` (`goods_delete_time`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_goods
 -- ----------------------------
 INSERT INTO `fruiter_goods` VALUES ('1', '小米手机', '为发烧而生', 's0002', '0', '手机', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1800.00', '1999.00', '500.00', '0', '1', '1475219625', '1475215415', '1478143473', '0', '30', '200.00', '件', '0', '1', '0', '0', '1', null);
+INSERT INTO `fruiter_goods` VALUES ('2', '山西运城红富士苹果水果 10斤装', '脆甜多汁，香嫩爽口', '100010', '0', '红富士,苹果', 'images/apple/5805cf86N0b152e05.jpg', '50.00', '68.00', '35.00', '0', '1', null, null, '1478771175', '1478771141', '900', '5000.00', '件', '0', '0', '0', '0', '0', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_category`
@@ -4165,7 +4177,7 @@ CREATE TABLE `fruiter_goods_category` (
   `delete_time` int(10) DEFAULT NULL COMMENT '软删除',
   PRIMARY KEY (`id`),
   KEY `parent_id` (`pid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='产品分类表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='产品分类表';
 
 -- ----------------------------
 -- Records of fruiter_goods_category
@@ -4188,7 +4200,7 @@ CREATE TABLE `fruiter_goods_category_to_seo` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `category_id` (`category_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_category_to_seo_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `fruiter_goods_category` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='产品分类SEO表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='产品分类SEO表';
 
 -- ----------------------------
 -- Records of fruiter_goods_category_to_seo
@@ -4256,12 +4268,13 @@ CREATE TABLE `fruiter_goods_to_category` (
   KEY `category_id` (`category_id`) USING BTREE,
   KEY `goods_id` (`goods_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_category_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COMMENT='商品分类关联表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_category
 -- ----------------------------
 INSERT INTO `fruiter_goods_to_category` VALUES ('43', '1', '1');
+INSERT INTO `fruiter_goods_to_category` VALUES ('44', '2', '2');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_commend`
@@ -4294,12 +4307,13 @@ CREATE TABLE `fruiter_goods_to_detail` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `goods_id` (`goods_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_detail_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_detail
 -- ----------------------------
 INSERT INTO `fruiter_goods_to_detail` VALUES ('1', '1', '<p>\r\n	<img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301045243046.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046094054.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301045286210.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046148141.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046205786.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301045424589.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046292475.jpg\" /> <img alt=\"\" src=\"http://shopimg.weimob.com/55689990/Group/1512301046317763.jpg\" /></p>');
+INSERT INTO `fruiter_goods_to_detail` VALUES ('2', '2', '<p>\r\n	<img alt=\"\" data-lazyload=\"done\" src=\"//img10.360buyimg.com/imgzone/jfs/t3622/320/195258950/236912/c48f36d/5805cd18N44b9ee34.jpg\" style=\"\" /> <img alt=\"\" data-lazyload=\"done\" src=\"//img10.360buyimg.com/imgzone/jfs/t3361/58/314551856/245133/137dc25e/5805cd19N4128caa1.jpg\" style=\"\" /> <img alt=\"\" data-lazyload=\"done\" src=\"//img10.360buyimg.com/imgzone/jfs/t3382/168/256389016/476810/c8978596/5805cd1aN7feb8d50.jpg\" style=\"\" /> <img alt=\"\" data-lazyload=\"done\" src=\"//img10.360buyimg.com/imgzone/jfs/t3418/143/300467989/238600/a9582d4e/5805cd1aNb652c492.jpg\" style=\"\" /></p>');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_images`
@@ -4312,12 +4326,13 @@ CREATE TABLE `fruiter_goods_to_images` (
   `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否封面图(1.封面图)',
   PRIMARY KEY (`id`),
   KEY `goods_id` (`goods_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_images
 -- ----------------------------
 INSERT INTO `fruiter_goods_to_images` VALUES ('33', '1', 'images/09fa513d269759eea57ece50b2fb43166d22df7b.jpg', '1');
+INSERT INTO `fruiter_goods_to_images` VALUES ('34', '2', 'images/apple/5805cf86N0b152e05.jpg', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_goods_to_seo`
@@ -4331,12 +4346,13 @@ CREATE TABLE `fruiter_goods_to_seo` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `goods_id` (`goods_id`) USING BTREE,
   CONSTRAINT `fruiter_goods_to_seo_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='商品SEO表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='商品SEO表';
 
 -- ----------------------------
 -- Records of fruiter_goods_to_seo
 -- ----------------------------
 INSERT INTO `fruiter_goods_to_seo` VALUES ('1', '1', '手机', '小米手机');
+INSERT INTO `fruiter_goods_to_seo` VALUES ('2', '2', '', '');
 
 -- ----------------------------
 -- Table structure for `fruiter_member`
@@ -4371,12 +4387,13 @@ CREATE TABLE `fruiter_member` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `weixinopenid` (`openid`) USING BTREE,
   UNIQUE KEY `mobile` (`mobile`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of fruiter_member
 -- ----------------------------
 INSERT INTO `fruiter_member` VALUES ('1', '', null, 'http://wx.qlogo.cn/mmopen/Q3auHgzwzM6dkNLaHQBND38jBNUPmib8dxd6z6Pvh6DRrUks3AgmrmqSibv1RFMEQiaJ12p09M92JQt8zf14dwH4CZgEEo3eSXHxxmuhAEWPJU/0', '1', null, null, null, null, null, '0', '1477383456', null, null, null, null, 'ooRHgvi8QVqAVsFm4IvyokDv2U8E', '{\"openid\":\"ooRHgvi8QVqAVsFm4IvyokDv2U8E\",\"nickname\":\"\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"Changsha\",\"province\":\"Hunan\",\"country\":\"CN\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/Q3auHgzwzM6dkNLaHQBND38jBNUPmib8dxd6z6Pvh6DRrUks3AgmrmqSibv1RFMEQiaJ12p09M92JQt8zf14dwH4CZgEEo3eSXHxxmuhAEWPJU\\/0\",\"privilege\":[]}', null, '0', '1', '1477385292', '1', '0', '1');
+INSERT INTO `fruiter_member` VALUES ('2', '赵森', null, 'http://wx.qlogo.cn/mmopen/zx5Yz0lMibDyKdic6iaLtZE7nibhTiaW1DibCJJXKnskZRXfBgdUn7t9ayicqRpxhVdIwdETNqDnzzoeZ0gM4rGaKeiaUg6pOkBjxfsm/0', '1', null, null, null, null, null, '0', '1478745180', null, null, null, null, 'ooRHgvhrDP0sdxcaXxpeQ9avY5KI', '{\"openid\":\"ooRHgvhrDP0sdxcaXxpeQ9avY5KI\",\"nickname\":\"赵森\",\"sex\":1,\"language\":\"zh_CN\",\"city\":\"Yangpu\",\"province\":\"Shanghai\",\"country\":\"CN\",\"headimgurl\":\"http:\\/\\/wx.qlogo.cn\\/mmopen\\/zx5Yz0lMibDyKdic6iaLtZE7nibhTiaW1DibCJJXKnskZRXfBgdUn7t9ayicqRpxhVdIwdETNqDnzzoeZ0gM4rGaKeiaUg6pOkBjxfsm\\/0\",\"privilege\":[]}', null, '0', '0', null, '1', '0', '1');
 
 -- ----------------------------
 -- Table structure for `fruiter_model`
@@ -4405,6 +4422,7 @@ CREATE TABLE `fruiter_order` (
   `pay_sn` varchar(50) DEFAULT NULL COMMENT '支付流水号',
   `pay_type` tinyint(1) DEFAULT NULL COMMENT '支付类型1.微信支付',
   `pay_price` decimal(10,2) NOT NULL COMMENT '支付金额',
+  `pay_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支付状态 1.支付',
   `pay_time` int(10) NOT NULL DEFAULT '0' COMMENT '支付时间 0.未支付',
   `goods_amount` decimal(10,2) NOT NULL COMMENT '商品总金额',
   `freight` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '运费',
@@ -4423,13 +4441,14 @@ CREATE TABLE `fruiter_order` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `order_sn` (`order_sn`) USING BTREE,
   KEY `member_id` (`member_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- ----------------------------
 -- Records of fruiter_order
 -- ----------------------------
-INSERT INTO `fruiter_order` VALUES ('1', '1', '116102709545579563', null, '1', '1.00', '0', '1800.00', '0.00', '0', '0', null, '0', null, '0', null, '', '1', '0', '1477533295', '0');
-INSERT INTO `fruiter_order` VALUES ('2', '1', '116110910123350682', null, '1', '1800.00', '0', '1800.00', '0.00', '0', '0', null, '0', null, '0', null, '', '1', '0', '1478657553', '0');
+INSERT INTO `fruiter_order` VALUES ('1', '1', '116102709545579563', '420507828618553666', '1', '1.00', '1', '1477563295', '1800.00', '0.00', '1', '0', null, '0', null, '0', null, '', '1', '0', '1477533295', '0');
+INSERT INTO `fruiter_order` VALUES ('2', '1', '116110910123350682', null, '1', '1800.00', '0', '0', '1800.00', '0.00', '0', '0', null, '0', null, '0', null, '', '1', '0', '1478657553', '0');
+INSERT INTO `fruiter_order` VALUES ('3', '1', '116111017514584709', null, '1', '50.00', '0', '0', '50.00', '0.00', '0', '0', null, '0', null, '0', null, '', '1', '0', '1478771505', '0');
 
 -- ----------------------------
 -- Table structure for `fruiter_order_address`
@@ -4446,13 +4465,14 @@ CREATE TABLE `fruiter_order_address` (
   `address` varchar(126) NOT NULL COMMENT '详细地址',
   `area_info` varchar(255) NOT NULL COMMENT '地区内容',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单地址表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='订单地址表';
 
 -- ----------------------------
 -- Records of fruiter_order_address
 -- ----------------------------
 INSERT INTO `fruiter_order_address` VALUES ('1', '116102709545579563', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园');
 INSERT INTO `fruiter_order_address` VALUES ('2', '116110910123350682', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园');
+INSERT INTO `fruiter_order_address` VALUES ('3', '116111017514584709', '秦智', '15874246906', '430000', '430100', '430104', '中电软件园', '湖南 长沙 岳麓区 中电软件园');
 
 -- ----------------------------
 -- Table structure for `fruiter_order_product`
@@ -4478,13 +4498,14 @@ CREATE TABLE `fruiter_order_product` (
   `product_is_evaluation` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否评价 1.已评价',
   `product_evaluation_time` int(10) DEFAULT NULL COMMENT '评价时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='订单商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='订单商品表';
 
 -- ----------------------------
 -- Records of fruiter_order_product
 -- ----------------------------
 INSERT INTO `fruiter_order_product` VALUES ('1', '116102709545579563', '3', '1', '小米手机', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"16G\"},{\"id\":2,\"name\":\"颜色\",\"type\":1,\"value\":\"红色\"}]', '1', '1800.00', '500.00', '0.00', '0', null, '0', null, null, null, '0', null);
 INSERT INTO `fruiter_order_product` VALUES ('2', '116110910123350682', '5', '1', '小米手机', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"},{\"id\":2,\"name\":\"颜色\",\"type\":1,\"value\":\"红色\"}]', '1', '1800.00', '500.00', '0.00', '0', null, '0', null, null, null, '0', null);
+INSERT INTO `fruiter_order_product` VALUES ('3', '116111017514584709', '9', '2', '山西运城红富士苹果水果 10斤装', '', '1', '50.00', '35.00', '0.00', '0', null, '0', null, null, null, '0', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_products`
@@ -4506,7 +4527,7 @@ CREATE TABLE `fruiter_products` (
   KEY `goods_id` (`goods_id`),
   KEY `products_no` (`products_no`),
   CONSTRAINT `fruiter_products_ibfk_1` FOREIGN KEY (`goods_id`) REFERENCES `fruiter_goods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='规格商品表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='规格商品表';
 
 -- ----------------------------
 -- Records of fruiter_products
@@ -4517,6 +4538,7 @@ INSERT INTO `fruiter_products` VALUES ('5', '1', 's0002', '[{\"id\":1,\"name\":\
 INSERT INTO `fruiter_products` VALUES ('6', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"32G\"},{\"id\":2,\"name\":\"颜色\",\"type\":1,\"value\":\"白色\"}]', '6', '2000.00', '1800.00', '500.00', '200.00', '0', null);
 INSERT INTO `fruiter_products` VALUES ('7', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"64G\"},{\"id\":2,\"name\":\"颜色\",\"type\":1,\"value\":\"红色\"}]', '6', '2000.00', '1800.00', '500.00', '200.00', '0', null);
 INSERT INTO `fruiter_products` VALUES ('8', '1', 's0002', '[{\"id\":1,\"name\":\"内存\",\"type\":1,\"value\":\"64G\"},{\"id\":2,\"name\":\"颜色\",\"type\":1,\"value\":\"白色\"}]', '6', '2000.00', '1800.00', '500.00', '200.00', '0', null);
+INSERT INTO `fruiter_products` VALUES ('9', '2', '100010', '', '900', '68.00', '50.00', '35.00', '5000.00', '1', null);
 
 -- ----------------------------
 -- Table structure for `fruiter_session`

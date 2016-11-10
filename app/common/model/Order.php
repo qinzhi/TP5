@@ -47,18 +47,22 @@ class Order extends Model
         if(isset($params['evaluation_status'])){
             $this->where('t.evaluation_status',$params['evaluation_status']);
         }
-        $orders = $this->alias('t')->field('t.*,t1.*,t2.*,t3.cover_image,t3.unit')
+        $orders = $this->alias('t')->field('t.*,t1.*,t2.*,t3.cover_image,t3.unit,t4.nickname')
                         ->join(OrderProduct::TABLE_NAME . ' as t1','t.order_sn=t1.order_sn','left')
                         ->join(OrderAddress::TABLE_NAME . ' as t2','t.order_sn=t2.order_sn','left')
                         ->join(Goods::TABLE_NAME . ' as t3','t1.goods_id=t3.id','left')
-                        ->limit($offset,$limit)->select();
+                        ->join(Member::TABLE_NAME . ' as t4','t.member_id=t4.id','left')
+                        ->order('add_time desc')->limit($offset,$limit)->select();
         $orderList = [];
         foreach ($orders as $order){
             if(!isset($orderList[$order['order_sn']])){
                 $orderList[$order['order_sn']] = [
+                    'id' => $order['id'],
+                    'nickname' => $order['nickname'],
                     'order_sn' => $order['order_sn'],
                     'pay_sn' => $order['pay_sn'],
                     'pay_type' => $order['pay_type'],
+                    'pay_status' => $order['pay_status'],
                     'pay_time' => $order['pay_time'],
                     'member_id' => $order['member_id'],
                     'pay_price' => $order['pay_price'],
@@ -73,7 +77,7 @@ class Order extends Model
                     'consignee' => $order['consignee'],
                     'mobile' => $order['mobile'],
                     'area_info' => $order['area_info'],
-                    'add_time' => date('Y/m/d H:i',$order['add_time']),
+                    'add_time' => $order['add_time'],
                 ];
             }
             $orderList[$order['order_sn']]['goods_num'] += $order['product_buy_num']; //订单商品数量

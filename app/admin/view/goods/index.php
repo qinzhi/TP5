@@ -80,7 +80,7 @@
                                     </td>
                                     <td class="input-edit" data-field="sort" title="点击更新商品排序">{$vo.sort}</td>
                                     <td>
-                                        <a class="btn btn-default btn-sm purple btn-edit" href="{:url('Goods/edit',['id'=>$vo['id']])}" title="编辑">
+                                        <a class="btn btn-default btn-sm purple btn-edit" href="{:url('goods/edit',['id'=>$vo['id']])}" title="编辑">
                                             <i class="fa fa-edit"></i> 编辑</a>
                                         <a class="btn btn-default btn-sm danger btn-del" href="javascript:void(0);" title="删除">
                                             <i class="fa fa-times"></i> 删除</a>
