@@ -29,3 +29,7 @@ if(!function_exists('create_editor')){
         //$CKEditor->replace("describe");
     }
 }
+
+function password_encrypt($password){
+    return md5(md5($password) . \think\Config::get('auth_key'));
+}

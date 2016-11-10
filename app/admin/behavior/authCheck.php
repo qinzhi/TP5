@@ -1,6 +1,7 @@
 <?php
 
 namespace app\admin\behavior;
+use app\admin\model\Admin;
 use app\common\tools\Crypt;
 use think\Request;
 use think\response\Redirect;
@@ -24,14 +25,15 @@ class AuthCheck{
 
     //检查是否登陆
     private function ckeckLogin(){
-        $admin_id = session('admin_id');
-        $_id = cookie('id');
-        if(empty($admin_id) && !empty($_id)){
-            $_id = intval(Crypt::authcode($_id, 'DECODE'));
-            if($_id > 0){
-                return session('admin_id',$_id);
+        $admin_id = session('id');
+        $auth = cookie('auth');
+        if(empty($admin_id) && !empty($auth)){
+            list($account,$password) = explode("\t", Crypt::authcode($auth, 'DECODE'));
+            $admin = Admin::where('account',$account)->where('password',$password)->find();
+            if(!empty($admin)){
+                return session('id',$admin['id']);
             }
-        }elseif(empty($admin_id) && empty($_auth)){
+        }elseif(empty($admin_id) && empty($auth)){
             (new Redirect('index/login'))->send();
             exit;
         }

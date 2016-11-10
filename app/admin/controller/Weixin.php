@@ -26,14 +26,24 @@ class Weixin extends Admin {
         return $this->fetch();
     }
 
+    /**
+     * 多图文素材库
+     * @return mixed
+     */
     public function lib_news(){
         $limit = 10;
         $page = Request::instance()->request('page/d',1);
         $offset = ($page - 1) * $limit;
         $itemList = $this->wechatService->getForeverList('news',$offset,$limit);
         fb($itemList);
-        $this->assign('itemList',$itemList);
+        $this->assign('itemList',$itemList['item']);
+        $this->assign('total_count',$itemList['total_count']);
+        $this->assign('item_count',$itemList['item_count']);
         return $this->fetch('weixin/lib/news');
+    }
+
+    public function lib_add_news(){
+        return $this->fetch('weixin/lib/add_news');
     }
 
     /**

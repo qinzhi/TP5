@@ -43,3 +43,25 @@ function get_full_url()
 {
     return get_site_url().$_SERVER['REQUEST_URI'];
 }
+
+// 获取IP地址（摘自discuz）
+function get_client_ip(){
+    $ip='未知IP';
+    if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+        return is_ip($_SERVER['HTTP_CLIENT_IP'])?$_SERVER['HTTP_CLIENT_IP']:$ip;
+    }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        return is_ip($_SERVER['HTTP_X_FORWARDED_FOR'])?$_SERVER['HTTP_X_FORWARDED_FOR']:$ip;
+    }else{
+        return is_ip($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:$ip;
+    }
+}
+
+function is_ip($str){
+    $ip=explode('.',$str);
+    for($i=0;$i<count($ip);$i++){
+        if($ip[$i]>255){
+            return false;
+        }
+    }
+    return preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/',$str);
+}

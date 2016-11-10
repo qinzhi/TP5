@@ -25,18 +25,25 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <?php $show_auth = function($auth,$level,$path) use (&$show_auth){
+                                        <?php
+                                            $show_auth = function($auth,$level,$path,$is_open = false) use (&$show_auth){
                                             if(!empty($auth) && is_array($auth)):
                                                 $class = '';
                                                 if($level){
                                                     $class = '<span class="margin-left-' . 20 * $level . '"></span>';
                                                 }
                                                 if($level < 2){
-                                                    $icon = '<i class="fa row-details fa-minus-square-o ifold"></i>';
+                                                    if($is_open){
+                                                        $icon = '<i class="fa row-details fa-minus-square-o ifold"></i>';
+                                                    }else{
+                                                        $icon = '<i class="fa row-details fa-plus-square-o ifold"></i>';
+                                                    }
                                                 }
+                                                $display = ($level && $is_open == false)?'style="display:none"':'';
                                                 foreach($auth as $value):
                                                     $tmp_path = $path . $value['id'] . '_';
-                                                    $html = '<tr data-id="' . $value['id'] . '" data-path="' . $tmp_path . '" data-pid="' . $value['pid'] . '">';
+                                                    $html = '<tr data-id="' . $value['id'] . '" data-path="' . $tmp_path . '" data-pid="' . $value['pid'] . '" '
+                                                                . $display . '>';
                                                     if(empty($value['child'])){
                                                         $icon = '';
                                                     }

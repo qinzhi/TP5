@@ -318,7 +318,7 @@ class Wechat
 
     /**
      * For weixin server validation
-     * @param bool $return 是否返回
+     * @return bool
      */
     public function valid($return=false)
     {
@@ -373,6 +373,7 @@ class Wechat
      * 设置发送消息
      * @param array $msg 消息数组
      * @param bool $append 是否在原消息数组追加
+     * @return array|string
      */
     public function Message($msg = '',$append = false){
         if (is_null($msg)) {
@@ -1049,8 +1050,9 @@ class Wechat
      *  	),
      *  	"1"=>....
      *  )
+     * @return $this
      */
-    public function news($newsData=array())
+    public function news($newsData= [])
     {
         $FuncFlag = $this->_funcflag ? 1 : 0;
         $count = count($newsData);
@@ -1074,6 +1076,7 @@ class Wechat
      * Example: $this->text('msg tips')->reply();
      * @param string $msg 要发送的信息, 默认取$this->_msg
      * @param bool $return 是否返回信息而不抛出到浏览器 默认:否
+     * @return bool|string
      */
     public function reply($msg=array(),$return = false)
     {
@@ -1127,6 +1130,7 @@ class Wechat
     /**
      * GET 请求
      * @param string $url
+     * @return bool|string
      */
     private function http_get($url){
         $oCurl = curl_init();
@@ -1193,6 +1197,7 @@ class Wechat
      */
     protected function setCache($cachename,$value,$expired){
         //TODO: set cache implementation
+        Cache::set($cachename,$value,$expired);
         return false;
     }
 
@@ -1203,6 +1208,7 @@ class Wechat
      */
     protected function getCache($cachename){
         //TODO: get cache implementation
+        Cache::get($cachename);
         return false;
     }
 
@@ -1213,6 +1219,7 @@ class Wechat
      */
     protected function removeCache($cachename){
         //TODO: remove cache implementation
+        Cache::rm($cachename);
         return false;
     }
 
@@ -1221,6 +1228,7 @@ class Wechat
      * @param string $appid 如在类初始化时已提供，则可为空
      * @param string $appsecret 如在类初始化时已提供，则可为空
      * @param string $token 手动指定access_token，非必要情况不建议用
+     * @return bool|string
      */
     public function checkAuth($appid='',$appsecret='',$token=''){
         if (!$appid || !$appsecret) {
@@ -1258,6 +1266,7 @@ class Wechat
     /**
      * 删除验证数据
      * @param string $appid
+     * @return bool
      */
     public function resetAuth($appid=''){
         if (!$appid) $appid = $this->appid;
@@ -1283,6 +1292,7 @@ class Wechat
      * 获取JSAPI授权TICKET
      * @param string $appid 用于多个appid时使用,可空
      * @param string $jsapi_ticket 手动指定jsapi_ticket，非必要情况不建议用
+     * @return bool|string
      */
     public function getJsTicket($appid='',$jsapi_ticket=''){
         if (!$this->access_token && !$this->checkAuth()) return false;
@@ -1351,6 +1361,7 @@ class Wechat
     /**
      * 微信api不支持中文转义的json结构
      * @param array $arr
+     * @return bool|string
      */
     static function json_encode($arr) {
         $parts = array ();
@@ -1505,6 +1516,7 @@ class Wechat
      * 6、pic_photo_or_album：弹出拍照或者相册发图
      * 7、pic_weixin：弹出微信相册发图器
      * 8、location_select：弹出地理位置选择器
+     * @return bool
      */
     public function createMenu($data){
         if (!$this->access_token && !$this->checkAuth()) return false;

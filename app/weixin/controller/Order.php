@@ -27,7 +27,7 @@ class Order extends Weixin
     public function index(){
 
         $orderModel = new OrderModel();
-        $count = $orderModel->getOrderStatusCount();
+        $count = $orderModel->getOrderStatusCount($this->member_id);
         $this->assign('count',$count);
 
         $status = Request::instance()->request('status/d',0);

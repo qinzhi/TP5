@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\model\Admin;
 use think\Config;
 use think\Cookie;
 use think\Request;
@@ -15,7 +16,7 @@ class Index extends Controller
 
     public $app_type = 'public';
 
-    const COOKIE_EXPIRE = 604800;//7天
+    const COOKIE_EXPIRE = 604800;// 七天
 
     public function index(){
         $this->redirect(url('index/login'));
@@ -35,10 +36,15 @@ class Index extends Controller
                 $admin = $adminModel::get(['account' => $account]);
                 if (!empty($admin)) {
                     if ($this::psd_verify($password, $admin['password']) === true) {
-                        Session::set('admin_id',$admin['id']);
+                        Session::set('id',$admin['id']);
                         if (Request::instance()->has('remember','post')) {
-                            Cookie::set('id',Crypt::authcode("{$admin['id']}", 'ENCODE'), self::COOKIE_EXPIRE);
+                            Cookie::set('auth',Crypt::authcode("{$admin['account']}\t{$admin['password']}", 'ENCODE'), self::COOKIE_EXPIRE);
                         }
+                        Admin::where('id',$admin['id'])->update([
+                            'login_time' => time(),
+                            'login_ip' => get_client_ip(),
+                            'login_num' => ($admin['login_num'] + 1)
+                        ]);
                         return ['code'=>1,'msg'=>'验证成功','url'=>Url::build('home/index')];
                     } else {
                         return ['code'=>0,'msg'=>'密码不正确'];
@@ -63,8 +69,7 @@ class Index extends Controller
      */
     public static function psd_verify($inputPsd, $password)
     {
-        $inputPsd = md5(md5($inputPsd) . Config::get('auth_key'));
-        if ($inputPsd == $password) {
+        if (password_encrypt($inputPsd) == $password) {
             return true;
         } else {
             return false;

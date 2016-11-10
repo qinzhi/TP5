@@ -2,7 +2,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="/">首页</a>
+            <a href="/admin">首页</a>
         </li>
         <?php for($i=0,$len=count($breadcrumbs);$i<$len;$i++){
             if($i<$len-1){

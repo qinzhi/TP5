@@ -1,4 +1,4 @@
-{extend name="Layout/base" /}
+{extend name="layout/base" /}
 {block name="css"}
 <link href="__CSS__/weixin.css" rel="stylesheet" />
 {/block}

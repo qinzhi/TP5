@@ -101,7 +101,10 @@ class Order extends Model
         return $orderList;
     }
 
-    public function getOrderStatusCount(){
+    public function getOrderStatusCount($member_id = 0){
+        if($member_id > 0){
+            $this->where('member_id',$member_id);
+        }
         $count = $this->field('count(*) as count,
                             count(status=0) as no_pay_count,
                             count(status=1 or status=2 or null) as pay_count,
